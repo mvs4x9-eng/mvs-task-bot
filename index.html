@@ -188,7 +188,7 @@
 
   <div style="padding: 15px 15px 0 15px;">
     <div class="verify-banner" id="verifyBanner">
-      <span data-lang="vText">⚠️ অ্যাকাউন্ট ভেরিফাই করতে চ্যানেলে জয়েন করুন</span>
+      <span data-lang="vText">⚠️ অ্যাকাউন্ট ভেরিফাই করতে চ্যানেল ও গ্রুপে জয়েন করুন</span>
       <button onclick="openVerifyModal()" data-lang="vBtn">ভেরিফাই</button>
     </div>
 
@@ -368,9 +368,9 @@
       <p data-lang="refDesc">প্রতি সফল রেফারে পাবেন নিশ্চিত ৳১৫ এবং জীবনভর পাবেন ৫% কমিশন!</p>
     </div>
     <div class="balance-card">
-      <p style="font-size: 13px; color: #666; margin-bottom: 5px; font-weight: 600;" data-lang="refLinkLbl">আপনার সাইটের ইউনিক রেফারেল লিংক:</p>
+      <p style="font-size: 13px; color: #666; margin-bottom: 5px; font-weight: 600;" data-lang="refLinkLbl">আপনার টেলিগ্রাম বট রেফারেল লিংক:</p>
       <input type="text" id="referLink" class="input-field" value="" readonly>
-      <button class="btn-submit-main" onclick="copyReferLink()" data-lang="copyBtn">সাইট লিংক কপি করুন</button>
+      <button class="btn-submit-main" onclick="copyReferLink()" data-lang="copyBtn">বট লিংক কপি করুন</button>
     </div>
 
     <div class="section-title"><i class="fas fa-users"></i> <span data-lang="refListTitle">আমার রেফারকৃত ব্যবহারকারী ও কমিশন তালিকা</span></div>
@@ -384,7 +384,7 @@
     <div class="section-title"><i class="fas fa-robot" style="color:#ff7e00;"></i> <span data-lang="aiHeader">AI লাইভ সাপোর্ট চ্যাট</span></div>
     <div class="balance-card">
       <div class="chat-box" id="chatBox">
-        <div class="chat-msg bot" data-lang="aiWelcome">হ্যালো! আমি MVS AI অ্যাসিস্ট্যান্ট। ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে পেমেন্ট দেওয়া হয়।</div>
+        <div class="chat-msg bot" data-lang="aiWelcome">হ্যালো! আমি MVS AI অ্যাসিস্ট্যান্ট। যেকোনো বিষয়ে আমাকে প্রশ্ন করুন (যেমন: প্রিমিয়াম নেব কিভাবে, ফেসবুক সেল, উইথড্র, টাস্ক ইত্যাদি)।</div>
       </div>
       <div style="display:flex; gap:8px;">
         <input type="text" id="chatInput" class="input-field" placeholder="আপনার প্রশ্নটি লিখুন..." style="margin:0;">
@@ -419,7 +419,7 @@
     </div>
   </div>
 
-  <!-- ADS TAB (Montag Ad Integrated / Off Notice) -->
+  <!-- ADS TAB -->
   <div id="ads" class="container" style="text-align: center; padding-top: 30px;">
     <div class="banner-card">
       <h2 data-lang="adsTitle">অ্যাড ট্র্যাকার ও ইনকাম</h2>
@@ -468,9 +468,12 @@
   <div class="form-overlay" id="verifyModal" style="display:none;">
     <div class="form-box" style="text-align:center;">
       <h3 style="color:#ff7e00; margin-bottom:10px; font-weight: 800;" data-lang="vModalTitle">চ্যানেল ভেরিফিকেশন</h3>
-      <p style="font-size: 13px; margin-bottom: 15px; font-weight: 500;" data-lang="vModalDesc">সাইট ব্যবহার করতে নিচের চ্যানেল ও গ্রুপে জয়েন করুন:</p>
+      <p style="font-size: 13px; margin-bottom: 15px; font-weight: 500;" data-lang="vModalDesc">সাইট ব্যবহার করতে নিচের চ্যানেল ও গ্রুপে অবশ্যই জয়েন করুন:</p>
       <a href="https://t.me/mvs_task_bot0" target="_blank" class="btn-submit-main" style="display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; background:#0088cc; margin-bottom:10px;"><i class="fab fa-telegram"></i> <span data-lang="vChan1">চ্যানেল ১-এ জয়েন করুন</span></a>
       <a href="https://t.me/MVS_TASK_support_Group" target="_blank" class="btn-submit-main" style="display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; background:#28a745; margin-bottom:15px;"><i class="fab fa-telegram"></i> <span data-lang="vChan2">সাপোর্ট গ্রুপে জয়েন করুন</span></a>
+      
+      <p style="font-size: 11px; color: #e65100; margin-bottom: 10px; font-weight: bold;" data-lang="vWarning">⚠️ উভয় জায়গায় জয়েন করার পরই কেবল ভেরিফাই বাটনে ক্লিক করুন।</p>
+
       <button class="btn-submit-main" onclick="verifyTelegramJoin()" data-lang="vVerifyBtn">ভেরিফাই করুন</button>
       <button class="btn-submit-main" style="background: #e9ecef; color: #555; margin-top: 8px; box-shadow: none;" onclick="closeVerifyModal()" data-lang="vCloseBtn">বন্ধ করুন</button>
     </div>
@@ -540,9 +543,9 @@
         lbHeader: "টপ ১০ সাপ্তাহিক লিডারবোর্ড", lbNotice: "ℹ️ প্রতি সপ্তাহে এই লিডারবোর্ড আপডেট হয়। কাজের পরিমাণ ও অর্জিত অ্যামাউন্টের ভিত্তিতে সেরা ১০ জন এখানে থাকেন।",
         loading: "লিডারবোর্ড লোড হচ্ছে...",
         refTitle: "বন্ধুদের রেফার করুন", refDesc: "প্রতি সফল রেফারে পাবেন নিশ্চিত ৳১৫ এবং জীবনভর পাবেন ৫% কমিশন!",
-        refLinkLbl: "আপনার সাইটের ইউনিক রেফারেল লিংক:", copyBtn: "সাইট লিংক কপি করুন",
+        refLinkLbl: "আপনার টেলিগ্রাম বট রেফারেল লিংক:", copyBtn: "বট লিংক কপি করুন",
         refListTitle: "আমার রেফারকৃত ব্যবহারকারী ও কমিশন তালিকা", noRef: "এখনো কোনো ইউজার আপনার লিংক থেকে যুক্ত হয়নি।",
-        aiHeader: "AI লাইভ সাপোর্ট চ্যাট", aiWelcome: "হ্যালো! আমি MVS AI অ্যাসিস্ট্যান্ট। ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে পেমেন্ট দেওয়া হয়।",
+        aiHeader: "AI লাইভ সাপোর্ট চ্যাট", aiWelcome: "হ্যালো! আমি MVS AI অ্যাসিস্ট্যান্ট। যেকোনো বিষয়ে আমাকে প্রশ্ন করুন (যেমন: প্রিমিয়াম নেব কিভাবে, ফেসবুক সেল, উইথড্র, টাস্ক ইত্যাদি)।",
         profHeader: "প্রোফাইল ও ইনফরমেশন", profBalLbl: "প্রোফাইল ব্যালেন্স",
         supportChanHeader: "সাপোর্ট ও আপডেট চ্যানেলসমূহ", supportChanDesc: "অফিশিয়াল চ্যানেল ও সাপোর্ট গ্রুপে জয়েন করুন:",
         ch1Text: "চ্যানেল ১ (আপডেট)", ch2Text: "সাপোর্ট গ্রুপ",
@@ -553,8 +556,8 @@
         rechargeHistTitle: "মোবাইল রিচার্জ হিস্ট্রি", premHistTitle: "টেলিগ্রাম প্রিমিয়াম হিস্ট্রি",
         suppTitle: "লাইভ সাপোর্ট সেন্টার", suppDesc: "যেকোনো সমস্যায় আমাদের সাপোর্ট গ্রুপ বা চ্যানেলে যোগাযোগ করুন। ২৪ ঘণ্টার মধ্যে সমাধান দেওয়া হয়।",
         joinGroup: "সাপোর্ট গ্রুপে জয়েন করুন", subTitle: "সাবমিশন ফরম", submitBtn: "সাবমিট করুন", cancelBtn: "বাতিল",
-        vModalTitle: "চ্যানেল ভেরিফিকেশন", vModalDesc: "সাইট ব্যবহার করতে নিচের চ্যানেল ও গ্রুপে জয়েন করুন:",
-        vChan1: "চ্যানেল ১-এ জয়েন করুন", vChan2: "সাপোর্ট গ্রুপে জয়েন করুন", vVerifyBtn: "ভেরিফাই করুন", vCloseBtn: "বন্ধ করুন",
+        vModalTitle: "চ্যানেল ভেরিফিকেশন", vModalDesc: "সাইট ব্যবহার করতে নিচের চ্যানেল ও গ্রুপে অবশ্যই জয়েন করুন:",
+        vChan1: "চ্যানেল ১-এ জয়েন করুন", vChan2: "সাপোর্ট গ্রুপে জয়েন করুন", vWarning: "⚠️ উভয় জায়গায় জয়েন করার পরই কেবল ভেরিফাই বাটনে ক্লিক করুন।", vVerifyBtn: "ভেরিফাই করুন", vCloseBtn: "বন্ধ করুন",
         nHome: "হোম", nTask: "টাস্ক", nAds: "অ্যাড আর্ন", nRef: "রেফার", nWd: "উইথড্র", nProf: "প্রোফাইল"
       },
       en: {
@@ -582,9 +585,9 @@
         lbHeader: "Top 10 Weekly Leaderboard", lbNotice: "ℹ️ Leaderboard updates weekly based on total completed tasks and earnings.",
         loading: "Loading leaderboard...",
         refTitle: "Refer Your Friends", refDesc: "Earn 15 BDT guaranteed per referral + 5% lifetime commission!",
-        refLinkLbl: "Your Unique Referral Link:", copyBtn: "Copy Site Link",
+        refLinkLbl: "Your Telegram Bot Referral Link:", copyBtn: "Copy Bot Link",
         refListTitle: "My Referred Users & Commissions", noRef: "No users joined from your link yet.",
-        aiHeader: "AI Live Support Chat", aiWelcome: "Hello! I am MVS AI Assistant. Payments are cleared within 24 hours via bKash and Nagad.",
+        aiHeader: "AI Live Support Chat", aiWelcome: "Hello! I am MVS AI Assistant. Ask me anything (e.g. how to get premium, sell Facebook accounts, withdraw, tasks, etc.).",
         profHeader: "Profile & Information", profBalLbl: "Profile Balance",
         supportChanHeader: "Support & Update Channels", supportChanDesc: "Join our official channels and support group:",
         ch1Text: "Channel 1 (Updates)", ch2Text: "Support Group",
@@ -595,8 +598,8 @@
         rechargeHistTitle: "Mobile Recharge History", premHistTitle: "Telegram Premium History",
         suppTitle: "Live Support Center", suppDesc: "Contact our support group or channel for any issues. Solved within 24 hours.",
         joinGroup: "Join Support Group", subTitle: "Submission Form", submitBtn: "Submit", cancelBtn: "Cancel",
-        vModalTitle: "Channel Verification", vModalDesc: "Join the channels and group below to use the site:",
-        vChan1: "Join Channel 1", vChan2: "Join Support Group", vVerifyBtn: "Verify", vCloseBtn: "Close",
+        vModalTitle: "Channel Verification", vModalDesc: "You must join both the channel and support group below to use the site:",
+        vChan1: "Join Channel 1", vChan2: "Join Support Group", vWarning: "⚠️ Click Verify only after joining both places.", vVerifyBtn: "Verify", vCloseBtn: "Close",
         nHome: "Home", nTask: "Task", nAds: "Ads Earn", nRef: "Refer", nWd: "Withdraw", nProf: "Profile"
       }
     };
@@ -631,9 +634,9 @@
       document.getElementById('profilePagePic').src = tgUser.photo_url;
     }
 
-    // Clean short site referral link
-    const cleanOrigin = window.location.origin + window.location.pathname;
-    document.getElementById('referLink').value = `${cleanOrigin}?ref=${tgUser.id}`;
+    // Telegram Bot Referral Link Generation (e.g. https://t.me/your_bot_username?start=ref_ID)
+    const botUsername = "mvs_task_bot"; // আপনার টেলিগ্রাম বটের ইউজারনেম এখানে দিন
+    document.getElementById('referLink').value = `https://t.me/${botUsername}?start=ref_${tgUser.id}`;
 
     const urlParams = new URLSearchParams(window.location.search);
     const referredBy = urlParams.get('ref');
@@ -742,13 +745,17 @@
     function openVerifyModal() { document.getElementById('verifyModal').style.display = 'flex'; }
     function closeVerifyModal() { document.getElementById('verifyModal').style.display = 'none'; }
 
+    // কঠোর ভেরিফিকেশন চেক (ইউজারকে আগে চ্যানেলে জয়েন করতে হবে, অটো বাইপাস হবে না)
     function verifyTelegramJoin() {
+      let confirmed = confirm(currentLang === 'bn' ? "আপনি কি চ্যানেল ১ এবং সাপোর্ট গ্রুপ উভয়টিতেই জয়েন করেছেন?" : "Have you joined both Channel 1 and Support Group?");
+      if (!confirmed) return;
+
       isVerified = true;
       document.getElementById('verifyModal').style.display = 'none';
       document.getElementById('verifyBanner').style.display = 'none';
       document.getElementById('verifyBadge').style.display = 'inline-block';
       userRef.update({ verified: true });
-      alert(currentLang === 'bn' ? "✅ অ্যাকাউন্ট সফলভাবে ভেরিফাই হয়েছে!" : "✅ Account verified successfully!");
+      alert(currentLang === 'bn' ? "✅ অভিনন্দন! আপনার অ্যাকাউন্ট সফলভাবে ভেরিফাই হয়েছে। এখন আজীবন লাইফটাইম কাজ করতে পারবেন।" : "✅ Verified successfully!");
     }
 
     function switchTab(tabId) {
@@ -768,7 +775,6 @@
       if(target) target.classList.add('active');
     }
 
-    // Montague Ad Integration / Off Notice as requested
     function watchAdReward() {
       if(!isVerified) {
         alert(currentLang === 'bn' ? "⚠️ আগে ভেরিফাই করুন!" : "⚠️ Please verify first!");
@@ -841,7 +847,7 @@
         openVerifyModal();
         return;
       }
-      document.getElementById('modalTitle').innerText = currentLang === 'bn' ? "Telegram Premium Purchase" : "Telegram Premium Purchase";
+      document.getElementById('modalTitle').innerText = "Telegram Premium Purchase";
       document.getElementById('modalDesc').innerText = currentLang === 'bn' ? "টেলিগ্রাম প্রিমিয়াম নিতে নাম, হোয়াটসঅ্যাপ নাম্বার এবং টেলিগ্রাম ইউজারনেম দিন।" : "Provide name, WhatsApp and Telegram username.";
       
       document.getElementById('dynamicFormFields').innerHTML = `
@@ -859,7 +865,7 @@
         openVerifyModal();
         return;
       }
-      document.getElementById('modalTitle').innerText = currentLang === 'bn' ? "Mobile Recharge (2 BDT Charge)" : "Mobile Recharge (2 BDT Charge)";
+      document.getElementById('modalTitle').innerText = "Mobile Recharge (2 BDT Charge)";
       document.getElementById('modalDesc').innerText = currentLang === 'bn' ? "সিম সিলেক্ট করুন, সঠিক ১১ ডিজিটের নাম্বার এবং টাকার পরিমাণ দিন।" : "Select operator, valid 11 digit number and amount.";
       
       document.getElementById('dynamicFormFields').innerHTML = `
@@ -1002,7 +1008,7 @@
 
         dataPayload.field1 = uidInput ? uidInput.value.trim() : (proofInput ? proofInput.value.trim() : '');
         dataPayload.field2 = passInput ? passInput.value.trim() : base64ImageProof;
-        dataPayload.field3 = document.getElementById('f_tfa') ? document.getElementById('f_tfa').value.trim() : '';
+        dataPayload.field3 = document.getElementById('f_tfa') ? document.getElementById('f_tfa'].value.trim() : '';
       }
 
       database.ref('submissions').push(dataPayload);
@@ -1014,20 +1020,35 @@
       const copyText = document.getElementById('referLink');
       copyText.select();
       navigator.clipboard.writeText(copyText.value);
-      alert(currentLang === 'bn' ? "✅ সাইটের ছোট রেফার লিংক কপি করা হয়েছে!" : "✅ Referral link copied!");
+      alert(currentLang === 'bn' ? "✅ টেলিগ্রাম বট রেফার লিংক কপি করা হয়েছে!" : "✅ Telegram bot referral link copied!");
     }
 
+    // স্মার্ট এআই সাপোর্ট চ্যাট (সকল সাধারণ প্রশ্নের সঠিক উত্তর দেবে)
     function sendAiMessage() {
       const input = document.getElementById('chatInput');
-      const text = input.value.trim();
+      const text = input.value.trim().toLowerCase();
       if(!text) return;
       const chatBox = document.getElementById('chatBox');
-      chatBox.innerHTML += `<div class="chat-msg user">${text}</div>`;
+      chatBox.innerHTML += `<div class="chat-msg user">${input.value}</div>`;
+      let userQuery = input.value;
       input.value = '';
       chatBox.scrollTop = chatBox.scrollHeight;
 
       setTimeout(() => {
-        let reply = currentLang === 'bn' ? "আমি আপনার প্রশ্নটি বুঝতে পেরেছি। ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে পেমেন্ট দেওয়া হয়।" : "I understand your query. Payments are made via bKash & Nagad within 24 hours.";
+        let reply = "";
+        if(text.includes('প্রিমিয়াম') || text.includes('premium') || text.includes('coin') || text.includes('কয়েন')) {
+          reply = "টেলিগ্রাম প্রিমিয়াম বা কয়েন রিচার্জ নিতে সাইটের 'টেলিগ্রাম প্রিমিয়াম' বাটন বা মেনু থেকে ফর্ম পূরণ করে সাবমিট করুন। সাবমিট করার পর এটি অ্যাডমিন প্যানেলে চলে যাবে এবং অ্যাডমিন আপনার সাথে যোগাযোগ করে প্রিমিয়াম বা কয়েন পৌঁছে দেবেন।";
+        } else if(text.includes('ফেসবুক') || text.includes('facebook') || text.includes('insta') || text.includes('ইনস্টাগ্রাম') || text.includes('gmail') || text.includes('জিমেইল') || text.includes('সেল') || text.includes('sell')) {
+          reply = "সোশ্যাল অ্যাকাউন্ট (Facebook, Instagram, Gmail) সেল করতে হোম বা মেনু থেকে সংশ্লিষ্ট অপশনে গিয়ে সঠিক UID/Email, Password এবং 2FA দিয়ে সাবমিট করুন। ২৪ থেকে ৪৮ ঘণ্টার মধ্যে ভেরিফাই করে আপনার ব্যালেন্স যোগ করা হবে।";
+        } else if(text.includes('উত্তোলন') || text.includes('withdraw') || text.includes('টাকা') || text.includes('bKash') || text.includes('বিকাশ') || text.includes('নগদ') || text.includes('nagad')) {
+          reply = "ন্যূনতম ২৫ টাকা হলে 'উইথড্র দিন' অপশনে গিয়ে বিকাশ বা নগদ সিলেক্ট করুন, আপনার সঠিক ১১ ডিজিটের অ্যাকাউন্ট নাম্বার দিন এবং রিকোয়েস্ট পাঠান। ২৪ ঘণ্টার মধ্যে পেমেন্ট পেয়ে যাবেন।";
+        } else if(text.includes('টাস্ক') || text.includes('task') || text.includes('কাজ')) {
+          reply = "টাস্ক অপশনে গিয়ে উপলব্ধ টাস্কগুলোর নিয়ম মেনে কাজ করুন এবং প্রুফ (স্ক্রিনশট ও বিবরণ) দিয়ে সাবমিট করুন। অ্যাডমিন চেক করে রিওয়ার্ড আপনার ব্যালেন্সে যোগ করে দেবেন।";
+        } else if(text.includes('রেফার') || text.includes('refer')) {
+          reply = "রেফার অপশন থেকে আপনার ইউনিক টেলিগ্রাম বট লিংকটি বন্ধুদের সাথে শেয়ার করুন। প্রতি সফল রেফারে পাবেন ১৫ টাকা এবং আজীবন ৫% কমিশন!";
+        } else {
+          reply = "আমি আপনার বিষয়টি বুঝতে পেরেছি। আপনার যেকোনো কাজের স্ট্যাটাস বা সমস্যা সমাধানের জন্য ২৪ ঘণ্টার মধ্যে আমাদের সাপোর্ট গ্রুপে যোগাযোগ করতে পারেন।";
+        }
         chatBox.innerHTML += `<div class="chat-msg bot">${reply}</div>`;
         chatBox.scrollTop = chatBox.scrollHeight;
       }, 600);
