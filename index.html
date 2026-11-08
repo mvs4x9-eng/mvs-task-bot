@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MVS TASK BOT - Ultimate Edition</title>
+  <title>MVS TASK SITE - Official Web Edition</title>
   
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -66,15 +66,18 @@
     .user-info h4 { font-size: 16px; color: #222; font-weight: 700; display: flex; align-items: center; gap: 6px; }
     .user-info p { font-size: 12px; color: #777; margin-top: 3px; }
 
+    /* Custom Banner Slider (2 banners with dynamic promotional text) */
     .slider-container {
       position: relative; width: 100%; height: 180px; border-radius: 20px; overflow: hidden; margin-bottom: 15px;
-      box-shadow: 0 8px 20px rgba(255, 126, 0, 0.25); background: #eee;
+      box-shadow: 0 8px 20px rgba(255, 126, 0, 0.25); background: linear-gradient(135deg, #ff7e00, #ff5100);
     }
     .slide {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.8s ease-in-out;
-      background-size: cover; background-position: center; border-radius: 20px;
+      display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; color: white; border-radius: 20px;
     }
     .slide.active { opacity: 1; }
+    .slide h2 { font-size: 20px; font-weight: 800; margin-bottom: 8px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .slide p { font-size: 13px; font-weight: 600; opacity: 0.95; line-height: 1.4; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
 
     .balance-card { background: white; padding: 20px; border-radius: 20px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid #f1f3f5; }
     .balance-amount { font-size: 32px; font-weight: 800; color: #111; margin: 8px 0; }
@@ -103,11 +106,12 @@
 
     .payment-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
     .pay-card {
-      background: #fff; border: 2px solid #e9ecef; border-radius: 16px; padding: 10px; text-align: center; cursor: pointer; transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03); overflow: hidden;
+      background: #fff; border: 2px solid #e9ecef; border-radius: 16px; padding: 12px; text-align: center; cursor: pointer; transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03); overflow: hidden; display: flex; flex-direction: column; align-items: center; gap: 8px;
     }
     .pay-card.selected { border-color: #ff7e00; background: #fffcf8; box-shadow: 0 6px 18px rgba(255, 126, 0, 0.2); }
-    .pay-card img { width: 100%; height: 90px; object-fit: cover; border-radius: 12px; margin-bottom: 6px; background: #eee; }
+    .pay-img-box { display: flex; gap: 6px; width: 100%; justify-content: center; }
+    .pay-card img { width: 45px; height: 45px; object-fit: cover; border-radius: 10px; background: #eee; border: 1px solid #ddd; }
     .pay-card p { font-size: 13px; font-weight: 700; color: #333; }
 
     .amount-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; }
@@ -173,7 +177,7 @@
   <div class="top-bar">
     <div class="header-left">
       <i class="fas fa-ellipsis-v" onclick="toggleSidebar()"></i>
-      <span class="brand-title" id="appTitle">MVS TASK BOT</span>
+      <span class="brand-title" id="appTitle">MVS TASK SITE</span>
     </div>
     <div class="header-icons">
       <i class="fas fa-robot" title="AI Chat" onclick="switchTab('aichat')"></i>
@@ -199,11 +203,16 @@
 
   <!-- 1. HOME TAB -->
   <div id="home" class="container active-tab">
+    <!-- Updated Slider Banner with 2 descriptive text slides -->
     <div class="slider-container" id="sliderContainer">
-      <div class="slide active" style="background-image: url('1000086868.jpg');"></div>
-      <div class="slide" style="background-image: url('1000086869.jpg');"></div>
-      <div class="slide" style="background-image: url('1000086870.jpg');"></div>
-      <div class="slide" style="background-image: url('1000086872.jpg');"></div>
+      <div class="slide active">
+        <h2>🚀 ফ্রিতে অনলাইনে আর্নিং</h2>
+        <p>ফ্রিতে অনলাইনে আর্নিং করতে এখনই আমাদের এমবিএস সাইটে কাজ শুরু করুন এবং প্রতিদিন ভালো টাকা আয় করুন!</p>
+      </div>
+      <div class="slide">
+        <h2>💸 ইনস্ট্যান্ট পেমেন্ট সিস্টেম</h2>
+        <p>পেমেন্ট ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে নিতে পারবে। নিরাপদে কাজ করুন এবং নিয়মিত পেমেন্ট পান!</p>
+      </div>
     </div>
 
     <div class="balance-card">
@@ -303,23 +312,29 @@
     </div>
   </div>
 
-  <!-- 4. WITHDRAW TAB -->
+  <!-- 4. WITHDRAW TAB (bKash & Nagad with dual images as requested) -->
   <div id="withdraw" class="container">
     <div class="section-title">
       <span>টাকা উত্তোলন (Withdraw)</span>
       <span class="history-btn-sm" onclick="switchTab('withdrawHistory')">উত্তোলন হিস্ট্রি</span>
     </div>
     <p style="font-size: 12px; color: #666; margin-top: 5px; font-weight: 500;">
-      ⚠️ নিয়ম: সর্বনিম্ন ২৫ টাকা উত্তোলন করতে হবে। ২৪ ঘণ্টার মধ্যে পেমেন্ট পাবেন।
+      ⚠️ নিয়ম: সর্বনিম্ন ২৫ টাকা উত্তোলন করতে হবে। ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে পেমেন্ট পাবেন।
     </p>
 
     <div class="payment-methods">
       <div class="pay-card" id="bKashCard" onclick="selectPayment('bKash')">
-        <img src="1000086871_2.jpg" alt="bKash" onerror="this.src='https://i.ibb.co/3134m8K/bkash.png'">
+        <div class="pay-img-box">
+          <img src="1000086871_2.jpg" alt="bKash 1" onerror="this.src='https://i.ibb.co/3134m8K/bkash.png'">
+          <img src="1000086871_2.jpg" alt="bKash 2" onerror="this.src='https://i.ibb.co/3134m8K/bkash.png'">
+        </div>
         <p>বিকাশ (bKash)</p>
       </div>
       <div class="pay-card" id="nagadCard" onclick="selectPayment('Nagad')">
-        <img src="1000086867_2.jpg" alt="Nagad[span_0](start_span)"[span_0](end_span) onerror="this.src='https://i.ibb.co/6y40S4v/nagad.png'">
+        <div class="pay-img-box">
+          <img src="1000086867_2.jpg" alt="Nagad 1" onerror="this.src='https://i.ibb.co/6y40S4v/nagad.png'">
+          <img src="1000086867_2.jpg" alt="Nagad 2" onerror="this.src='https://i.ibb.co/6y40S4v/nagad.png'">
+        </div>
         <p>নগদ (Nagad)</p>
       </div>
     </div>
@@ -351,16 +366,16 @@
     </div>
   </div>
 
-  <!-- 6. REFER TAB -->
+  <!-- 6. REFER TAB (Site referral link system instead of bot) -->
   <div id="refer" class="container">
     <div class="banner-card" style="text-align: center;">
       <h2>বন্ধুদের রেফার করুন</h2>
       <p>প্রতি সফল রেফারে পাবেন নিশ্চিত ৳১৫ এবং জীবনভর পাবেন ৫% কমিশন!</p>
     </div>
     <div class="balance-card">
-      <p style="font-size: 13px; color: #666; margin-bottom: 5px; font-weight: 600;">আপনার ইউনিক রেফারেল লিংক:</p>
+      <p style="font-size: 13px; color: #666; margin-bottom: 5px; font-weight: 600;">আপনার সাইটের ইউনিক রেফারেল লিংক:</p>
       <input type="text" id="referLink" class="input-field" value="" readonly>
-      <button class="btn-submit-main" onclick="copyReferLink()">লিংক কপি করুন</button>
+      <button class="btn-submit-main" onclick="copyReferLink()">সাইট লিংক কপি করুন</button>
     </div>
 
     <div class="section-title"><i class="fas fa-users"></i> আমার রেফারকৃত ব্যবহারকারী ও কমিশন তালিকা</div>
@@ -374,7 +389,7 @@
     <div class="section-title"><i class="fas fa-robot" style="color:#ff7e00;"></i> <span>AI লাইভ সাপোর্ট চ্যাট</span></div>
     <div class="balance-card">
       <div class="chat-box" id="chatBox">
-        <div class="chat-msg bot">হ্যালো! আমি MVS AI অ্যাসিস্ট্যান্ট। ২৪ ঘণ্টার মধ্যে পেমেন্ট ও সাপোর্ট দেওয়া হয়।</div>
+        <div class="chat-msg bot">হ্যালো! আমি MVS AI অ্যাসিস্ট্যান্ট। ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে পেমেন্ট দেওয়া হয়।</div>
       </div>
       <div style="display:flex; gap:8px;">
         <input type="text" id="chatInput" class="input-field" placeholder="আপনার প্রশ্নটি লিখুন..." style="margin:0;">
@@ -409,13 +424,6 @@
     </div>
   </div>
 
-  <!-- MICRO JOB TAB -->
-  <div id="microjob" class="container" style="text-align: center; padding-top: 40px;">
-    <i class="fas fa-briefcase" style="font-size: 55px; color: #ff7e00; margin-bottom: 15px;"></i>
-    <h3 style="font-weight: 800;">মাইক্রো জব সেকশন</h3>
-    <p style="font-size: 14px; color: #666; margin: 10px 0;">প্রতিটি মাইক্রো জবের রেট: <b>৳৫.০০</b></p>
-  </div>
-
   <!-- ADS TAB -->
   <div id="ads" class="container" style="text-align: center; padding-top: 30px;">
     <div class="banner-card">
@@ -428,61 +436,21 @@
     </div>
   </div>
 
-  <!-- ================= SPECIFIC & ALL HISTORY TABS ================= -->
-  
-  <!-- 1. ALL HISTORY -->
-  <div id="allHistory" class="container">
-    <div class="section-title"><i class="fas fa-history"></i> <span>সকল কাজের হিস্ট্রি (All History)</span></div>
-    <div id="allHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো হিস্ট্রি নেই।</p></div>
-  </div>
-
-  <!-- 2. WITHDRAW HISTORY -->
-  <div id="withdrawHistory" class="container">
-    <div class="section-title"><i class="fas fa-wallet"></i> <span>উত্তোলন হিস্ট্রি (Withdraw History)</span></div>
-    <div id="withdrawHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো উত্তোলন হিস্ট্রি নেই।</p></div>
-  </div>
-
-  <!-- 3. TASK HISTORY -->
-  <div id="taskHistory" class="container">
-    <div class="section-title"><i class="fas fa-tasks"></i> <span>টাস্ক হিস্ট্রি (Task History)</span></div>
-    <div id="taskHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো টাস্ক হিস্ট্রি নেই।</p></div>
-  </div>
-
-  <!-- 4. FACEBOOK SELL HISTORY -->
-  <div id="fbHistory" class="container">
-    <div class="section-title"><i class="fab fa-facebook" style="color:#1877F2;"></i> <span>ফেসবুক সেল হিস্ট্রি (Facebook History)</span></div>
-    <div id="fbHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো ফেসবুক সেল হিস্ট্রি নেই।</p></div>
-  </div>
-
-  <!-- 5. INSTAGRAM SELL HISTORY -->
-  <div id="instaHistory" class="container">
-    <div class="section-title"><i class="fab fa-instagram" style="color:#E4405F;"></i> <span>Instagram সেল হিস্ট্রি</span></div>
-    <div id="instaHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো ইনস্টাগ্রাম সেল হিস্ট্রি নেই।</p></div>
-  </div>
-
-  <!-- 6. GMAIL SELL HISTORY -->
-  <div id="gmailHistory" class="container">
-    <div class="section-title"><i class="fas fa-envelope" style="color:#EA4335;"></i> <span>জিমেইল সেল হিস্ট্রি (Gmail History)</span></div>
-    <div id="gmailHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো জিমেইল সেল হিস্ট্রি নেই।</p></div>
-  </div>
-
-  <!-- 7. MOBILE RECHARGE HISTORY -->
-  <div id="rechargeHistory" class="container">
-    <div class="section-title"><i class="fas fa-mobile-alt"></i> <span>মোবাইল রিচার্জ হিস্ট্রি (Recharge History)</span></div>
-    <div id="rechargeHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো মোবাইল রিচার্জ হিস্ট্রি নেই।</p></div>
-  </div>
-
-  <!-- 8. ADS HISTORY -->
-  <div id="adsHistory" class="container">
-    <div class="section-title"><i class="fas fa-ad"></i> <span>অ্যাড ওয়াচ হিস্ট্রি (Ads History)</span></div>
-    <div id="adsHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো অ্যাড হিস্ট্রি নেই।</p></div>
-  </div>
+  <!-- HISTORY TABS -->
+  <div id="allHistory" class="container"><div class="section-title"><i class="fas fa-history"></i> <span>সকল কাজের হিস্ট্রি (All History)</span></div><div id="allHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো হিস্ট্রি নেই।</p></div></div>
+  <div id="withdrawHistory" class="container"><div class="section-title"><i class="fas fa-wallet"></i> <span>উত্তোলন হিস্ট্রি (Withdraw History)</span></div><div id="withdrawHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো উত্তোলন হিস্ট্রি নেই।</p></div></div>
+  <div id="taskHistory" class="container"><div class="section-title"><i class="fas fa-tasks"></i> <span>টাস্ক হিস্ট্রি (Task History)</span></div><div id="taskHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো টাস্ক হিস্ট্রি নেই।</p></div></div>
+  <div id="fbHistory" class="container"><div class="section-title"><i class="fab fa-facebook" style="color:#1877F2;"></i> <span>ফেসবুক সেল হিস্ট্রি</span></div><div id="fbHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো ফেসবুক সেল হিস্ট্রি নেই।</p></div></div>
+  <div id="instaHistory" class="container"><div class="section-title"><i class="fab fa-instagram" style="color:#E4405F;"></i> <span>Instagram সেল হিস্ট্রি</span></div><div id="instaHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো ইনস্টাগ্রাম সেল হিস্ট্রি নেই।</p></div></div>
+  <div id="gmailHistory" class="container"><div class="section-title"><i class="fas fa-envelope" style="color:#EA4335;"></i> <span>জিমেইল সেল হিস্ট্রি</span></div><div id="gmailHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো জিমেইল সেল হিস্ট্রি নেই।</p></div></div>
+  <div id="rechargeHistory" class="container"><div class="section-title"><i class="fas fa-mobile-alt"></i> <span>মোবাইল রিচার্জ হিস্ট্রি</span></div><div id="rechargeHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো মোবাইল রিচার্জ হিস্ট্রি নেই।</p></div></div>
+  <div id="adsHistory" class="container"><div class="section-title"><i class="fas fa-ad"></i> <span>অ্যাড ওয়াচ হিস্ট্রি</span></div><div id="adsHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো অ্যাড হিস্ট্রি নেই।</p></div></div>
 
   <!-- SUPPORT TAB -->
   <div id="support" class="container">
     <div class="banner-card" style="text-align: center;">
       <h2>লাইভ সাপোর্ট সেন্টার</h2>
-      <p>যেকোনো সমস্যায় আমাদের সাপোর্ট চ্যানেলে যোগাযোগ করুন। ২৪ থেকে ৪৮ ঘণ্টার মধ্যে সমাধান দেওয়া হয়।</p>
+      <p>যেকোনো সমস্যায় আমাদের সাপোর্ট চ্যানেলে যোগাযোগ করুন। ২৪ ঘণ্টার মধ্যে সমাধান দেওয়া হয়।</p>
     </div>
   </div>
 
@@ -501,7 +469,7 @@
   <div class="form-overlay" id="verifyModal" style="display:none;">
     <div class="form-box" style="text-align:center;">
       <h3 style="color:#ff7e00; margin-bottom:10px; font-weight: 800;">চ্যানেল ভেরিফিকেশন</h3>
-      <p style="font-size: 13px; margin-bottom: 15px; font-weight: 500;">মিনি অ্যাপ ব্যবহার করতে নিচের চ্যানেলগুলোতে জয়েন করুন:</p>
+      <p style="font-size: 13px; margin-bottom: 15px; font-weight: 500;">সাইট ব্যবহার করতে নিচের চ্যানেলগুলোতে জয়েন করুন:</p>
       <a id="chLink1" href="https://t.me/" target="_blank" class="btn-submit-main" style="display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; background:#0088cc; margin-bottom:10px;"><i class="fab fa-telegram"></i> চ্যানেল ১-এ জয়েন করুন</a>
       <a id="chLink2" href="https://t.me/" target="_blank" class="btn-submit-main" style="display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; background:#0088cc; margin-bottom:15px;"><i class="fab fa-telegram"></i> চ্যানেল ২-এ জয়েন করুন</a>
       <button class="btn-submit-main" onclick="verifyTelegramJoin()">ভেরিফাই করুন</button>
@@ -565,12 +533,19 @@
       document.getElementById('userPhoto').src = tgUser.photo_url;
       document.getElementById('profilePagePic').src = tgUser.photo_url;
     }
-    document.getElementById('referLink').value = `https://t.me/MVSTaskBot?start=ref_${tgUser.id}`;
+
+    // Site direct URL referral link generation (e.g. https://yourdomain.com/index.html?ref=USER_ID)
+    const siteBaseUrl = window.location.href.split('?')[0];
+    document.getElementById('referLink').value = `${siteBaseUrl}?ref=${tgUser.id}`;
+
+    // Handle URL referral tracking if someone joins via site link
+    const urlParams = new URLSearchParams(window.location.search);
+    const referredBy = urlParams.get('ref');
 
     const userRef = database.ref('users/' + tgUser.id);
     userRef.once('value').then(snapshot => {
       if (!snapshot.exists()) {
-        userRef.set({
+        let newUserObj = {
           name: tgUser.first_name,
           username: tgUser.username || '',
           balance: 0.00,
@@ -578,10 +553,26 @@
           referCount: 0,
           verified: false,
           joined: Date.now()
-        });
+        };
+        if (referredBy && referredBy !== String(tgUser.id)) {
+          newUserObj.referredBy = referredBy;
+          // Update referrer count
+          database.ref('users/' + referredBy).once('value').then(refSnap => {
+            if(refSnap.exists()) {
+              let refData = refSnap.val();
+              database.ref('users/' + referredBy).update({
+                referCount: (refData.referCount || 0) + 1,
+                balance: (refData.balance || 0) + 15, // 15 BDT refer bonus
+                totalEarn: (refData.totalEarn || refData.balance || 0) + 15
+              });
+            }
+          });
+        }
+        userRef.set(newUserObj);
       }
     });
 
+    // Slider animation
     let currentSlide = 0;
     const slides = document.querySelectorAll('.slide');
     function nextSlide() {
@@ -591,7 +582,7 @@
         slides[currentSlide].classList.add('active');
       }
     }
-    setInterval(nextSlide, 3500);
+    setInterval(nextSlide, 4000);
 
     database.ref('settings').on('value', snap => {
       let settings = snap.val() || {};
@@ -760,7 +751,7 @@
         totalWithdraw: (parseFloat(document.getElementById('totalWithdraw').innerText) + requestedAmt)
       });
 
-      alert(`✅ উইথড্র রিকোয়েস্ট জমা হয়েছে!\n২৪ ঘণ্টার মধ্যে পেমেন্ট পেয়ে যাবেন।`);
+      alert(`✅ উইথড্র রিকোয়েস্ট জমা হয়েছে!\n২৪ ঘণ্টার মধ্যে বিকাশ বা নগদে পেমেন্ট পেয়ে যাবেন।`);
       document.getElementById('withdrawNumber').value = '';
       document.getElementById('customWithdrawAmount').value = '';
     }
@@ -937,7 +928,7 @@
       const copyText = document.getElementById('referLink');
       copyText.select();
       navigator.clipboard.writeText(copyText.value);
-      alert("✅ আপনার রেফার লিংক কপি করা হয়েছে!");
+      alert("✅ সাইটের রেফার লিংক কপি করা হয়েছে!");
     }
 
     function sendAiMessage() {
@@ -950,7 +941,7 @@
       chatBox.scrollTop = chatBox.scrollHeight;
 
       setTimeout(() => {
-        let reply = "আমি আপনার প্রশ্নটি বুঝতে পেরেছি। হিস্ট্রি সেকশন থেকে আপনার কাজের স্ট্যাটাস চেক করতে পারবেন।";
+        let reply = "আমি আপনার প্রশ্নটি বুঝতে পেরেছি। ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে পেমেন্ট দেওয়া হয়।";
         chatBox.innerHTML += `<div class="chat-msg bot">${reply}</div>`;
         chatBox.scrollTop = chatBox.scrollHeight;
       }, 600);
@@ -967,7 +958,6 @@
       document.getElementById('referralUserList').innerHTML = refHtml || '<p style="text-align:center; color:#777; padding:15px;">এখনো কোনো ইউজার আপনার লিংক থেকে যুক্ত হয়নি।</p>';
     });
 
-    // আলাদা আলাদা পার্সোনাল হিস্ট্রি ও অল হিস্ট্রি রেন্ডারিং
     database.ref('submissions').orderByChild('userId').equalTo(tgUser.id).on('value', snap => {
       let subs = snap.val() || {};
       let allHtml = '', taskHtml = '', fbHtml = '', instaHtml = '', gmailHtml = '', rechargeHtml = '', adsHtml = '';
