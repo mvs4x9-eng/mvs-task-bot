@@ -373,9 +373,9 @@
       <p data-lang="refDesc">প্রতি সফল রেফারে পাবেন নিশ্চিত ৳১০ (ইউজার কাজ সম্পন্ন করার পর যোগ হবে) এবং আজীবন ৫% কমিশন!</p>
     </div>
     <div class="balance-card">
-      <p style="font-size: 13px; color: #666; margin-bottom: 5px; font-weight: 600;" data-lang="refLinkLbl">আপনার রেফারেল লিংক:</p>
+      <p style="font-size: 13px; color: #666; margin-bottom: 5px; font-weight: 600;" data-lang="refLinkLbl">আপনার টেলিগ্রাম বট রেফারেল লিংক:</p>
       <input type="text" id="referLink" class="input-field" value="" readonly>
-      <button class="btn-submit-main" onclick="copyReferLink()" data-lang="copyBtn">লিংক কপি করুন</button>
+      <button class="btn-submit-main" onclick="copyReferLink()" data-lang="copyBtn">বট লিংক কপি করুন</button>
     </div>
 
     <div class="section-title"><i class="fas fa-users"></i> <span data-lang="refListTitle">আমার রেফারকৃত ব্যবহারকারী ও কমিশন তালিকা</span></div>
@@ -533,7 +533,7 @@
         lbHeader: "টপ ১০ সাপ্তাহিক লিডারবোর্ড", lbNotice: "ℹ️ প্রতি সপ্তাহে এই লিডারবোর্ড আপডেট হয়। কাজের পরিমাণ ও অর্জিত অ্যামাউন্টের ভিত্তিতে সেরা ১০ জন এখানে থাকেন।",
         loading: "লিডারবোর্ড লোড হচ্ছে...",
         refTitle: "বন্ধুদের রেফার করুন", refDesc: "প্রতি সফল রেফারে পাবেন নিশ্চিত ৳১০ (ইউজার কাজ সম্পন্ন করার পর যোগ হবে) এবং আজীবন ৫% কমিশন!",
-        refLinkLbl: "আপনার রেফারেল লিংক:", copyBtn: "লিংক কপি করুন",
+        refLinkLbl: "আপনার টেলিগ্রাম বট রেফারেল লিংক:", copyBtn: "বট লিংক কপি করুন",
         refListTitle: "আমার রেফারকৃত ব্যবহারকারী ও কমিশন তালিকা", noRef: "এখনো কোনো ইউজার আপনার লিংক থেকে যুক্ত হয়নি।",
         aiHeader: "AI লাইভ সাপোর্ট চ্যাট", aiWelcome: "হ্যালো! আমি MVS AI অ্যাসিস্ট্যান্ট। যেকোনো বিষয়ে আমাকে প্রশ্ন করুন (যেমন: প্রিমিয়াম নেব কিভাবে, ফেসবুক সেল, উইথড্র, টাস্ক ইত্যাদি)।",
         profHeader: "প্রোফাইল ও ইনফরমেশন", profBalLbl: "প্রোফাইল ব্যালেন্স",
@@ -574,7 +574,7 @@
         lbHeader: "Top 10 Weekly Leaderboard", lbNotice: "ℹ️ Leaderboard updates weekly based on total completed tasks and earnings.",
         loading: "Loading leaderboard...",
         refTitle: "Refer Your Friends", refDesc: "Earn 10 BDT per referral (credited after user completes a task) + 5% commission!",
-        refLinkLbl: "Your Referral Link:", copyBtn: "Copy Link",
+        refLinkLbl: "Your Telegram Bot Referral Link:", copyBtn: "Copy Bot Link",
         refListTitle: "My Referred Users & Commissions", noRef: "No users joined from your link yet.",
         aiHeader: "AI Live Support Chat", aiWelcome: "Hello! I am MVS AI Assistant. Ask me anything (e.g. how to get premium, sell Facebook accounts, withdraw, tasks, etc.).",
         profHeader: "Profile & Information", profBalLbl: "Profile Balance",
@@ -621,12 +621,23 @@
       document.getElementById('profilePagePic').src = tgUser.photo_url;
     }
 
-    // Direct clean site referral link supporting multiple telegram accounts
-    const cleanOrigin = window.location.origin + window.location.pathname;
-    document.getElementById('referLink').value = `${cleanOrigin}?ref=${tgUser.id}`;
+    // সঠিক বটের ইউজারনেম দিয়ে রেফারেল লিংক জেনারেটর (ম্যাটched with @MVS_Task_Bot)
+    const botUsername = "MVS_Task_Bot"; 
+    document.getElementById('referLink').value = `https://t.me/${botUsername}?start=ref_${tgUser.id}`;
 
+    // স্টার্ট প্যারামিটার বা ইউআরএল থেকে রেফার আইডি ডিটেক্ট করার সিস্টেম
+    let referredBy = null;
     const urlParams = new URLSearchParams(window.location.search);
-    const referredBy = urlParams.get('ref');
+    if (urlParams.get('ref')) {
+      referredBy = urlParams.get('ref');
+    }
+    
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe) {
+      const startParam = window.Telegram.WebApp.initDataUnsafe.start_param;
+      if (startParam && startParam.startsWith('ref_')) {
+        referredBy = startParam.replace('ref_', '');
+      }
+    }
 
     const userRef = database.ref('users/' + tgUser.id);
     userRef.once('value').then(snapshot => {
@@ -640,6 +651,7 @@
           taskCompleted: false,
           joined: Date.now()
         };
+        // যদি অন্য কারো রেফার লিংকে ঢুকে থাকে, তবে শুধু তার সাথেই যুক্ত হবে (নিজের আইডি হলে হবে না)
         if (referredBy && referredBy !== String(tgUser.id)) {
           newUserObj.referredBy = referredBy;
           database.ref('referrals/' + referredBy + '/' + tgUser.id).set({
@@ -875,6 +887,7 @@
 
     function closeModal() { document.getElementById('submissionModal').style.display = 'none'; }
 
+    // টাস্ক সম্পন্ন করার পর সঠিক রেফারকারীর অ্যাকাউন্টে বোনাস যোগ করার সিস্টেম
     function checkAndRewardReferrer() {
       userRef.once('value').then(snap => {
         let uData = snap.val() || {};
@@ -986,7 +999,7 @@
       const copyText = document.getElementById('referLink');
       copyText.select();
       navigator.clipboard.writeText(copyText.value);
-      alert(currentLang === 'bn' ? "✅ রেফার লিংক কপি করা হয়েছে!" : "✅ Referral link copied!");
+      alert(currentLang === 'bn' ? "✅ টেলিগ্রাম বট রেফার লিংক কপি করা হয়েছে!" : "✅ Telegram bot referral link copied!");
     }
 
     function sendAiMessage() {
@@ -1009,7 +1022,7 @@
         } else if(text.includes('টাস্ক') || text.includes('task') || text.includes('কাজ')) {
           reply = "টাস্ক অপশনে গিয়ে উপলব্ধ টাস্কগুলোর নিয়ম মেনে কাজ করুন এবং প্রুফ (স্ক্রিনশট ও বিবরণ) দিয়ে সাবমিট করুন। অ্যাডমিন চেক করে রিওয়ার্ড আপনার ব্যালেন্সে যোগ করে দেবেন।";
         } else if(text.includes('রেফার') || text.includes('refer')) {
-          reply = "রেফার অপশন থেকে আপনার ইউনিক লিংকটি বন্ধুদের সাথে শেয়ার করুন। যাকে রেফার করবেন সে একটি কাজ সম্পূর্ণ করার সাথে সাথেই আপনি পাবেন ১০ টাকা এবং আজীবন ৫% কমিশন!";
+          reply = "রেফার অপশন থেকে আপনার ইউনিক টেলিগ্রাম বট লিংকটি বন্ধুদের সাথে শেয়ার করুন। যাকে রেফার করবেন সে একটি কাজ সম্পূর্ণ করার সাথে সাথেই আপনি পাবেন ১০ টাকা এবং আজীবন ৫% কমিশন!";
         } else {
           reply = "আমি আপনার বিষয়টি বুঝতে পেরেছি। আপনার যেকোনো কাজের স্ট্যাটাস বা সমস্যা সমাধানের জন্য ২৪ ঘণ্টার মধ্যে আমাদের সাপোর্ট গ্রুপে যোগাযোগ করতে পারেন।";
         }
@@ -1018,6 +1031,7 @@
       }, 600);
     }
 
+    // নির্দিষ্ট ইউজারের রেফারকৃত তালিকা ফায়ারবেস থেকে রিয়েলটাইমে লোড করা
     database.ref('referrals/' + tgUser.id).on('value', snap => {
       let refs = snap.val() || {};
       let refHtml = '';
