@@ -365,7 +365,7 @@
   <div id="refer" class="container">
     <div class="banner-card" style="text-align: center;">
       <h2 data-lang="refTitle">বন্ধুদের রেফার করুন</h2>
-      <p data-lang="refDesc">প্রতি সফল রেফারে পাবেন নিশ্চিত ৳১৫ এবং জীবনভর পাবেন ৫% কমিশন!</p>
+      <p data-lang="refDesc">প্রতি সফল রেফারে পাবেন নিশ্চিত ৳১০ এবং আজীবন ৫% কমিশন!</p>
     </div>
     <div class="balance-card">
       <p style="font-size: 13px; color: #666; margin-bottom: 5px; font-weight: 600;" data-lang="refLinkLbl">আপনার টেলিগ্রাম বট রেফারেল লিংক:</p>
@@ -542,7 +542,7 @@
         amtLabel: "অ্যামাউন্ট সিলেক্ট করুন অথবা নিজে লিখুন:", wdBtn: "উত্তোলন নিশ্চিত করুন",
         lbHeader: "টপ ১০ সাপ্তাহিক লিডারবোর্ড", lbNotice: "ℹ️ প্রতি সপ্তাহে এই লিডারবোর্ড আপডেট হয়। কাজের পরিমাণ ও অর্জিত অ্যামাউন্টের ভিত্তিতে সেরা ১০ জন এখানে থাকেন।",
         loading: "লিডারবোর্ড লোড হচ্ছে...",
-        refTitle: "বন্ধুদের রেফার করুন", refDesc: "প্রতি সফল রেফারে পাবেন নিশ্চিত ৳১৫ এবং জীবনভর পাবেন ৫% কমিশন!",
+        refTitle: "বন্ধুদের রেফার করুন", refDesc: "প্রতি সফল রেফারে পাবেন নিশ্চিত ৳১০ এবং আজীবন ৫% কমিশন!",
         refLinkLbl: "আপনার টেলিগ্রাম বট রেফারেল লিংক:", copyBtn: "বট লিংক কপি করুন",
         refListTitle: "আমার রেফারকৃত ব্যবহারকারী ও কমিশন তালিকা", noRef: "এখনো কোনো ইউজার আপনার লিংক থেকে যুক্ত হয়নি।",
         aiHeader: "AI লাইভ সাপোর্ট চ্যাট", aiWelcome: "হ্যালো! আমি MVS AI অ্যাসিস্ট্যান্ট। যেকোনো বিষয়ে আমাকে প্রশ্ন করুন (যেমন: প্রিমিয়াম নেব কিভাবে, ফেসবুক সেল, উইথড্র, টাস্ক ইত্যাদি)।",
@@ -584,7 +584,7 @@
         amtLabel: "Select amount or type manually:", wdBtn: "Confirm Withdrawal",
         lbHeader: "Top 10 Weekly Leaderboard", lbNotice: "ℹ️ Leaderboard updates weekly based on total completed tasks and earnings.",
         loading: "Loading leaderboard...",
-        refTitle: "Refer Your Friends", refDesc: "Earn 15 BDT guaranteed per referral + 5% lifetime commission!",
+        refTitle: "Refer Your Friends", refDesc: "Earn 10 BDT guaranteed per referral + 5% lifetime commission!",
         refLinkLbl: "Your Telegram Bot Referral Link:", copyBtn: "Copy Bot Link",
         refListTitle: "My Referred Users & Commissions", noRef: "No users joined from your link yet.",
         aiHeader: "AI Live Support Chat", aiWelcome: "Hello! I am MVS AI Assistant. Ask me anything (e.g. how to get premium, sell Facebook accounts, withdraw, tasks, etc.).",
@@ -634,8 +634,8 @@
       document.getElementById('profilePagePic').src = tgUser.photo_url;
     }
 
-    // Telegram Bot Referral Link Generation (e.g. https://t.me/your_bot_username?start=ref_ID)
-    const botUsername = "mvs_task_bot"; // আপনার টেলিগ্রাম বটের ইউজারনেম এখানে দিন
+    // Telegram Bot Referral Link Generation (10 BDT bonus)
+    const botUsername = "mvs_task_bot"; 
     document.getElementById('referLink').value = `https://t.me/${botUsername}?start=ref_${tgUser.id}`;
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -660,8 +660,8 @@
               let refData = refSnap.val();
               database.ref('users/' + referredBy).update({
                 referCount: (refData.referCount || 0) + 1,
-                balance: (refData.balance || 0) + 15,
-                totalEarn: (refData.totalEarn || refData.balance || 0) + 15
+                balance: (refData.balance || 0) + 10, // 10 BDT refer bonus
+                totalEarn: (refData.totalEarn || refData.balance || 0) + 10
               });
             }
           });
@@ -745,7 +745,7 @@
     function openVerifyModal() { document.getElementById('verifyModal').style.display = 'flex'; }
     function closeVerifyModal() { document.getElementById('verifyModal').style.display = 'none'; }
 
-    // কঠোর ভেরিফিকেশন চেক (ইউজারকে আগে চ্যানেলে জয়েন করতে হবে, অটো বাইপাস হবে না)
+    // পার্মানেন্ট ভেরিফিকেশন (একবার ভেরিফাই করলে আজীবন সেভ থাকবে)
     function verifyTelegramJoin() {
       let confirmed = confirm(currentLang === 'bn' ? "আপনি কি চ্যানেল ১ এবং সাপোর্ট গ্রুপ উভয়টিতেই জয়েন করেছেন?" : "Have you joined both Channel 1 and Support Group?");
       if (!confirmed) return;
@@ -1008,7 +1008,7 @@
 
         dataPayload.field1 = uidInput ? uidInput.value.trim() : (proofInput ? proofInput.value.trim() : '');
         dataPayload.field2 = passInput ? passInput.value.trim() : base64ImageProof;
-        dataPayload.field3 = document.getElementById('f_tfa') ? document.getElementById('f_tfa'].value.trim() : '';
+        dataPayload.field3 = document.getElementById('f_tfa') ? document.getElementById('f_tfa').value.trim() : '';
       }
 
       database.ref('submissions').push(dataPayload);
@@ -1023,14 +1023,13 @@
       alert(currentLang === 'bn' ? "✅ টেলিগ্রাম বট রেফার লিংক কপি করা হয়েছে!" : "✅ Telegram bot referral link copied!");
     }
 
-    // স্মার্ট এআই সাপোর্ট চ্যাট (সকল সাধারণ প্রশ্নের সঠিক উত্তর দেবে)
+    // স্মার্ট এআই সাপোর্ট চ্যাট
     function sendAiMessage() {
       const input = document.getElementById('chatInput');
       const text = input.value.trim().toLowerCase();
       if(!text) return;
       const chatBox = document.getElementById('chatBox');
       chatBox.innerHTML += `<div class="chat-msg user">${input.value}</div>`;
-      let userQuery = input.value;
       input.value = '';
       chatBox.scrollTop = chatBox.scrollHeight;
 
@@ -1045,7 +1044,7 @@
         } else if(text.includes('টাস্ক') || text.includes('task') || text.includes('কাজ')) {
           reply = "টাস্ক অপশনে গিয়ে উপলব্ধ টাস্কগুলোর নিয়ম মেনে কাজ করুন এবং প্রুফ (স্ক্রিনশট ও বিবরণ) দিয়ে সাবমিট করুন। অ্যাডমিন চেক করে রিওয়ার্ড আপনার ব্যালেন্সে যোগ করে দেবেন।";
         } else if(text.includes('রেফার') || text.includes('refer')) {
-          reply = "রেফার অপশন থেকে আপনার ইউনিক টেলিগ্রাম বট লিংকটি বন্ধুদের সাথে শেয়ার করুন। প্রতি সফল রেফারে পাবেন ১৫ টাকা এবং আজীবন ৫% কমিশন!";
+          reply = "রেফার অপশন থেকে আপনার ইউনিক টেলিগ্রাম বট লিংকটি বন্ধুদের সাথে শেয়ার করুন। প্রতি সফল রেফারে পাবেন ১০ টাকা এবং আজীবন ৫% কমিশন!";
         } else {
           reply = "আমি আপনার বিষয়টি বুঝতে পেরেছি। আপনার যেকোনো কাজের স্ট্যাটাস বা সমস্যা সমাধানের জন্য ২৪ ঘণ্টার মধ্যে আমাদের সাপোর্ট গ্রুপে যোগাযোগ করতে পারেন।";
         }
