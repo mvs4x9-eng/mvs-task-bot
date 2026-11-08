@@ -46,7 +46,6 @@
     .sidebar ul li:hover { background: #fff5eb; color: #ff7e00; padding-left: 25px; }
     .sidebar ul li i { color: #ff7e00; width: 22px; font-size: 16px; }
 
-    /* Update Notice Banner replacing Verification */
     .update-banner {
       background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 1px solid #90caf9; color: #0d47a1;
       padding: 12px 15px; border-radius: 16px; margin-bottom: 15px; font-size: 12px; font-weight: 600;
@@ -190,7 +189,6 @@
   </div>
 
   <div style="padding: 15px 15px 0 15px;">
-    <!-- Update Notice Banner replacing Verification -->
     <div class="update-banner">
       <span data-lang="updateNoticeText">📢 প্রতিদিন নিয়মিত আপডেট জানতে আমাদের চ্যানেল ও সাপোর্ট গ্রুপে জয়েন করুন:</span>
       <div class="update-banner-btns">
@@ -644,7 +642,6 @@
         };
         if (referredBy && referredBy !== String(tgUser.id)) {
           newUserObj.referredBy = referredBy;
-          // Register in referrer's pending referral list immediately
           database.ref('referrals/' + referredBy + '/' + tgUser.id).set({
             name: tgUser.first_name,
             userId: tgUser.id,
@@ -878,12 +875,10 @@
 
     function closeModal() { document.getElementById('submissionModal').style.display = 'none'; }
 
-    // Task completion check for rewarding referrer 10 BDT + updating stats
     function checkAndRewardReferrer() {
       userRef.once('value').then(snap => {
         let uData = snap.val() || {};
         if (uData.referredBy && !uData.taskCompleted) {
-          // Mark user taskCompleted as true so it only rewards once
           userRef.update({ taskCompleted: true });
 
           let refId = uData.referredBy;
@@ -891,7 +886,7 @@
             if (refSnap.exists()) {
               let rData = refSnap.val();
               let newCount = (rData.referCount || 0) + 1;
-              let newBal = (rData.balance || 0) + 10; // 10 BDT reward
+              let newBal = (rData.balance || 0) + 10;
               let newTotal = (rData.totalEarn || rData.balance || 0) + 10;
 
               database.ref('users/' + refId).update({
@@ -900,7 +895,6 @@
                 totalEarn: newTotal
               });
 
-              // Update referral list status in Firebase
               database.ref('referrals/' + refId + '/' + tgUser.id).update({
                 status: 'Completed Task (Rewarded ৳10)',
                 commission: 10
@@ -931,7 +925,7 @@
         dataPayload.field3 = "Telegram: " + tguser;
         
         database.ref('submissions').push(dataPayload);
-        checkAndRewardReferrer(); // Trigger referrer reward on first action/submission
+        checkAndRewardReferrer();
         alert(currentLang === 'bn' ? "ভাই, প্রিমিয়াম সাবমিট করার পরে এটি অ্যাডমিন প্যানেলে পাঠানো হয়েছে, শীঘ্রই আপনার সাথে যোগাযোগ করবে। আপনি রেডি থাকুন।" : "Sir, your Premium request has been sent to admin panel. We will contact you soon. Stay ready!");
         closeModal();
         return;
@@ -983,7 +977,7 @@
       }
 
       database.ref('submissions').push(dataPayload);
-      checkAndRewardReferrer(); // Trigger referrer reward on first action/submission
+      checkAndRewardReferrer();
       alert(currentLang === 'bn' ? "✅ সফলভাবে সাবমিট হয়েছে! ২৪ ঘণ্টার মধ্যে আপডেট দেওয়া হবে।" : "✅ Successfully submitted!");
       closeModal();
     }
@@ -995,7 +989,6 @@
       alert(currentLang === 'bn' ? "✅ রেফার লিংক কপি করা হয়েছে!" : "✅ Referral link copied!");
     }
 
-    // স্মার্ট এআই সাপোর্ট চ্যাট
     function sendAiMessage() {
       const input = document.getElementById('chatInput');
       const text = input.value.trim().toLowerCase();
@@ -1025,7 +1018,6 @@
       }, 600);
     }
 
-    // Display list of referred users and their statuses / commissions
     database.ref('referrals/' + tgUser.id).on('value', snap => {
       let refs = snap.val() || {};
       let refHtml = '';
