@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVS TASK BOT - Ultimate Edition</title>
+  
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #ff7e00, #ff5100);
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-color: #1e293b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+    body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 90px; }
+
+    .top-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 15px 20px; background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .header-left i { font-size: 22px; cursor: pointer; color: #ff7e00; background: #fff5eb; padding: 8px; border-radius: 12px; }
+    .brand-title { font-weight: 800; font-size: 18px; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header-icons i { font-size: 18px; margin-left: 10px; color: #555; cursor: pointer; background: #f1f3f5; padding: 10px; border-radius: 50%; }
+
+    /* Side Drawer */
+    .sidebar {
+      position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
+      background: #fff; z-index: 1100; transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 5px 0 25px rgba(0,0,0,0.1); padding-top: 20px; overflow-y: auto;
+    }
+    .sidebar.active { left: 0; }
+    .sidebar h3 { padding: 0 20px 15px; color: #ff7e00; border-bottom: 2px solid #f1f3f5; font-size: 16px; font-weight: bold; }
+    .sidebar ul { list-style: none; margin-top: 10px; }
+    .sidebar ul li {
+      padding: 14px 20px; border-bottom: 1px solid #f8f9fa; display: flex; align-items: center; gap: 15px; cursor: pointer; font-size: 14px; font-weight: 600; color: #444; transition: 0.2s;
+    }
+    .sidebar ul li:hover { background: #fff5eb; color: #ff7e00; padding-left: 25px; }
+    .sidebar ul li i { color: #ff7e00; width: 22px; font-size: 16px; }
+
+    .verify-banner {
+      background: linear-gradient(135deg, #fff8e1, #ffecb3); border: 1px solid #ffe082; color: #795548;
+      padding: 15px; border-radius: 16px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600;
+      box-shadow: 0 4px 10px rgba(255, 193, 7, 0.1);
+    }
+    .verify-banner button {
+      background: var(--primary-gradient); color: white; border: none; padding: 8px 16px; border-radius: 10px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(255, 126, 0, 0.3);
+    }
+
+    .container { padding: 15px; display: none; }
+    .container.active-tab { display: block; }
+
+    .user-card {
+      background: #fff; padding: 18px; border-radius: 16px; display: flex; align-items: center; gap: 15px;
+      margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid #f1f3f5;
+    }
+    .user-card img { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #ff7e00; object-fit: cover; }
+    .user-info h4 { font-size: 16px; color: #222; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+    .user-info p { font-size: 12px; color: #777; margin-top: 3px; }
+
+    .slider-container {
+      position: relative; width: 100%; height: 180px; border-radius: 20px; overflow: hidden; margin-bottom: 15px;
+      box-shadow: 0 8px 20px rgba(255, 126, 0, 0.25); background: #eee;
+    }
+    .slide {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.8s ease-in-out;
+      background-size: cover; background-position: center; border-radius: 20px;
+    }
+    .slide.active { opacity: 1; }
+
+    .balance-card { background: white; padding: 20px; border-radius: 20px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid #f1f3f5; }
+    .balance-amount { font-size: 32px; font-weight: 800; color: #111; margin: 8px 0; }
+    .stats-flex { display: flex; justify-content: space-between; border-top: 1px solid #f1f3f5; padding-top: 12px; margin-top: 12px; font-size: 13px; font-weight: 600; }
+
+    .section-title { font-size: 16px; font-weight: 800; margin: 20px 0 12px; color: #333; display: flex; justify-content: space-between; align-items: center; }
+    .history-btn-sm { font-size: 12px; background: #eef2f7; padding: 6px 12px; border-radius: 8px; cursor: pointer; color: #555; font-weight: 600; }
+
+    .home-action-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 15px; }
+    .home-action-btn {
+      background: #fff; border: 2px solid #f1f3f5; padding: 18px 8px; border-radius: 16px; text-align: center; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: all 0.3s ease; color: #333; font-size: 12px; font-weight: 700; position: relative;
+    }
+    .home-action-btn:hover { transform: translateY(-3px); border-color: #ff7e00; box-shadow: 0 6px 15px rgba(255, 126, 0, 0.15); }
+    .home-action-btn i { font-size: 28px; margin-bottom: 8px; display: block; color: #ff7e00; }
+    
+    .home-action-btn.locked { opacity: 0.6; cursor: not-allowed; border-color: #ddd; background: #f1f3f5; }
+    .lock-badge { position: absolute; top: 8px; right: 8px; background: #dc3545; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 6px; font-weight: bold; }
+
+    .task-card, .list-card { background: #fff; padding: 16px; border-radius: 16px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid #f1f3f5; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .task-card img { width: 55px; height: 55px; border-radius: 12px; object-fit: cover; }
+    .task-info { flex: 1; }
+    .task-info h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: #222; }
+    .task-info p { font-size: 12px; color: #666; font-weight: 500; }
+    .btn-action { background: var(--primary-gradient); color: white; border: none; padding: 9px 16px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(255, 126, 0, 0.3); }
+
+    .payment-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
+    .pay-card {
+      background: #fff; border: 2px solid #e9ecef; border-radius: 16px; padding: 10px; text-align: center; cursor: pointer; transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03); overflow: hidden;
+    }
+    .pay-card.selected { border-color: #ff7e00; background: #fffcf8; box-shadow: 0 6px 18px rgba(255, 126, 0, 0.2); }
+    .pay-card img { width: 100%; height: 90px; object-fit: cover; border-radius: 12px; margin-bottom: 6px; background: #eee; }
+    .pay-card p { font-size: 13px; font-weight: 700; color: #333; }
+
+    .amount-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; }
+    .amt-btn { background: #fff; border: 2px solid #e9ecef; padding: 14px 5px; border-radius: 12px; text-align: center; font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.2s; }
+    .amt-btn.selected { background: var(--primary-gradient); color: white; border-color: #ff7e00; box-shadow: 0 4px 12px rgba(255, 126, 0, 0.3); }
+
+    .input-field { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #e9ecef; border-radius: 12px; font-size: 14px; background: #fafbfc; transition: 0.2s; }
+    .input-field:focus { border-color: #ff7e00; outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(255, 126, 0, 0.1); }
+
+    .channel-btn-box { display: flex; gap: 10px; margin-top: 12px; }
+    .channel-btn { flex: 1; padding: 12px; background: #0088cc; color: white; border: none; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 13px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(0, 136, 204, 0.2); }
+
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; background: white;
+      display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #f1f3f5; z-index: 900;
+      box-shadow: 0 -5px 20px rgba(0,0,0,0.06); border-top-left-radius: 20px; border-top-right-radius: 20px;
+    }
+    .nav-item { text-align: center; color: #888; font-size: 11px; text-decoration: none; cursor: pointer; font-weight: 700; transition: 0.2s; }
+    .nav-item.active { color: #ff7e00; transform: translateY(-2px); }
+    .nav-item i { font-size: 22px; display: block; margin-bottom: 3px; }
+
+    .form-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1200; padding: 15px; }
+    .form-box { background: #fff; padding: 25px; border-radius: 22px; width: 100%; max-width: 380px; max-height: 90vh; overflow-y: auto; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+    
+    .btn-submit-main {
+      width: 100%; padding: 14px; background: var(--primary-gradient); color: white;
+      border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; margin-top: 12px;
+      box-shadow: 0 6px 15px rgba(255, 126, 0, 0.3); transition: 0.2s;
+    }
+
+    .chat-box { height: 300px; overflow-y: auto; border: 1px solid #eee; padding: 10px; border-radius: 12px; margin-bottom: 10px; background: #fafbfc; }
+    .chat-msg { margin-bottom: 10px; font-size: 13px; max-width: 80%; padding: 8px 12px; border-radius: 12px; }
+    .chat-msg.bot { background: #e2f0fd; color: #0056b3; align-self: flex-start; }
+    .chat-msg.user { background: #ff7e00; color: white; margin-left: auto; text-align: right; }
+  </style>
+</head>
+<body>
+
+  <!-- Side Drawer / Threedot Menu -->
+  <div class="sidebar" id="sidebar">
+    <h3>MVS TASK MENU</h3>
+    <ul>
+      <li onclick="switchTab('home'); toggleSidebar()"><i class="fas fa-home"></i> <span>হোম</span></li>
+      <li onclick="openSellModal('Facebook'); toggleSidebar()"><i class="fab fa-facebook" style="color: #1877F2;"></i> <span>ফেসবুক সেল (৳১২)</span></li>
+      <li onclick="openSellModal('Instagram'); toggleSidebar()"><i class="fab fa-instagram" style="color: #E4405F;"></i> <span>Instagram সেল (৳৪)</span></li>
+      <li onclick="openSellModal('Gmail'); toggleSidebar()"><i class="fas fa-envelope" style="color: #EA4335;"></i> <span>জিমেইল সেল (৳১৮)</span></li>
+      <li onclick="switchTab('task'); toggleSidebar()"><i class="fas fa-tasks"></i> <span>টাস্ক অপশন</span></li>
+      <li onclick="switchTab('ads'); toggleSidebar()"><i class="fas fa-play-circle"></i> <span>অ্যাড দেখে ইনকাম</span></li>
+      <li onclick="openTelegramPremiumModal(); toggleSidebar()"><i class="fas fa-crown" style="color: gold;"></i> <span>টেলিগ্রাম প্রিমিয়াম</span></li>
+      <li onclick="openMobileRechargeModal(); toggleSidebar()"><i class="fas fa-mobile-alt"></i> <span>মোবাইল রিচার্জ</span></li>
+      <li onclick="switchTab('leaderboard'); toggleSidebar()"><i class="fas fa-trophy" style="color: gold;"></i> <span>টপ ১০ লিডারবোর্ড</span></li>
+      <li onclick="switchTab('profile'); toggleSidebar()"><i class="fas fa-user-circle"></i> <span>প্রোফাইল</span></li>
+      <li onclick="switchTab('aichat'); toggleSidebar()"><i class="fas fa-robot"></i> <span>এআই সাপোর্ট (AI Chat)</span></li>
+      <li onclick="switchTab('withdraw'); toggleSidebar()"><i class="fas fa-wallet"></i> <span>উইথড্র দিন</span></li>
+      <li onclick="switchTab('allHistory'); toggleSidebar()"><i class="fas fa-history"></i> <span>সকল হিস্ট্রি (All History)</span></li>
+      <li onclick="alert('দুঃখিত! টিকটক কয়েন রিচার্জ বর্তমানে বন্ধ আছে।'); toggleSidebar();"><i class="fas fa-lock" style="color: red;"></i> <span>টিকটক কয়েন রিচার্জ (লকড)</span></li>
+      <li onclick="alert('দুঃখিত! ফেসবুক বুস্টিং বর্তমানে বন্ধ আছে।'); toggleSidebar();"><i class="fas fa-lock" style="color: red;"></i> <span>ফেসবুক বুস্টিং (লকড)</span></li>
+      <li onclick="switchTab('refer'); toggleSidebar()"><i class="fas fa-users"></i> <span>রেফার</span></li>
+      <li onclick="switchTab('support'); toggleSidebar()"><i class="fas fa-headset"></i> <span>সাপোর্ট</span></li>
+    </ul>
+  </div>
+
+  <div class="top-bar">
+    <div class="header-left">
+      <i class="fas fa-ellipsis-v" onclick="toggleSidebar()"></i>
+      <span class="brand-title" id="appTitle">MVS TASK BOT</span>
+    </div>
+    <div class="header-icons">
+      <i class="fas fa-robot" title="AI Chat" onclick="switchTab('aichat')"></i>
+      <i class="fas fa-headset" onclick="switchTab('support')"></i>
+    </div>
+  </div>
+
+  <div style="padding: 15px 15px 0 15px;">
+    <div class="verify-banner" id="verifyBanner">
+      <span>⚠️ অ্যাকাউন্ট ভেরিফাই করতে চ্যানেলে জয়েন করুন</span>
+      <button onclick="openVerifyModal()">ভেরিফাই</button>
+    </div>
+
+    <div class="user-card">
+      <img id="userPhoto" src="https://ui-avatars.com/api/?name=User" alt="User">
+      <div class="user-info">
+        <h4 id="userName">User Name <i id="verifyBadge" class="fas fa-check-circle" style="color: #28a745; display: none;" title="Verified"></i></h4>
+        <p>ইউজারনেম: <span id="userHandle">@username</span></p>
+        <p>চ্যাট আইডি: <span id="chatId">12345678</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. HOME TAB -->
+  <div id="home" class="container active-tab">
+    <div class="slider-container" id="sliderContainer">
+      <div class="slide active" style="background-image: url('1000086868.jpg');"></div>
+      <div class="slide" style="background-image: url('1000086869.jpg');"></div>
+      <div class="slide" style="background-image: url('1000086870.jpg');"></div>
+      <div class="slide" style="background-image: url('1000086872.jpg');"></div>
+    </div>
+
+    <div class="balance-card">
+      <p style="color: #666; font-size: 13px; font-weight: 600;">আপনার বর্তমান ব্যালেন্স</p>
+      <div class="balance-amount">৳ <span id="balance">0.00</span></div>
+      <div class="stats-flex">
+        <div>মোট উত্তোলন: <strong style="color: #ff7e00;">৳ <span id="totalWithdraw">0.00</span></strong></div>
+        <div>সফল রেফার: <strong><span id="referCount">0</span> জন</strong></div>
+      </div>
+    </div>
+
+    <div class="section-title">
+      <span>হোম স্ক্রিন ফিচারসমূহ</span>
+      <span class="history-btn-sm" onclick="switchTab('allHistory')">সকল হিস্ট্রি</span>
+    </div>
+
+    <div class="home-action-grid">
+      <div class="home-action-btn" onclick="openSellModal('Facebook')">
+        <i class="fab fa-facebook" style="color: #1877F2;"></i>
+        <span>ফেসবুক সেল (৳১২)</span>
+      </div>
+      <div class="home-action-btn" onclick="openSellModal('Instagram')">
+        <i class="fab fa-instagram" style="color: #E4405F;"></i>
+        <span>Instagram সেল (৳৪)</span>
+      </div>
+      <div class="home-action-btn" onclick="openSellModal('Gmail')">
+        <i class="fas fa-envelope" style="color: #EA4335;"></i>
+        <span>জিমেইল সেল (৳১৮)</span>
+      </div>
+      <div class="home-action-btn" onclick="switchTab('task'); setActiveNav('task')">
+        <i class="fas fa-tasks"></i>
+        <span>টাস্ক অপশন</span>
+      </div>
+      <div class="home-action-btn" onclick="switchTab('ads'); setActiveNav('ads')">
+        <i class="fas fa-play-circle"></i>
+        <span>অ্যাড দেখে ইনকাম</span>
+      </div>
+      <div class="home-action-btn" onclick="openTelegramPremiumModal()">
+        <i class="fas fa-crown" style="color: gold;"></i>
+        <span>টেলিগ্রাম প্রিমিয়াম</span>
+      </div>
+      <div class="home-action-btn" onclick="openMobileRechargeModal()">
+        <i class="fas fa-mobile-alt"></i>
+        <span>মোবাইল রিচার্জ</span>
+      </div>
+      <div class="home-action-btn" onclick="switchTab('leaderboard'); setActiveNav('home')">
+        <i class="fas fa-trophy" style="color: gold;"></i>
+        <span>টপ ১০ লিডারবোর্ড</span>
+      </div>
+      <div class="home-action-btn" onclick="switchTab('profile'); setActiveNav('profile')">
+        <i class="fas fa-user-circle"></i>
+        <span>প্রোফাইল অপশন</span>
+      </div>
+      <div class="home-action-btn" onclick="switchTab('aichat'); setActiveNav('home')">
+        <i class="fas fa-robot"></i>
+        <span>এআই সাপোর্ট</span>
+      </div>
+      <div class="home-action-btn" onclick="switchTab('withdraw'); setActiveNav('withdraw')">
+        <i class="fas fa-wallet"></i>
+        <span>উইথড্র দিন</span>
+      </div>
+      <div class="home-action-btn locked" onclick="alert('দুঃখিত! টিকটক কয়েন রিচার্জ বর্তমানে বন্ধ আছে।')">
+        <span class="lock-badge">LOCK</span>
+        <i class="fas fa-coins"></i>
+        <span>টিকটক কয়েন রিচার্জ</span>
+      </div>
+      <div class="home-action-btn locked" onclick="alert('দুঃখিত! ফেসবুক বুস্টিং বর্তমানে বন্ধ আছে।')">
+        <span class="lock-badge">LOCK</span>
+        <i class="fab fa-facebook" style="color: #1877F2;"></i>
+        <span>ফেসবুক বুস্টিং</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. TASK TAB -->
+  <div id="task" class="container">
+    <div class="section-title">
+      <span>টাস্ক সেকশন (প্রতিটি টাস্ক একবার করে সম্পন্ন করুন)</span>
+      <span class="history-btn-sm" onclick="switchTab('taskHistory')">টাস্ক হিস্ট্রি</span>
+    </div>
+    <div id="dynamicTaskList"></div>
+  </div>
+
+  <!-- 3. SELL TAB (Social Accounts) -->
+  <div id="sell" class="container">
+    <div class="section-title">
+      <span>সোশ্যাল একাউন্ট আনলিমিটেড সেল হাব</span>
+      <span class="history-btn-sm" onclick="switchTab('sellHistory')">সেল হিস্ট্রি</span>
+    </div>
+    <div style="background:#e2f0fd; padding:12px; border-radius:12px; font-size:12px; color:#0056b3; margin-bottom:12px;">
+      ℹ️ জিমেইল সেল ২৪ ঘণ্টার মধ্যে এবং ফেসবুক/ইনস্টাগ্রাম সেল ২৪ থেকে ৪৮ ঘণ্টার মধ্যে ভেরিফাই করে ব্যালেন্স যোগ করা হবে।
+    </div>
+    <div class="home-action-grid">
+      <div class="home-action-btn" onclick="openSellModal('Facebook')"><i class="fab fa-facebook" style="color: #1877F2;"></i><span>Facebook (৳১২)</span></div>
+      <div class="home-action-btn" onclick="openSellModal('Gmail')"><i class="fas fa-envelope" style="color: #EA4335;"></i><span>Gmail (৳১৮)</span></div>
+      <div class="home-action-btn" onclick="openSellModal('Instagram')"><i class="fab fa-instagram" style="color: #E4405F;"></i><span>Instagram (৳৪)</span></div>
+    </div>
+  </div>
+
+  <!-- 4. WITHDRAW TAB -->
+  <div id="withdraw" class="container">
+    <div class="section-title">
+      <span>টাকা উত্তোলন (Withdraw)</span>
+      <span class="history-btn-sm" onclick="switchTab('withdrawHistory')">উত্তোলন হিস্ট্রি</span>
+    </div>
+    <p style="font-size: 12px; color: #666; margin-top: 5px; font-weight: 500;">
+      ⚠️ নিয়ম: সর্বনিম্ন ২৫ টাকা উত্তোলন করতে হবে। ২৪ ঘণ্টার মধ্যে পেমেন্ট পাবেন।
+    </p>
+
+    <div class="payment-methods">
+      <div class="pay-card" id="bKashCard" onclick="selectPayment('bKash')">
+        <img src="1000086871_2.jpg" alt="bKash" onerror="this.src='https://i.ibb.co/3134m8K/bkash.png'">
+        <p>বিকাশ (bKash)</p>
+      </div>
+      <div class="pay-card" id="nagadCard" onclick="selectPayment('Nagad')">
+        <img src="1000086867_2.jpg" alt="Nagad[span_0](start_span)"[span_0](end_span) onerror="this.src='https://i.ibb.co/6y40S4v/nagad.png'">
+        <p>নগদ (Nagad)</p>
+      </div>
+    </div>
+
+    <label style="font-size: 13px; font-weight: 700;">অ্যামাউন্ট সিলেক্ট করুন অথবা নিজে লিখুন:</label>
+    <div class="amount-grid">
+      <div class="amt-btn" onclick="selectAmount(25)">৳ ২৫</div>
+      <div class="amt-btn" onclick="selectAmount(50)">৳ ৫০</div>
+      <div class="amt-btn" onclick="selectAmount(100)">৳ ১০০</div>
+      <div class="amt-btn" onclick="selectAmount(250)">৳ ২৫০</div>
+      <div class="amt-btn" onclick="selectAmount(500)">৳ ৫০০</div>
+      <div class="amt-btn" onclick="selectAmount(1000)">৳ ১০০০</div>
+    </div>
+
+    <input type="number" id="customWithdrawAmount" class="input-field" placeholder="টাকার পরিমাণ লিখুন (কমপক্ষে ২৫)" oninput="onCustomAmountInput()">
+    <input type="text" id="withdrawNumber" class="input-field" placeholder="বিকাশ/নগদ ১১ ডিজিটের অ্যাকাউন্ট নাম্বার">
+
+    <button class="btn-submit-main" onclick="processWithdrawal()">উত্তোলন নিশ্চিত করুন</button>
+  </div>
+
+  <!-- 5. LEADERBOARD TAB -->
+  <div id="leaderboard" class="container">
+    <div class="section-title"><i class="fas fa-trophy" style="color: gold;"></i> <span>টপ ১০ সাপ্তাহিক লিডারবোর্ড</span></div>
+    <div style="background:#fff3cd; padding:10px; border-radius:8px; font-size:12px; color:#856404; margin-bottom:12px;">
+      ℹ️ প্রতি সপ্তাহে এই লিডারবোর্ড আপডেট হয়। কাজের পরিমাণ ও অর্জিত অ্যামাউন্টের ভিত্তিতে সেরা ১০ জন এখানে থাকেন।
+    </div>
+    <div id="leaderboardList">
+      <p style="text-align:center; color:#777; padding:20px;">লিডারবোর্ড লোড হচ্ছে...</p>
+    </div>
+  </div>
+
+  <!-- 6. REFER TAB -->
+  <div id="refer" class="container">
+    <div class="banner-card" style="text-align: center;">
+      <h2>বন্ধুদের রেফার করুন</h2>
+      <p>প্রতি সফল রেফারে পাবেন নিশ্চিত ৳১৫ এবং জীবনভর পাবেন ৫% কমিশন!</p>
+    </div>
+    <div class="balance-card">
+      <p style="font-size: 13px; color: #666; margin-bottom: 5px; font-weight: 600;">আপনার ইউনিক রেফারেল লিংক:</p>
+      <input type="text" id="referLink" class="input-field" value="" readonly>
+      <button class="btn-submit-main" onclick="copyReferLink()">লিংক কপি করুন</button>
+    </div>
+
+    <div class="section-title"><i class="fas fa-users"></i> আমার রেফারকৃত ব্যবহারকারী ও কমিশন তালিকা</div>
+    <div id="referralUserList">
+      <p style="text-align:center; color:#777; padding:15px;">এখনো কোনো ইউজার আপনার লিংক থেকে যুক্ত হয়নি।</p>
+    </div>
+  </div>
+
+  <!-- 7. AI LIVE CHAT TAB -->
+  <div id="aichat" class="container">
+    <div class="section-title"><i class="fas fa-robot" style="color:#ff7e00;"></i> <span>AI লাইভ সাপোর্ট চ্যাট</span></div>
+    <div class="balance-card">
+      <div class="chat-box" id="chatBox">
+        <div class="chat-msg bot">হ্যালো! আমি MVS AI অ্যাসিস্ট্যান্ট। ২৪ ঘণ্টার মধ্যে পেমেন্ট ও সাপোর্ট দেওয়া হয়।</div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="chatInput" class="input-field" placeholder="আপনার প্রশ্নটি লিখুন..." style="margin:0;">
+        <button class="btn-submit-main" style="width: auto; margin: 0; padding: 0 20px;" onclick="sendAiMessage()"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. PROFILE TAB -->
+  <div id="profile" class="container">
+    <div class="section-title"><i class="fas fa-user-circle"></i> <span>প্রোফাইল ও ইনফরমেশন</span></div>
+    
+    <div class="balance-card" style="text-align: center; padding: 22px;">
+      <img id="profilePagePic" src="https://ui-avatars.com/api/?name=User" alt="Profile" style="width: 85px; height: 85px; border-radius: 50%; border: 3px solid #ff7e00; margin-bottom: 12px; object-fit: cover;">
+      <h3 id="profilePageName" style="font-size: 18px; font-weight: 800;">User Name</h3>
+      <p style="color: #666; font-size: 13px; margin-top: 5px;">ইউজারনেম: <span id="profilePageHandle">@username</span></p>
+      <p style="color: #666; font-size: 13px;">চ্যাট আইডি: <span id="profilePageChatId">12345678</span></p>
+      
+      <div style="margin-top: 15px; background: #fff5eb; padding: 10px; border-radius: 12px; border: 1px dashed #ff7e00;">
+        <p style="font-size: 12px; color: #555; font-weight: 600;">প্রোফাইল ব্যালেন্স</p>
+        <h3 style="font-size: 22px; color: #ff7e00; font-weight: 800;">৳ <span id="profileBalance">0.00</span></h3>
+      </div>
+    </div>
+
+    <div class="balance-card">
+      <h4 style="font-size: 14px; margin-bottom: 10px; font-weight: 700;"><i class="fas fa-headset"></i> সাপোর্ট ও আপডেট চ্যানেলসমূহ</h4>
+      <p style="font-size: 12px; color: #666; margin-bottom: 10px;">অফিশিয়াল চ্যানেল দুটিতে জয়েন করুন:</p>
+      <div class="channel-btn-box">
+        <a id="profileChLink1" href="https://t.me/" target="_blank" class="channel-btn"><i class="fab fa-telegram"></i> চ্যানেল ১</a>
+        <a id="profileChLink2" href="https://t.me/" target="_blank" class="channel-btn" style="background: #28a745;"><i class="fab fa-telegram"></i> চ্যানেল ২</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MICRO JOB TAB -->
+  <div id="microjob" class="container" style="text-align: center; padding-top: 40px;">
+    <i class="fas fa-briefcase" style="font-size: 55px; color: #ff7e00; margin-bottom: 15px;"></i>
+    <h3 style="font-weight: 800;">মাইক্রো জব সেকশন</h3>
+    <p style="font-size: 14px; color: #666; margin: 10px 0;">প্রতিটি মাইক্রো জবের রেট: <b>৳৫.০০</b></p>
+  </div>
+
+  <!-- ADS TAB -->
+  <div id="ads" class="container" style="text-align: center; padding-top: 30px;">
+    <div class="banner-card">
+      <h2>অ্যাড ট্র্যাকার ও ইনকাম</h2>
+      <p>বিজ্ঞাপন দেখে রিওয়ার্ড অর্জন করুন। প্রতি বিজ্ঞাপনে পাবেন ৳২.০০।</p>
+    </div>
+    <div class="balance-card" style="padding: 30px;">
+      <button class="btn-submit-main" onclick="watchAdReward()" style="margin-bottom: 12px;">বিজ্ঞাপন দেখুন ও ৳২ রিওয়ার্ড নিন</button>
+      <span class="history-btn-sm" onclick="switchTab('adsHistory')" style="display:inline-block; padding:8px 15px;">অ্যাড হিস্ট্রি দেখুন</span>
+    </div>
+  </div>
+
+  <!-- ================= SPECIFIC & ALL HISTORY TABS ================= -->
+  
+  <!-- 1. ALL HISTORY -->
+  <div id="allHistory" class="container">
+    <div class="section-title"><i class="fas fa-history"></i> <span>সকল কাজের হিস্ট্রি (All History)</span></div>
+    <div id="allHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো হিস্ট্রি নেই।</p></div>
+  </div>
+
+  <!-- 2. WITHDRAW HISTORY -->
+  <div id="withdrawHistory" class="container">
+    <div class="section-title"><i class="fas fa-wallet"></i> <span>উত্তোলন হিস্ট্রি (Withdraw History)</span></div>
+    <div id="withdrawHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো উত্তোলন হিস্ট্রি নেই।</p></div>
+  </div>
+
+  <!-- 3. TASK HISTORY -->
+  <div id="taskHistory" class="container">
+    <div class="section-title"><i class="fas fa-tasks"></i> <span>টাস্ক হিস্ট্রি (Task History)</span></div>
+    <div id="taskHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো টাস্ক হিস্ট্রি নেই।</p></div>
+  </div>
+
+  <!-- 4. FACEBOOK SELL HISTORY -->
+  <div id="fbHistory" class="container">
+    <div class="section-title"><i class="fab fa-facebook" style="color:#1877F2;"></i> <span>ফেসবুক সেল হিস্ট্রি (Facebook History)</span></div>
+    <div id="fbHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো ফেসবুক সেল হিস্ট্রি নেই।</p></div>
+  </div>
+
+  <!-- 5. INSTAGRAM SELL HISTORY -->
+  <div id="instaHistory" class="container">
+    <div class="section-title"><i class="fab fa-instagram" style="color:#E4405F;"></i> <span>Instagram সেল হিস্ট্রি</span></div>
+    <div id="instaHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো ইনস্টাগ্রাম সেল হিস্ট্রি নেই।</p></div>
+  </div>
+
+  <!-- 6. GMAIL SELL HISTORY -->
+  <div id="gmailHistory" class="container">
+    <div class="section-title"><i class="fas fa-envelope" style="color:#EA4335;"></i> <span>জিমেইল সেল হিস্ট্রি (Gmail History)</span></div>
+    <div id="gmailHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো জিমেইল সেল হিস্ট্রি নেই।</p></div>
+  </div>
+
+  <!-- 7. MOBILE RECHARGE HISTORY -->
+  <div id="rechargeHistory" class="container">
+    <div class="section-title"><i class="fas fa-mobile-alt"></i> <span>মোবাইল রিচার্জ হিস্ট্রি (Recharge History)</span></div>
+    <div id="rechargeHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো মোবাইল রিচার্জ হিস্ট্রি নেই।</p></div>
+  </div>
+
+  <!-- 8. ADS HISTORY -->
+  <div id="adsHistory" class="container">
+    <div class="section-title"><i class="fas fa-ad"></i> <span>অ্যাড ওয়াচ হিস্ট্রি (Ads History)</span></div>
+    <div id="adsHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো অ্যাড হিস্ট্রি নেই।</p></div>
+  </div>
+
+  <!-- SUPPORT TAB -->
+  <div id="support" class="container">
+    <div class="banner-card" style="text-align: center;">
+      <h2>লাইভ সাপোর্ট সেন্টার</h2>
+      <p>যেকোনো সমস্যায় আমাদের সাপোর্ট চ্যানেলে যোগাযোগ করুন। ২৪ থেকে ৪৮ ঘণ্টার মধ্যে সমাধান দেওয়া হয়।</p>
+    </div>
+  </div>
+
+  <!-- Submission Modal -->
+  <div class="form-overlay" id="submissionModal">
+    <div class="form-box">
+      <h3 id="modalTitle" style="color: #ff7e00; margin-bottom: 10px; font-weight: 800;">সাবমিশন ফরম</h3>
+      <p id="modalDesc" style="font-size: 12px; color: #666; margin-bottom: 12px; font-weight: 500;"></p>
+      <div id="dynamicFormFields"></div>
+      <button class="btn-submit-main" onclick="submitDataToAdmin()">সাবমিট করুন</button>
+      <button class="btn-submit-main" style="background: #e9ecef; color: #555; margin-top: 8px; box-shadow: none;" onclick="closeModal()">বাতিল</button>
+    </div>
+  </div>
+
+  <!-- Verification Modal Popup -->
+  <div class="form-overlay" id="verifyModal" style="display:none;">
+    <div class="form-box" style="text-align:center;">
+      <h3 style="color:#ff7e00; margin-bottom:10px; font-weight: 800;">চ্যানেল ভেরিফিকেশন</h3>
+      <p style="font-size: 13px; margin-bottom: 15px; font-weight: 500;">মিনি অ্যাপ ব্যবহার করতে নিচের চ্যানেলগুলোতে জয়েন করুন:</p>
+      <a id="chLink1" href="https://t.me/" target="_blank" class="btn-submit-main" style="display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; background:#0088cc; margin-bottom:10px;"><i class="fab fa-telegram"></i> চ্যানেল ১-এ জয়েন করুন</a>
+      <a id="chLink2" href="https://t.me/" target="_blank" class="btn-submit-main" style="display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; background:#0088cc; margin-bottom:15px;"><i class="fab fa-telegram"></i> চ্যানেল ২-এ জয়েন করুন</a>
+      <button class="btn-submit-main" onclick="verifyTelegramJoin()">ভেরিফাই করুন</button>
+      <button class="btn-submit-main" style="background: #e9ecef; color: #555; margin-top: 8px; box-shadow: none;" onclick="closeVerifyModal()">বন্ধ করুন</button>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="bottom-nav">
+    <div class="nav-item active" id="nav-home" onclick="switchTab('home'); setActiveNav('home')">
+      <i class="fas fa-home"></i> <span>হোম</span>
+    </div>
+    <div class="nav-item" id="nav-task" onclick="switchTab('task'); setActiveNav('task')">
+      <i class="fas fa-tasks"></i> <span>টাস্ক</span>
+    </div>
+    <div class="nav-item" id="nav-ads" onclick="switchTab('ads'); setActiveNav('ads')">
+      <i class="fas fa-play-circle"></i> <span>অ্যাড আর্ন</span>
+    </div>
+    <div class="nav-item" id="nav-refer" onclick="switchTab('refer'); setActiveNav('refer')">
+      <i class="fas fa-users"></i> <span>রেফার</span>
+    </div>
+    <div class="nav-item" id="nav-withdraw" onclick="switchTab('withdraw'); setActiveNav('withdraw')">
+      <i class="fas fa-wallet"></i> <span>উইথড্র</span>
+    </div>
+    <div class="nav-item" id="nav-profile" onclick="switchTab('profile'); setActiveNav('profile')">
+      <i class="fas fa-user-circle"></i> <span>প্রোফাইল</span>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDxBvBB5LZBJx9SzRYFraFrk1JdqlH3a6c",
+      authDomain: "trx-zone-bd.firebaseapp.com",
+      databaseURL: "https://trx-zone-bd-default-rtdb.firebaseio.com",
+      projectId: "trx-zone-bd",
+      storageBucket: "trx-zone-bd.firebasestorage.app"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    let tgUser = { id: "12345678", first_name: "MVS User", username: "mvsuser", photo_url: "" };
+    let selectedPaymentMethod = '';
+    let isVerified = false;
+
+    if (window.Telegram && window.Telegram.WebApp) {
+      const tg = window.Telegram.WebApp;
+      tg.expand();
+      if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        tgUser = tg.initDataUnsafe.user;
+      }
+    }
+
+    document.getElementById('userName').innerText = `${tgUser.first_name || 'User'}`;
+    document.getElementById('userHandle').innerText = tgUser.username ? `@${tgUser.username}` : 'N/A';
+    document.getElementById('chatId').innerText = tgUser.id;
+    
+    document.getElementById('profilePageName').innerText = `${tgUser.first_name || 'User'}`;
+    document.getElementById('profilePageHandle').innerText = tgUser.username ? `@${tgUser.username}` : 'N/A';
+    document.getElementById('profilePageChatId').innerText = tgUser.id;
+    if (tgUser.photo_url) {
+      document.getElementById('userPhoto').src = tgUser.photo_url;
+      document.getElementById('profilePagePic').src = tgUser.photo_url;
+    }
+    document.getElementById('referLink').value = `https://t.me/MVSTaskBot?start=ref_${tgUser.id}`;
+
+    const userRef = database.ref('users/' + tgUser.id);
+    userRef.once('value').then(snapshot => {
+      if (!snapshot.exists()) {
+        userRef.set({
+          name: tgUser.first_name,
+          username: tgUser.username || '',
+          balance: 0.00,
+          totalWithdraw: 0.00,
+          referCount: 0,
+          verified: false,
+          joined: Date.now()
+        });
+      }
+    });
+
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    function nextSlide() {
+      if(slides.length > 0) {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+      }
+    }
+    setInterval(nextSlide, 3500);
+
+    database.ref('settings').on('value', snap => {
+      let settings = snap.val() || {};
+      if(settings.channel1) {
+        document.getElementById('chLink1').href = settings.channel1;
+        document.getElementById('profileChLink1').href = settings.channel1;
+      }
+      if(settings.channel2) {
+        document.getElementById('chLink2').href = settings.channel2;
+        document.getElementById('profileChLink2').href = settings.channel2;
+      }
+    });
+
+    database.ref('tasks').on('value', snap => {
+      let tasks = snap.val() || {};
+      database.ref('submissions').orderByChild('userId').equalTo(tgUser.id).once('value', subSnap => {
+        let userSubs = subSnap.val() || {};
+        let completedTaskNames = [];
+        for(let k in userSubs) {
+          if(userSubs[k].type && userSubs[k].type.startsWith('Task: ')) {
+            completedTaskNames.push(userSubs[k].type.replace('Task: ', ''));
+          }
+        }
+
+        let html = '';
+        for(let key in tasks) {
+          let t = tasks[key];
+          if(t.status === 'active') {
+            let isDone = completedTaskNames.includes(t.title);
+            let imgSrc = t.image && t.image.trim() !== '' ? t.image : 'https://via.placeholder.com/50?text=Task';
+            html += `<div class="task-card">
+              <img src="${imgSrc}" alt="Task Image">
+              <div class="task-info">
+                <h4>${t.title}</h4>
+                <p>${t.desc} | <b>রিওয়ার্ড: ৳${t.reward}</b></p>
+              </div>`;
+            if(isDone) {
+              html += `<button class="btn-action" style="background:#28a745;" disabled>সম্পন্ন হয়েছে</button>`;
+            } else {
+              html += `<button class="btn-action" onclick="openTaskSubmit('${t.title}', ${t.reward}, '${t.desc}', '${t.link || '#'}')">কাজ করুন</button>`;
+            }
+            html += `</div>`;
+          }
+        }
+        document.getElementById('dynamicTaskList').innerHTML = html || '<p style="text-align:center; color:#777;">বর্তমানে কোনো টাস্ক নেই।</p>';
+      });
+    });
+
+    database.ref('users').on('value', snap => {
+      let users = snap.val() || {};
+      let userArray = [];
+      for(let uid in users) {
+        let u = users[uid];
+        userArray.push({
+          name: u.name || 'User',
+          balance: u.balance || 0,
+          totalEarn: u.totalEarn || u.balance || 0
+        });
+      }
+      userArray.sort((a, b) => b.totalEarn - a.totalEarn);
+      let top10 = userArray.slice(0, 10);
+      
+      let lbHtml = '';
+      let medals = ['🥇', '🥈', '🥉', '৪.', '৫.', '৬.', '৭.', '৮.', '৯.', '১০.'];
+      top10.forEach((usr, index) => {
+        lbHtml += `<div class="list-card">
+          <span><b>${medals[index] || (index+1)+'.'} ${usr.name}</b></span>
+          <strong style="color: #ff7e00;">৳ ${usr.totalEarn.toFixed(2)}</strong>
+        </div>`;
+      });
+      document.getElementById('leaderboardList').innerHTML = lbHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো ডেটা নেই।</p>';
+    });
+
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+    function openVerifyModal() { document.getElementById('verifyModal').style.display = 'flex'; }
+    function closeVerifyModal() { document.getElementById('verifyModal').style.display = 'none'; }
+
+    function verifyTelegramJoin() {
+      isVerified = true;
+      document.getElementById('verifyModal').style.display = 'none';
+      document.getElementById('verifyBanner').style.display = 'none';
+      document.getElementById('verifyBadge').style.display = 'inline-block';
+      userRef.update({ verified: true });
+      alert("✅ অ্যাকাউন্ট সফলভাবে ভেরিফাই হয়েছে!");
+    }
+
+    function switchTab(tabId) {
+      if(!isVerified && tabId !== 'home' && tabId !== 'profile' && tabId !== 'support' && tabId !== 'aichat') {
+        alert("⚠️ আগে চ্যানেল ভেরিফাই করুন!");
+        openVerifyModal();
+        return;
+      }
+      document.querySelectorAll('.container').forEach(el => el.classList.remove('active-tab'));
+      document.getElementById(tabId).classList.add('active-tab');
+      window.scrollTo(0, 0);
+    }
+
+    function setActiveNav(navName) {
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      let target = document.getElementById('nav-' + navName);
+      if(target) target.classList.add('active');
+    }
+
+    function watchAdReward() {
+      if(!isVerified) {
+        alert("⚠️ আগে চ্যানেল ভেরিফাই করুন!");
+        openVerifyModal();
+        return;
+      }
+      database.ref('submissions').push({
+        userId: tgUser.id, userName: tgUser.first_name, type: 'Ad Watch Earn',
+        reward: 2, field1: 'Watched Ad', status: 'pending', timestamp: Date.now()
+      });
+      alert("✅ বিজ্ঞাপন দেখা সাবমিট হয়েছে! ২৪ ঘণ্টার মধ্যে এপ্রুভ করা হবে।");
+    }
+
+    function selectPayment(method) {
+      selectedPaymentMethod = method;
+      document.getElementById('bKashCard').classList.remove('selected');
+      document.getElementById('nagadCard').classList.remove('selected');
+      if (method === 'bKash') document.getElementById('bKashCard').classList.add('selected');
+      if (method === 'Nagad') document.getElementById('nagadCard').classList.add('selected');
+    }
+
+    function selectAmount(amt) {
+      document.getElementById('customWithdrawAmount').value = amt;
+      document.querySelectorAll('.amt-btn').forEach(b => b.classList.remove('selected'));
+      event.target.classList.add('selected');
+    }
+
+    function onCustomAmountInput() {
+      document.querySelectorAll('.amt-btn').forEach(b => b.classList.remove('selected'));
+    }
+
+    function processWithdrawal() {
+      if(!isVerified) {
+        alert("⚠️ ভেরিফাই ছাড়া উত্তোলন করা যাবে না!");
+        openVerifyModal();
+        return;
+      }
+      const number = document.getElementById('withdrawNumber').value.trim();
+      const amtInput = document.getElementById('customWithdrawAmount').value.trim();
+      const requestedAmt = parseFloat(amtInput);
+      const currentBalance = parseFloat(document.getElementById('balance').innerText);
+
+      if (!selectedPaymentMethod) { alert("বিকাশ বা নগদ মেথড সিলেক্ট করুন!"); return; }
+      if (!requestedAmt || isNaN(requestedAmt) || requestedAmt < 25) { alert("ন্যূনতম ২৫ টাকা বা তার বেশি অ্যামাউন্ট লিখুন!"); return; }
+      if (!number || number.length !== 11 || isNaN(number)) { alert("❌ ভুল নাম্বার! সঠিক ১১ ডিজিটের বিকাশ/নগদ নাম্বার দিন।"); return; }
+      
+      let fee = requestedAmt >= 500 ? 10 : 5;
+      let requiredBal = requestedAmt + fee;
+
+      if (currentBalance < requiredBal) { 
+        alert(`❌ অপর্যাপ্ত ব্যালেন্স!\n${requestedAmt} টাকার উত্তোলনের জন্য ${fee} টাকা ফি সহ কমপক্ষে ৳${requiredBal} টাকা থাকা প্রয়োজন।`); 
+        return; 
+      }
+
+      database.ref('withdrawals').push({
+        userId: tgUser.id, userName: tgUser.first_name, method: selectedPaymentMethod,
+        number: number, requestedAmount: requestedAmt, fee: fee, payableAmount: requestedAmt,
+        status: 'pending', timestamp: Date.now()
+      });
+
+      userRef.update({
+        balance: currentBalance - requiredBal,
+        totalWithdraw: (parseFloat(document.getElementById('totalWithdraw').innerText) + requestedAmt)
+      });
+
+      alert(`✅ উইথড্র রিকোয়েস্ট জমা হয়েছে!\n২৪ ঘণ্টার মধ্যে পেমেন্ট পেয়ে যাবেন।`);
+      document.getElementById('withdrawNumber').value = '';
+      document.getElementById('customWithdrawAmount').value = '';
+    }
+
+    function openTelegramPremiumModal() {
+      if(!isVerified) {
+        alert("⚠️ সেবা নিতে হলে আগে চ্যানেল ভেরিফাই করুন!");
+        openVerifyModal();
+        return;
+      }
+      document.getElementById('modalTitle').innerText = "Telegram Premium Purchase";
+      document.getElementById('modalDesc').innerText = "টেলিগ্রাম প্রিমিয়াম নিতে নাম, হোয়াটসঅ্যাপ নাম্বার এবং টেলিগ্রাম ইউজারনেম দিন।";
+      
+      document.getElementById('dynamicFormFields').innerHTML = `
+        <input type="text" id="p_name" class="input-field" placeholder="আপনার নাম (Name)" required>
+        <input type="text" id="p_whatsapp" class="input-field" placeholder="হোয়াটসঅ্যাপ নাম্বার (WhatsApp Number)" required>
+        <input type="text" id="p_tguser" class="input-field" placeholder="টেলিগ্রাম ইউজারনেম (@username)" required>
+      `;
+      window.currentModalSubmitType = "Telegram Premium Order";
+      document.getElementById('submissionModal').style.display = 'flex';
+    }
+
+    function openMobileRechargeModal() {
+      if(!isVerified) {
+        alert("⚠️ মোবাইল রিচার্জ করতে হলে আগে চ্যানেল ভেরিফাই করুন!");
+        openVerifyModal();
+        return;
+      }
+      document.getElementById('modalTitle').innerText = "Mobile Recharge (2 BDT Charge)";
+      document.getElementById('modalDesc').innerText = "সিম সিলেক্ট করুন, সঠিক ১১ ডিজিটের নাম্বার এবং টাকার পরিমাণ দিন।";
+      
+      document.getElementById('dynamicFormFields').innerHTML = `
+        <select id="r_operator" class="input-field">
+          <option value="Grameenphone">Grameenphone (জিপি)</option>
+          <option value="Robi">Robi (রবি)</option>
+          <option value="Banglalink">Banglalink (বাংলালিংক)</option>
+          <option value="Airtel">Airtel (এয়ারটেল)</option>
+          <option value="Teletalk">Teletalk (টেলিটক)</option>
+        </select>
+        <input type="text" id="r_number" class="input-field" placeholder="১১ ডিজিটের মোবাইল নাম্বার" required>
+        <input type="number" id="r_amount" class="input-field" placeholder="রিচার্জের পরিমাণ (টাকা)" required>
+      `;
+      window.currentModalSubmitType = "Mobile Recharge Order";
+      document.getElementById('submissionModal').style.display = 'flex';
+    }
+
+    function openSellModal(platform) {
+      if(!isVerified) {
+        alert("⚠️ কাজ করতে হলে আগে চ্যানেল ভেরিফাই করুন!");
+        openVerifyModal();
+        return;
+      }
+      window.currentModalSubmitType = platform + ' Sell';
+      let rate = platform === 'Gmail' ? 18 : (platform === 'Facebook' ? 12 : 4);
+      document.getElementById('modalTitle').innerText = `${platform} একাউন্ট সেল (রেট: ৳${rate})`;
+      
+      let fieldsHtml = '';
+      if(platform === 'Facebook') {
+        document.getElementById('modalDesc').innerText = `আপনার Facebook UID / Email, Password এবং 2FA দিন। (সব তথ্য বাধ্যতামূলক)`;
+        fieldsHtml = `<input type="text" id="f_uid" class="input-field" placeholder="Facebook UID / Email / Phone" required><input type="text" id="f_pass" class="input-field" placeholder="Password" required><input type="text" id="f_tfa" class="input-field" placeholder="2FA Secret (যদি না থাকে N/A লিখুন)" required>`;
+      } else if(platform === 'Gmail') {
+        document.getElementById('modalDesc').innerText = `আপনার জিমেইল অ্যাকাউন্ট ও পাসওয়ার্ড দিন। (সব তথ্য বাধ্যতামূলক)`;
+        fieldsHtml = `<input type="text" id="f_uid" class="input-field" placeholder="Gmail Address" required><input type="text" id="f_pass" class="input-field" placeholder="Password" required>`;
+      } else if(platform === 'Instagram') {
+        document.getElementById('modalDesc').innerText = `আপনার Instagram Username/Email, Password এবং 2FA দিন। (সব তথ্য বাধ্যতামূলক)`;
+        fieldsHtml = `<input type="text" id="f_uid" class="input-field" placeholder="Username / Email" required><input type="text" id="f_pass" class="input-field" placeholder="Password" required><input type="text" id="f_tfa" class="input-field" placeholder="2FA Secret (যদি না থাকে N/A লিখুন)" required>`;
+      }
+
+      document.getElementById('dynamicFormFields').innerHTML = fieldsHtml;
+      document.getElementById('submissionModal').style.display = 'flex';
+    }
+
+    let base64ImageProof = "";
+    function openTaskSubmit(taskName, reward, rulesText, taskLink) {
+      if(!isVerified) {
+        alert("⚠️ টাস্ক সম্পন্ন করতে হলে আগে চ্যানেল ভেরিফাই করুন!");
+        openVerifyModal();
+        return;
+      }
+      window.currentModalSubmitType = 'Task: ' + taskName;
+      base64ImageProof = "";
+      document.getElementById('modalTitle').innerText = taskName;
+      let linkHtml = taskLink && taskLink !== '#' ? `<br><a href="${taskLink}" target="_blank" style="color:#0088cc; font-weight:bold;"><i class="fas fa-external-link-alt"></i> কাজের লিংকে ভিজিট করুন</a>` : '';
+      document.getElementById('modalDesc').innerHTML = `নিয়মাবলী: ${rulesText} ${linkHtml} <br><b>রিওয়ার্ড: ৳${reward}</b>`;
+      
+      document.getElementById('dynamicFormFields').innerHTML = `
+        <input type="text" id="f_proof" class="input-field" placeholder="আপনার টেলিগ্রাম ইউজারনেম / বিবরণ লিখুন" required>
+        <label style="font-size:12px; font-weight:bold; margin-top:5px; display:block;">প্রুফ স্ক্রিনশট বা ছবি আপলোড করুন (বাধ্যতামূলক):</label>
+        <input type="file" id="f_file" accept="image/*" class="input-field" onchange="convertFileToBase64(this)" required>
+      `;
+      document.getElementById('submissionModal').style.display = 'flex';
+    }
+
+    function convertFileToBase64(element) {
+      const file = element.files[0];
+      if(file) {
+        const reader = new FileReader();
+        reader.onloadend = function() { base64ImageProof = reader.result; }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function closeModal() { document.getElementById('submissionModal').style.display = 'none'; }
+
+    function submitDataToAdmin() {
+      let subType = window.currentModalSubmitType || 'General Submission';
+      let dataPayload = {
+        userId: tgUser.id,
+        userName: tgUser.first_name,
+        type: subType,
+        status: 'pending',
+        timestamp: Date.now()
+      };
+
+      if(subType === "Telegram Premium Order") {
+        let name = document.getElementById('p_name').value.trim();
+        let whatsapp = document.getElementById('p_whatsapp').value.trim();
+        let tguser = document.getElementById('p_tguser').value.trim();
+        if(!name || !whatsapp || !tguser) { alert("❌ সবকটি ঘর পূরণ করা বাধ্যতামূলক!"); return; }
+        dataPayload.field1 = "Name: " + name;
+        dataPayload.field2 = "WhatsApp: " + whatsapp;
+        dataPayload.field3 = "Telegram: " + tguser;
+      } else if(subType === "Mobile Recharge Order") {
+        let op = document.getElementById('r_operator').value;
+        let num = document.getElementById('r_number').value.trim();
+        let amt = parseFloat(document.getElementById('r_amount').value);
+        if(!num || num.length !== 11 || isNaN(num) || !amt || isNaN(amt)) { 
+          alert("❌ ভুল তথ্য! সঠিক ১১ ডিজিটের মোবাইল নাম্বার এবং টাকার পরিমাণ দিন।"); 
+          return; 
+        }
+        
+        let totalDeduct = amt + 2; 
+        let currentBalance = parseFloat(document.getElementById('balance').innerText);
+        if(currentBalance < totalDeduct) {
+          alert(`❌ অপর্যাপ্ত ব্যালেন্স!\nরিচার্জ ${amt} টাকা এবং চার্জ ২ টাকা সহ মোট ৳${totalDeduct} প্রয়োজন।`);
+          return;
+        }
+
+        userRef.update({ balance: currentBalance - totalDeduct });
+
+        dataPayload.field1 = "Operator: " + op;
+        dataPayload.field2 = "Number: " + num;
+        dataPayload.field3 = "Amount: " + amt + " BDT (Charge: 2 BDT)";
+        dataPayload.reward = amt;
+      } else {
+        let uidInput = document.getElementById('f_uid');
+        let passInput = document.getElementById('f_pass');
+        let proofInput = document.getElementById('f_proof');
+
+        if(uidInput && passInput) {
+          if(!uidInput.value.trim() || !passInput.value.trim()) {
+            alert("❌ ইউজারনেম/ইমেইল এবং পাসওয়ার্ডের ঘরগুলো খালি রাখা যাবে না!");
+            return;
+          }
+        }
+        if(proofInput) {
+          if(!proofInput.value.trim() || !base64ImageProof) {
+            alert("❌ বিবরণ এবং প্রুফ স্ক্রিনশট আপলোড করা বাধ্যতামূলক!");
+            return;
+          }
+        }
+
+        dataPayload.field1 = uidInput ? uidInput.value.trim() : (proofInput ? proofInput.value.trim() : '');
+        dataPayload.field2 = passInput ? passInput.value.trim() : base64ImageProof;
+        dataPayload.field3 = document.getElementById('f_tfa') ? document.getElementById('f_tfa').value.trim() : '';
+      }
+
+      database.ref('submissions').push(dataPayload);
+      alert("✅ সফলভাবে সাবমিট হয়েছে! ২৪ থেকে ৪৮ ঘণ্টার মধ্যে আপডেট দেওয়া হবে।");
+      closeModal();
+    }
+
+    function copyReferLink() {
+      const copyText = document.getElementById('referLink');
+      copyText.select();
+      navigator.clipboard.writeText(copyText.value);
+      alert("✅ আপনার রেফার লিংক কপি করা হয়েছে!");
+    }
+
+    function sendAiMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if(!text) return;
+      const chatBox = document.getElementById('chatBox');
+      chatBox.innerHTML += `<div class="chat-msg user">${text}</div>`;
+      input.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      setTimeout(() => {
+        let reply = "আমি আপনার প্রশ্নটি বুঝতে পেরেছি। হিস্ট্রি সেকশন থেকে আপনার কাজের স্ট্যাটাস চেক করতে পারবেন।";
+        chatBox.innerHTML += `<div class="chat-msg bot">${reply}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 600);
+    }
+
+    database.ref('users').orderByChild('referredBy').equalTo(tgUser.id).on('value', snap => {
+      let refs = snap.val() || {};
+      let refHtml = '';
+      for(let rId in refs) {
+        let rUser = refs[rId];
+        let earnedCommission = rUser.commissionEarned || 0;
+        refHtml += `<div class="list-card"><div><b>নাম: ${rUser.name || 'User'}</b><br><small>চ্যাট আইডি: ${rId}</small></div><div style="text-align:right;"><strong style="color: #ff7e00;">কমিশন: ৳${earnedCommission.toFixed(2)}</strong></div></div>`;
+      }
+      document.getElementById('referralUserList').innerHTML = refHtml || '<p style="text-align:center; color:#777; padding:15px;">এখনো কোনো ইউজার আপনার লিংক থেকে যুক্ত হয়নি।</p>';
+    });
+
+    // আলাদা আলাদা পার্সোনাল হিস্ট্রি ও অল হিস্ট্রি রেন্ডারিং
+    database.ref('submissions').orderByChild('userId').equalTo(tgUser.id).on('value', snap => {
+      let subs = snap.val() || {};
+      let allHtml = '', taskHtml = '', fbHtml = '', instaHtml = '', gmailHtml = '', rechargeHtml = '', adsHtml = '';
+
+      for(let k in subs) {
+        let s = subs[k];
+        let statusText = s.status === 'approved' ? '<span style="color:green; font-weight:bold;">সফল (Approved)</span>' : (s.status === 'rejected' ? '<span style="color:red; font-weight:bold;">বাতিল (Rejected)</span>' : '<span style="color:orange; font-weight:bold;">প্রসেসিং / পেন্ডিং</span>');
+        let card = `<div class="list-card"><div><b>${s.type}</b><br><small>${new Date(s.timestamp).toLocaleString()}</small></div><div>${statusText}</div></div>`;
+        
+        allHtml += card;
+        if(s.type.includes('Task')) taskHtml += card;
+        if(s.type.includes('Facebook Sell')) fbHtml += card;
+        if(s.type.includes('Instagram Sell')) instaHtml += card;
+        if(s.type.includes('Gmail Sell')) gmailHtml += card;
+        if(s.type.includes('Mobile Recharge Order')) rechargeHtml += card;
+        if(s.type.includes('Ad Watch Earn')) adsHtml += card;
+      }
+
+      document.getElementById('allHistoryList').innerHTML = allHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো হিস্ট্রি নেই।</p>';
+      document.getElementById('taskHistoryList').innerHTML = taskHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো টাস্ক হিস্ট্রি নেই।</p>';
+      document.getElementById('fbHistoryList').innerHTML = fbHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো ফেসবুক সেল হিস্ট্রি নেই।</p>';
+      document.getElementById('instaHistoryList').innerHTML = instaHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো ইনস্টাগ্রাম সেল হিস্ট্রি নেই।</p>';
+      document.getElementById('gmailHistoryList').innerHTML = gmailHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো জিমেইল সেল হিস্ট্রি নেই।</p>';
+      document.getElementById('rechargeHistoryList').innerHTML = rechargeHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো মোবাইল রিচার্জ হিস্ট্রি নেই।</p>';
+      document.getElementById('adsHistoryList').innerHTML = adsHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো অ্যাড হিস্ট্রি নেই।</p>';
+    });
+
+    database.ref('withdrawals').orderByChild('userId').equalTo(tgUser.id).on('value', snap => {
+      let data = snap.val() || {};
+      let wHtml = '';
+      for(let k in data) {
+        let w = data[k];
+        let statusMsg = w.status === 'approved' ? '<span style="color:green; font-weight:bold;">সফল</span>' : (w.status === 'rejected' ? '<span style="color:red; font-weight:bold;">বাতিল</span>' : '<span style="color:orange; font-weight:bold;">পেন্ডিং</span>');
+        wHtml += `<div class="list-card"><div><b>মেথড: ${w.method} (${w.number})</b><br>পরিমাণ: ৳${w.requestedAmount}<br><small>${new Date(w.timestamp).toLocaleString()}</small></div><div>${statusMsg}</div></div>`;
+      }
+      document.getElementById('withdrawHistoryList').innerHTML = wHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো উত্তোলন হিস্ট্রি নেই।</p>';
+    });
+
+    userRef.on('value', (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        let bal = data.balance || 0;
+        document.getElementById('balance').innerText = bal.toFixed(2);
+        document.getElementById('profileBalance').innerText = bal.toFixed(2);
+        document.getElementById('totalWithdraw').innerText = (data.totalWithdraw || 0).toFixed(2);
+        document.getElementById('referCount').innerText = data.referCount || 0;
+        
+        if (data.verified) {
+          isVerified = true;
+          document.getElementById('verifyBanner').style.display = 'none';
+          document.getElementById('verifyBadge').style.display = 'inline-block';
+        }
+      }
+    });
+  </script>
+</body>
+</html>
