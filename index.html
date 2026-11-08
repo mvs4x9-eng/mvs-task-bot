@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MVS TASK SITE - Official Web Edition</title>
+  <title id="pageTitle">MVS TASK SITE - Official Web Edition</title>
   
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -29,9 +29,9 @@
     .header-left { display: flex; align-items: center; gap: 12px; }
     .header-left i { font-size: 22px; cursor: pointer; color: #ff7e00; background: #fff5eb; padding: 8px; border-radius: 12px; }
     .brand-title { font-weight: 800; font-size: 18px; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .header-icons i { font-size: 18px; margin-left: 10px; color: #555; cursor: pointer; background: #f1f3f5; padding: 10px; border-radius: 50%; }
+    .header-icons { display: flex; align-items: center; gap: 10px; }
+    .header-icons i, .header-icons select { font-size: 16px; color: #555; cursor: pointer; background: #f1f3f5; padding: 8px 12px; border-radius: 20px; border: none; font-weight: 600; }
 
-    /* Side Drawer */
     .sidebar {
       position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
       background: #fff; z-index: 1100; transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -66,7 +66,6 @@
     .user-info h4 { font-size: 16px; color: #222; font-weight: 700; display: flex; align-items: center; gap: 6px; }
     .user-info p { font-size: 12px; color: #777; margin-top: 3px; }
 
-    /* Custom Banner Slider (2 banners with dynamic promotional text) */
     .slider-container {
       position: relative; width: 100%; height: 180px; border-radius: 20px; overflow: hidden; margin-bottom: 15px;
       box-shadow: 0 8px 20px rgba(255, 126, 0, 0.25); background: linear-gradient(135deg, #ff7e00, #ff5100);
@@ -152,25 +151,23 @@
 
   <!-- Side Drawer / Threedot Menu -->
   <div class="sidebar" id="sidebar">
-    <h3>MVS TASK MENU</h3>
+    <h3 data-lang="menuTitle">MVS TASK MENU</h3>
     <ul>
-      <li onclick="switchTab('home'); toggleSidebar()"><i class="fas fa-home"></i> <span>হোম</span></li>
-      <li onclick="openSellModal('Facebook'); toggleSidebar()"><i class="fab fa-facebook" style="color: #1877F2;"></i> <span>ফেসবুক সেল (৳১২)</span></li>
-      <li onclick="openSellModal('Instagram'); toggleSidebar()"><i class="fab fa-instagram" style="color: #E4405F;"></i> <span>Instagram সেল (৳৪)</span></li>
-      <li onclick="openSellModal('Gmail'); toggleSidebar()"><i class="fas fa-envelope" style="color: #EA4335;"></i> <span>জিমেইল সেল (৳১৮)</span></li>
-      <li onclick="switchTab('task'); toggleSidebar()"><i class="fas fa-tasks"></i> <span>টাস্ক অপশন</span></li>
-      <li onclick="switchTab('ads'); toggleSidebar()"><i class="fas fa-play-circle"></i> <span>অ্যাড দেখে ইনকাম</span></li>
-      <li onclick="openTelegramPremiumModal(); toggleSidebar()"><i class="fas fa-crown" style="color: gold;"></i> <span>টেলিগ্রাম প্রিমিয়াম</span></li>
-      <li onclick="openMobileRechargeModal(); toggleSidebar()"><i class="fas fa-mobile-alt"></i> <span>মোবাইল রিচার্জ</span></li>
-      <li onclick="switchTab('leaderboard'); toggleSidebar()"><i class="fas fa-trophy" style="color: gold;"></i> <span>টপ ১০ লিডারবোর্ড</span></li>
-      <li onclick="switchTab('profile'); toggleSidebar()"><i class="fas fa-user-circle"></i> <span>প্রোফাইল</span></li>
-      <li onclick="switchTab('aichat'); toggleSidebar()"><i class="fas fa-robot"></i> <span>এআই সাপোর্ট (AI Chat)</span></li>
-      <li onclick="switchTab('withdraw'); toggleSidebar()"><i class="fas fa-wallet"></i> <span>উইথড্র দিন</span></li>
-      <li onclick="switchTab('allHistory'); toggleSidebar()"><i class="fas fa-history"></i> <span>সকল হিস্ট্রি (All History)</span></li>
-      <li onclick="alert('দুঃখিত! টিকটক কয়েন রিচার্জ বর্তমানে বন্ধ আছে।'); toggleSidebar();"><i class="fas fa-lock" style="color: red;"></i> <span>টিকটক কয়েন রিচার্জ (লকড)</span></li>
-      <li onclick="alert('দুঃখিত! ফেসবুক বুস্টিং বর্তমানে বন্ধ আছে।'); toggleSidebar();"><i class="fas fa-lock" style="color: red;"></i> <span>ফেসবুক বুস্টিং (লকড)</span></li>
-      <li onclick="switchTab('refer'); toggleSidebar()"><i class="fas fa-users"></i> <span>রেফার</span></li>
-      <li onclick="switchTab('support'); toggleSidebar()"><i class="fas fa-headset"></i> <span>সাপোর্ট</span></li>
+      <li onclick="switchTab('home'); toggleSidebar()"><i class="fas fa-home"></i> <span data-lang="mHome">হোম</span></li>
+      <li onclick="openSellModal('Facebook'); toggleSidebar()"><i class="fab fa-facebook" style="color: #1877F2;"></i> <span data-lang="mFb">ফেসবুক সেল (৳১২)</span></li>
+      <li onclick="openSellModal('Instagram'); toggleSidebar()"><i class="fab fa-instagram" style="color: #E4405F;"></i> <span data-lang="mInsta">Instagram সেল (৳৪)</span></li>
+      <li onclick="openSellModal('Gmail'); toggleSidebar()"><i class="fas fa-envelope" style="color: #EA4335;"></i> <span data-lang="mGmail">জিমেইল সেল (৳১৮)</span></li>
+      <li onclick="switchTab('task'); toggleSidebar()"><i class="fas fa-tasks"></i> <span data-lang="mTask">টাস্ক অপশন</span></li>
+      <li onclick="switchTab('ads'); toggleSidebar()"><i class="fas fa-play-circle"></i> <span data-lang="mAds">অ্যাড দেখে ইনকাম</span></li>
+      <li onclick="openTelegramPremiumModal(); toggleSidebar()"><i class="fas fa-crown" style="color: gold;"></i> <span data-lang="mPrem">টেলিগ্রাম প্রিমিয়াম</span></li>
+      <li onclick="openMobileRechargeModal(); toggleSidebar()"><i class="fas fa-mobile-alt"></i> <span data-lang="mRecharge">মোবাইল রিচার্জ</span></li>
+      <li onclick="switchTab('leaderboard'); toggleSidebar()"><i class="fas fa-trophy" style="color: gold;"></i> <span data-lang="mLb">টপ ১০ লিডারবোর্ড</span></li>
+      <li onclick="switchTab('profile'); toggleSidebar()"><i class="fas fa-user-circle"></i> <span data-lang="mProfile">প্রোফাইল</span></li>
+      <li onclick="switchTab('aichat'); toggleSidebar()"><i class="fas fa-robot"></i> <span data-lang="mAi">এআই সাপোর্ট (AI Chat)</span></li>
+      <li onclick="switchTab('withdraw'); toggleSidebar()"><i class="fas fa-wallet"></i> <span data-lang="mWd">উইথড্র দিন</span></li>
+      <li onclick="switchTab('allHistory'); toggleSidebar()"><i class="fas fa-history"></i> <span data-lang="mAllHist">সকল হিস্ট্রি (All History)</span></li>
+      <li onclick="switchTab('refer'); toggleSidebar()"><i class="fas fa-users"></i> <span data-lang="mRef">রেফার</span></li>
+      <li onclick="switchTab('support'); toggleSidebar()"><i class="fas fa-headset"></i> <span data-lang="mSupport">সাপোর্ট</span></li>
     </ul>
   </div>
 
@@ -180,6 +177,10 @@
       <span class="brand-title" id="appTitle">MVS TASK SITE</span>
     </div>
     <div class="header-icons">
+      <select id="langSelector" onchange="changeLanguage(this.value)">
+        <option value="bn">বাংলা</option>
+        <option value="en">English</option>
+      </select>
       <i class="fas fa-robot" title="AI Chat" onclick="switchTab('aichat')"></i>
       <i class="fas fa-headset" onclick="switchTab('support')"></i>
     </div>
@@ -187,102 +188,96 @@
 
   <div style="padding: 15px 15px 0 15px;">
     <div class="verify-banner" id="verifyBanner">
-      <span>⚠️ অ্যাকাউন্ট ভেরিফাই করতে চ্যানেলে জয়েন করুন</span>
-      <button onclick="openVerifyModal()">ভেরিফাই</button>
+      <span data-lang="vText">⚠️ অ্যাকাউন্ট ভেরিফাই করতে চ্যানেলে জয়েন করুন</span>
+      <button onclick="openVerifyModal()" data-lang="vBtn">ভেরিফাই</button>
     </div>
 
     <div class="user-card">
       <img id="userPhoto" src="https://ui-avatars.com/api/?name=User" alt="User">
       <div class="user-info">
         <h4 id="userName">User Name <i id="verifyBadge" class="fas fa-check-circle" style="color: #28a745; display: none;" title="Verified"></i></h4>
-        <p>ইউজারনেম: <span id="userHandle">@username</span></p>
-        <p>চ্যাট আইডি: <span id="chatId">12345678</span></p>
+        <p><span data-lang="uNameLbl">ইউজারনেম</span>: <span id="userHandle">@username</span></p>
+        <p><span data-lang="uIdLbl">চ্যাট আইডি</span>: <span id="chatId">12345678</span></p>
       </div>
     </div>
   </div>
 
   <!-- 1. HOME TAB -->
   <div id="home" class="container active-tab">
-    <!-- Updated Slider Banner with 2 descriptive text slides -->
     <div class="slider-container" id="sliderContainer">
       <div class="slide active">
-        <h2>🚀 ফ্রিতে অনলাইনে আর্নিং</h2>
-        <p>ফ্রিতে অনলাইনে আর্নিং করতে এখনই আমাদের এমবিএস সাইটে কাজ শুরু করুন এবং প্রতিদিন ভালো টাকা আয় করুন!</p>
+        <h2 data-lang="slide1H">🚀 ফ্রিতে অনলাইনে আর্নিং</h2>
+        <p data-lang="slide1P">ফ্রিতে অনলাইনে আর্নিং করতে এখনই আমাদের এমবিএস সাইটে কাজ শুরু করুন এবং প্রতিদিন ভালো টাকা আয় করুন!</p>
       </div>
       <div class="slide">
-        <h2>💸 ইনস্ট্যান্ট পেমেন্ট সিস্টেম</h2>
-        <p>পেমেন্ট ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে নিতে পারবে। নিরাপদে কাজ করুন এবং নিয়মিত পেমেন্ট পান!</p>
+        <h2>💸 <span data-lang="slide2H">ইনস্ট্যান্ট পেমেন্ট সিস্টেম</span></h2>
+        <p data-lang="slide2P">পেমেন্ট ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে নিতে পারবেন। নিরাপদে কাজ করুন এবং নিয়মিত পেমেন্ট পান!</p>
       </div>
     </div>
 
     <div class="balance-card">
-      <p style="color: #666; font-size: 13px; font-weight: 600;">আপনার বর্তমান ব্যালেন্স</p>
+      <p style="color: #666; font-size: 13px; font-weight: 600;" data-lang="currBal">আপনার বর্তমান ব্যালেন্স</p>
       <div class="balance-amount">৳ <span id="balance">0.00</span></div>
       <div class="stats-flex">
-        <div>মোট উত্তোলন: <strong style="color: #ff7e00;">৳ <span id="totalWithdraw">0.00</span></strong></div>
-        <div>সফল রেফার: <strong><span id="referCount">0</span> জন</strong></div>
+        <div><span data-lang="totWd">মোট উত্তোলন</span>: <strong style="color: #ff7e00;">৳ <span id="totalWithdraw">0.00</span></strong></div>
+        <div><span data-lang="succRef">সফল রেফার</span>: <strong><span id="referCount">0</span> জন</strong></div>
       </div>
     </div>
 
     <div class="section-title">
-      <span>হোম স্ক্রিন ফিচারসমূহ</span>
-      <span class="history-btn-sm" onclick="switchTab('allHistory')">সকল হিস্ট্রি</span>
+      <span data-lang="homeShortcuts">হোম স্ক্রিন ফিচারসমূহ</span>
+      <span class="history-btn-sm" onclick="switchTab('allHistory')" data-lang="allHistBtn">সকল হিস্ট্রি</span>
     </div>
 
     <div class="home-action-grid">
       <div class="home-action-btn" onclick="openSellModal('Facebook')">
         <i class="fab fa-facebook" style="color: #1877F2;"></i>
-        <span>ফেসবুক সেল (৳১২)</span>
+        <span data-lang="btnFb">ফেসবুক সেল (৳১২)</span>
       </div>
       <div class="home-action-btn" onclick="openSellModal('Instagram')">
         <i class="fab fa-instagram" style="color: #E4405F;"></i>
-        <span>Instagram সেল (৳৪)</span>
+        <span data-lang="btnInsta">Instagram সেল (৳৪)</span>
       </div>
       <div class="home-action-btn" onclick="openSellModal('Gmail')">
         <i class="fas fa-envelope" style="color: #EA4335;"></i>
-        <span>জিমেইল সেল (৳১৮)</span>
+        <span data-lang="btnGmail">জিমেইল সেল (৳১৮)</span>
       </div>
       <div class="home-action-btn" onclick="switchTab('task'); setActiveNav('task')">
         <i class="fas fa-tasks"></i>
-        <span>টাস্ক অপশন</span>
+        <span data-lang="btnTask">টাস্ক অপশন</span>
       </div>
       <div class="home-action-btn" onclick="switchTab('ads'); setActiveNav('ads')">
         <i class="fas fa-play-circle"></i>
-        <span>অ্যাড দেখে ইনকাম</span>
+        <span data-lang="btnAds">অ্যাড দেখে ইনকাম</span>
       </div>
       <div class="home-action-btn" onclick="openTelegramPremiumModal()">
         <i class="fas fa-crown" style="color: gold;"></i>
-        <span>টেলিগ্রাম প্রিমিয়াম</span>
+        <span data-lang="btnPrem">টেলিগ্রাম প্রিমিয়াম</span>
       </div>
       <div class="home-action-btn" onclick="openMobileRechargeModal()">
         <i class="fas fa-mobile-alt"></i>
-        <span>মোবাইল রিচার্জ</span>
+        <span data-lang="btnRecharge">মোবাইল রিচার্জ</span>
       </div>
       <div class="home-action-btn" onclick="switchTab('leaderboard'); setActiveNav('home')">
         <i class="fas fa-trophy" style="color: gold;"></i>
-        <span>টপ ১০ লিডারবোর্ড</span>
+        <span data-lang="btnLb">টপ ১০ লিডারবোর্ড</span>
       </div>
       <div class="home-action-btn" onclick="switchTab('profile'); setActiveNav('profile')">
         <i class="fas fa-user-circle"></i>
-        <span>প্রোফাইল অপশন</span>
+        <span data-lang="btnProfile">প্রোফাইল অপশন</span>
       </div>
       <div class="home-action-btn" onclick="switchTab('aichat'); setActiveNav('home')">
         <i class="fas fa-robot"></i>
-        <span>এআই সাপোর্ট</span>
+        <span data-lang="btnAi">এআই সাপোর্ট</span>
       </div>
       <div class="home-action-btn" onclick="switchTab('withdraw'); setActiveNav('withdraw')">
         <i class="fas fa-wallet"></i>
-        <span>উইথড্র দিন</span>
+        <span data-lang="btnWd">উইথড্র দিন</span>
       </div>
-      <div class="home-action-btn locked" onclick="alert('দুঃখিত! টিকটক কয়েন রিচার্জ বর্তমানে বন্ধ আছে।')">
+      <div class="home-action-btn locked" onclick="alert(currentLang === 'bn' ? 'দুঃখিত! এই ফিচারটি এই মুহূর্তে বন্ধ আছে।' : 'Sorry! This feature is currently disabled.')">
         <span class="lock-badge">LOCK</span>
         <i class="fas fa-coins"></i>
-        <span>টিকটক কয়েন রিচার্জ</span>
-      </div>
-      <div class="home-action-btn locked" onclick="alert('দুঃখিত! ফেসবুক বুস্টিং বর্তমানে বন্ধ আছে।')">
-        <span class="lock-badge">LOCK</span>
-        <i class="fab fa-facebook" style="color: #1877F2;"></i>
-        <span>ফেসবুক বুস্টিং</span>
+        <span data-lang="btnTiktok">টিকটক কয়েন রিচার্জ</span>
       </div>
     </div>
   </div>
@@ -290,19 +285,19 @@
   <!-- 2. TASK TAB -->
   <div id="task" class="container">
     <div class="section-title">
-      <span>টাস্ক সেকশন (প্রতিটি টাস্ক একবার করে সম্পন্ন করুন)</span>
-      <span class="history-btn-sm" onclick="switchTab('taskHistory')">টাস্ক হিস্ট্রি</span>
+      <span data-lang="taskHeader">টাস্ক সেকশন (প্রতিটি টাস্ক একবার করে সম্পন্ন করুন)</span>
+      <span class="history-btn-sm" onclick="switchTab('taskHistory')" data-lang="taskHistBtn">টাস্ক হিস্ট্রি</span>
     </div>
     <div id="dynamicTaskList"></div>
   </div>
 
-  <!-- 3. SELL TAB (Social Accounts) -->
+  <!-- 3. SELL TAB -->
   <div id="sell" class="container">
     <div class="section-title">
-      <span>সোশ্যাল একাউন্ট আনলিমিটেড সেল হাব</span>
-      <span class="history-btn-sm" onclick="switchTab('sellHistory')">সেল হিস্ট্রি</span>
+      <span data-lang="sellHeader">সোশ্যাল একাউন্ট আনলিমিটেড সেল হাব</span>
+      <span class="history-btn-sm" onclick="switchTab('sellHistory')" data-lang="sellHistBtn">সেল হিস্ট্রি</span>
     </div>
-    <div style="background:#e2f0fd; padding:12px; border-radius:12px; font-size:12px; color:#0056b3; margin-bottom:12px;">
+    <div style="background:#e2f0fd; padding:12px; border-radius:12px; font-size:12px; color:#0056b3; margin-bottom:12px;" data-lang="sellNotice">
       ℹ️ জিমেইল সেল ২৪ ঘণ্টার মধ্যে এবং ফেসবুক/ইনস্টাগ্রাম সেল ২৪ থেকে ৪৮ ঘণ্টার মধ্যে ভেরিফাই করে ব্যালেন্স যোগ করা হবে।
     </div>
     <div class="home-action-grid">
@@ -312,13 +307,13 @@
     </div>
   </div>
 
-  <!-- 4. WITHDRAW TAB (bKash & Nagad with dual images as requested) -->
+  <!-- 4. WITHDRAW TAB -->
   <div id="withdraw" class="container">
     <div class="section-title">
-      <span>টাকা উত্তোলন (Withdraw)</span>
-      <span class="history-btn-sm" onclick="switchTab('withdrawHistory')">উত্তোলন হিস্ট্রি</span>
+      <span data-lang="wdHeader">টাকা উত্তোলন (Withdraw)</span>
+      <span class="history-btn-sm" onclick="switchTab('withdrawHistory')" data-lang="wdHistBtn">উত্তোলন হিস্ট্রি</span>
     </div>
-    <p style="font-size: 12px; color: #666; margin-top: 5px; font-weight: 500;">
+    <p style="font-size: 12px; color: #666; margin-top: 5px; font-weight: 500;" data-lang="wdRules">
       ⚠️ নিয়ম: সর্বনিম্ন ২৫ টাকা উত্তোলন করতে হবে। ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে পেমেন্ট পাবেন।
     </p>
 
@@ -339,7 +334,7 @@
       </div>
     </div>
 
-    <label style="font-size: 13px; font-weight: 700;">অ্যামাউন্ট সিলেক্ট করুন অথবা নিজে লিখুন:</label>
+    <label style="font-size: 13px; font-weight: 700;" data-lang="amtLabel">অ্যামাউন্ট সিলেক্ট করুন অথবা নিজে লিখুন:</label>
     <div class="amount-grid">
       <div class="amt-btn" onclick="selectAmount(25)">৳ ২৫</div>
       <div class="amt-btn" onclick="selectAmount(50)">৳ ৫০</div>
@@ -352,44 +347,44 @@
     <input type="number" id="customWithdrawAmount" class="input-field" placeholder="টাকার পরিমাণ লিখুন (কমপক্ষে ২৫)" oninput="onCustomAmountInput()">
     <input type="text" id="withdrawNumber" class="input-field" placeholder="বিকাশ/নগদ ১১ ডিজিটের অ্যাকাউন্ট নাম্বার">
 
-    <button class="btn-submit-main" onclick="processWithdrawal()">উত্তোলন নিশ্চিত করুন</button>
+    <button class="btn-submit-main" onclick="processWithdrawal()" data-lang="wdBtn">উত্তোলন নিশ্চিত করুন</button>
   </div>
 
   <!-- 5. LEADERBOARD TAB -->
   <div id="leaderboard" class="container">
-    <div class="section-title"><i class="fas fa-trophy" style="color: gold;"></i> <span>টপ ১০ সাপ্তাহিক লিডারবোর্ড</span></div>
-    <div style="background:#fff3cd; padding:10px; border-radius:8px; font-size:12px; color:#856404; margin-bottom:12px;">
+    <div class="section-title"><i class="fas fa-trophy" style="color: gold;"></i> <span data-lang="lbHeader">টপ ১০ সাপ্তাহিক লিডারবোর্ড</span></div>
+    <div style="background:#fff3cd; padding:10px; border-radius:8px; font-size:12px; color:#856404; margin-bottom:12px;" data-lang="lbNotice">
       ℹ️ প্রতি সপ্তাহে এই লিডারবোর্ড আপডেট হয়। কাজের পরিমাণ ও অর্জিত অ্যামাউন্টের ভিত্তিতে সেরা ১০ জন এখানে থাকেন।
     </div>
     <div id="leaderboardList">
-      <p style="text-align:center; color:#777; padding:20px;">লিডারবোর্ড লোড হচ্ছে...</p>
+      <p style="text-align:center; color:#777; padding:20px;" data-lang="loading">লিডারবোর্ড লোড হচ্ছে...</p>
     </div>
   </div>
 
-  <!-- 6. REFER TAB (Site referral link system instead of bot) -->
+  <!-- 6. REFER TAB -->
   <div id="refer" class="container">
     <div class="banner-card" style="text-align: center;">
-      <h2>বন্ধুদের রেফার করুন</h2>
-      <p>প্রতি সফল রেফারে পাবেন নিশ্চিত ৳১৫ এবং জীবনভর পাবেন ৫% কমিশন!</p>
+      <h2 data-lang="refTitle">বন্ধুদের রেফার করুন</h2>
+      <p data-lang="refDesc">প্রতি সফল রেফারে পাবেন নিশ্চিত ৳১৫ এবং জীবনভর পাবেন ৫% কমিশন!</p>
     </div>
     <div class="balance-card">
-      <p style="font-size: 13px; color: #666; margin-bottom: 5px; font-weight: 600;">আপনার সাইটের ইউনিক রেফারেল লিংক:</p>
+      <p style="font-size: 13px; color: #666; margin-bottom: 5px; font-weight: 600;" data-lang="refLinkLbl">আপনার সাইটের ইউনিক রেফারেল লিংক:</p>
       <input type="text" id="referLink" class="input-field" value="" readonly>
-      <button class="btn-submit-main" onclick="copyReferLink()">সাইট লিংক কপি করুন</button>
+      <button class="btn-submit-main" onclick="copyReferLink()" data-lang="copyBtn">সাইট লিংক কপি করুন</button>
     </div>
 
-    <div class="section-title"><i class="fas fa-users"></i> আমার রেফারকৃত ব্যবহারকারী ও কমিশন তালিকা</div>
+    <div class="section-title"><i class="fas fa-users"></i> <span data-lang="refListTitle">আমার রেফারকৃত ব্যবহারকারী ও কমিশন তালিকা</span></div>
     <div id="referralUserList">
-      <p style="text-align:center; color:#777; padding:15px;">এখনো কোনো ইউজার আপনার লিংক থেকে যুক্ত হয়নি।</p>
+      <p style="text-align:center; color:#777; padding:15px;" data-lang="noRef">এখনো কোনো ইউজার আপনার লিংক থেকে যুক্ত হয়নি।</p>
     </div>
   </div>
 
   <!-- 7. AI LIVE CHAT TAB -->
   <div id="aichat" class="container">
-    <div class="section-title"><i class="fas fa-robot" style="color:#ff7e00;"></i> <span>AI লাইভ সাপোর্ট চ্যাট</span></div>
+    <div class="section-title"><i class="fas fa-robot" style="color:#ff7e00;"></i> <span data-lang="aiHeader">AI লাইভ সাপোর্ট চ্যাট</span></div>
     <div class="balance-card">
       <div class="chat-box" id="chatBox">
-        <div class="chat-msg bot">হ্যালো! আমি MVS AI অ্যাসিস্ট্যান্ট। ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে পেমেন্ট দেওয়া হয়।</div>
+        <div class="chat-msg bot" data-lang="aiWelcome">হ্যালো! আমি MVS AI অ্যাসিস্ট্যান্ট। ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে পেমেন্ট দেওয়া হয়।</div>
       </div>
       <div style="display:flex; gap:8px;">
         <input type="text" id="chatInput" class="input-field" placeholder="আপনার প্রশ্নটি লিখুন..." style="margin:0;">
@@ -400,102 +395,106 @@
 
   <!-- 8. PROFILE TAB -->
   <div id="profile" class="container">
-    <div class="section-title"><i class="fas fa-user-circle"></i> <span>প্রোফাইল ও ইনফরমেশন</span></div>
+    <div class="section-title"><i class="fas fa-user-circle"></i> <span data-lang="profHeader">প্রোফাইল ও ইনফরমেশন</span></div>
     
     <div class="balance-card" style="text-align: center; padding: 22px;">
       <img id="profilePagePic" src="https://ui-avatars.com/api/?name=User" alt="Profile" style="width: 85px; height: 85px; border-radius: 50%; border: 3px solid #ff7e00; margin-bottom: 12px; object-fit: cover;">
       <h3 id="profilePageName" style="font-size: 18px; font-weight: 800;">User Name</h3>
-      <p style="color: #666; font-size: 13px; margin-top: 5px;">ইউজারনেম: <span id="profilePageHandle">@username</span></p>
-      <p style="color: #666; font-size: 13px;">চ্যাট আইডি: <span id="profilePageChatId">12345678</span></p>
+      <p style="color: #666; font-size: 13px; margin-top: 5px;"><span data-lang="uNameLbl">ইউজারনেম</span>: <span id="profilePageHandle">@username</span></p>
+      <p style="color: #666; font-size: 13px;"><span data-lang="uIdLbl">চ্যাট আইডি</span>: <span id="profilePageChatId">12345678</span></p>
       
       <div style="margin-top: 15px; background: #fff5eb; padding: 10px; border-radius: 12px; border: 1px dashed #ff7e00;">
-        <p style="font-size: 12px; color: #555; font-weight: 600;">প্রোফাইল ব্যালেন্স</p>
+        <p style="font-size: 12px; color: #555; font-weight: 600;" data-lang="profBalLbl">প্রোফাইল ব্যালেন্স</p>
         <h3 style="font-size: 22px; color: #ff7e00; font-weight: 800;">৳ <span id="profileBalance">0.00</span></h3>
       </div>
     </div>
 
     <div class="balance-card">
-      <h4 style="font-size: 14px; margin-bottom: 10px; font-weight: 700;"><i class="fas fa-headset"></i> সাপোর্ট ও আপডেট চ্যানেলসমূহ</h4>
-      <p style="font-size: 12px; color: #666; margin-bottom: 10px;">অফিশিয়াল চ্যানেল দুটিতে জয়েন করুন:</p>
+      <h4 style="font-size: 14px; margin-bottom: 10px; font-weight: 700;"><i class="fas fa-headset"></i> <span data-lang="supportChanHeader">সাপোর্ট ও আপডেট চ্যানেলসমূহ</span></h4>
+      <p style="font-size: 12px; color: #666; margin-bottom: 10px;" data-lang="supportChanDesc">অফিশিয়াল চ্যানেল ও সাপোর্ট গ্রুপে জয়েন করুন:</p>
       <div class="channel-btn-box">
-        <a id="profileChLink1" href="https://t.me/" target="_blank" class="channel-btn"><i class="fab fa-telegram"></i> চ্যানেল ১</a>
-        <a id="profileChLink2" href="https://t.me/" target="_blank" class="channel-btn" style="background: #28a745;"><i class="fab fa-telegram"></i> চ্যানেল ২</a>
+        <a href="https://t.me/mvs_task_bot0" target="_blank" class="channel-btn"><i class="fab fa-telegram"></i> <span data-lang="ch1Text">চ্যানেল ১ (আপডেট)</span></a>
+        <a href="https://t.me/MVS_TASK_support_Group" target="_blank" class="channel-btn" style="background: #28a745;"><i class="fab fa-telegram"></i> <span data-lang="ch2Text">সাপোর্ট গ্রুপ</span></a>
       </div>
     </div>
   </div>
 
-  <!-- ADS TAB -->
+  <!-- ADS TAB (Montag Ad Integrated / Off Notice) -->
   <div id="ads" class="container" style="text-align: center; padding-top: 30px;">
     <div class="banner-card">
-      <h2>অ্যাড ট্র্যাকার ও ইনকাম</h2>
-      <p>বিজ্ঞাপন দেখে রিওয়ার্ড অর্জন করুন। প্রতি বিজ্ঞাপনে পাবেন ৳২.০০।</p>
+      <h2 data-lang="adsTitle">অ্যাড ট্র্যাকার ও ইনকাম</h2>
+      <p data-lang="adsDesc">বিজ্ঞাপন দেখে রিওয়ার্ড অর্জন করুন।</p>
     </div>
     <div class="balance-card" style="padding: 30px;">
-      <button class="btn-submit-main" onclick="watchAdReward()" style="margin-bottom: 12px;">বিজ্ঞাপন দেখুন ও ৳২ রিওয়ার্ড নিন</button>
-      <span class="history-btn-sm" onclick="switchTab('adsHistory')" style="display:inline-block; padding:8px 15px;">অ্যাড হিস্ট্রি দেখুন</span>
+      <button class="btn-submit-main" onclick="watchAdReward()" style="margin-bottom: 12px;" data-lang="adsBtn">বিজ্ঞাপন দেখুন ও রিওয়ার্ড নিন</button>
+      <span class="history-btn-sm" onclick="switchTab('adsHistory')" style="display:inline-block; padding:8px 15px;" data-lang="adsHistBtn">অ্যাড হিস্ট্রি দেখুন</span>
     </div>
   </div>
 
-  <!-- HISTORY TABS -->
-  <div id="allHistory" class="container"><div class="section-title"><i class="fas fa-history"></i> <span>সকল কাজের হিস্ট্রি (All History)</span></div><div id="allHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো হিস্ট্রি নেই।</p></div></div>
-  <div id="withdrawHistory" class="container"><div class="section-title"><i class="fas fa-wallet"></i> <span>উত্তোলন হিস্ট্রি (Withdraw History)</span></div><div id="withdrawHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো উত্তোলন হিস্ট্রি নেই।</p></div></div>
-  <div id="taskHistory" class="container"><div class="section-title"><i class="fas fa-tasks"></i> <span>টাস্ক হিস্ট্রি (Task History)</span></div><div id="taskHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো টাস্ক হিস্ট্রি নেই।</p></div></div>
-  <div id="fbHistory" class="container"><div class="section-title"><i class="fab fa-facebook" style="color:#1877F2;"></i> <span>ফেসবুক সেল হিস্ট্রি</span></div><div id="fbHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো ফেসবুক সেল হিস্ট্রি নেই।</p></div></div>
-  <div id="instaHistory" class="container"><div class="section-title"><i class="fab fa-instagram" style="color:#E4405F;"></i> <span>Instagram সেল হিস্ট্রি</span></div><div id="instaHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো ইনস্টাগ্রাম সেল হিস্ট্রি নেই।</p></div></div>
-  <div id="gmailHistory" class="container"><div class="section-title"><i class="fas fa-envelope" style="color:#EA4335;"></i> <span>জিমেইল সেল হিস্ট্রি</span></div><div id="gmailHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো জিমেইল সেল হিস্ট্রি নেই।</p></div></div>
-  <div id="rechargeHistory" class="container"><div class="section-title"><i class="fas fa-mobile-alt"></i> <span>মোবাইল রিচার্জ হিস্ট্রি</span></div><div id="rechargeHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো মোবাইল রিচার্জ হিস্ট্রি নেই।</p></div></div>
-  <div id="adsHistory" class="container"><div class="section-title"><i class="fas fa-ad"></i> <span>অ্যাড ওয়াচ হিস্ট্রি</span></div><div id="adsHistoryList"><p style="text-align:center; color:#777; padding:20px;">কোনো অ্যাড হিস্ট্রি নেই।</p></div></div>
+  <!-- ================= HISTORY TABS ================= -->
+  <div id="allHistory" class="container"><div class="section-title"><i class="fas fa-history"></i> <span data-lang="allHistTitle">সকল কাজের হিস্ট্রি (All History)</span></div><div id="allHistoryList"><p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো হিস্ট্রি নেই।</p></div></div>
+  <div id="withdrawHistory" class="container"><div class="section-title"><i class="fas fa-wallet"></i> <span data-lang="wdHistTitle">উত্তোলন হিস্ট্রি (Withdraw History)</span></div><div id="withdrawHistoryList"><p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো উত্তোলন হিস্ট্রি নেই।</p></div></div>
+  <div id="taskHistory" class="container"><div class="section-title"><i class="fas fa-tasks"></i> <span data-lang="taskHistTitle">টাস্ক হিস্ট্রি (Task History)</span></div><div id="taskHistoryList"><p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো টাস্ক হিস্ট্রি নেই।</p></div></div>
+  <div id="fbHistory" class="container"><div class="section-title"><i class="fab fa-facebook" style="color:#1877F2;"></i> <span data-lang="fbHistTitle">ফেসবুক সেল হিস্ট্রি</span></div><div id="fbHistoryList"><p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো ফেসবুক সেল হিস্ট্রি নেই।</p></div></div>
+  <div id="instaHistory" class="container"><div class="section-title"><i class="fab fa-instagram" style="color:#E4405F;"></i> <span data-lang="instaHistTitle">Instagram সেল হিস্ট্রি</span></div><div id="instaHistoryList"><p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো ইনস্টাগ্রাম সেল হিস্ট্রি নেই।</p></div></div>
+  <div id="gmailHistory" class="container"><div class="section-title"><i class="fas fa-envelope" style="color:#EA4335;"></i> <span data-lang="gmailHistTitle">জিমেইল সেল হিস্ট্রি</span></div><div id="gmailHistoryList"><p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো জিমেইল সেল হিস্ট্রি নেই।</p></div></div>
+  <div id="rechargeHistory" class="container"><div class="section-title"><i class="fas fa-mobile-alt"></i> <span data-lang="rechargeHistTitle">মোবাইল রিচার্জ হিস্ট্রি</span></div><div id="rechargeHistoryList"><p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো মোবাইল রিচার্জ হিস্ট্রি নেই।</p></div></div>
+  <div id="premHistory" class="container"><div class="section-title"><i class="fas fa-crown" style="color:gold;"></i> <span data-lang="premHistTitle">টেলিগ্রাম প্রিমিয়াম হিস্ট্রি</span></div><div id="premHistoryList"><p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো প্রিমিয়াম হিস্ট্রি নেই।</p></div></div>
+  <div id="adsHistory" class="container"><div class="section-title"><i class="fas fa-ad"></i> <span data-lang="adsHistTitle">অ্যাড ওয়াচ হিস্ট্রি</span></div><div id="adsHistoryList"><p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো অ্যাড হিস্ট্রি নেই।</p></div></div>
 
   <!-- SUPPORT TAB -->
   <div id="support" class="container">
     <div class="banner-card" style="text-align: center;">
-      <h2>লাইভ সাপোর্ট সেন্টার</h2>
-      <p>যেকোনো সমস্যায় আমাদের সাপোর্ট চ্যানেলে যোগাযোগ করুন। ২৪ ঘণ্টার মধ্যে সমাধান দেওয়া হয়।</p>
+      <h2 data-lang="suppTitle">লাইভ সাপোর্ট সেন্টার</h2>
+      <p data-lang="suppDesc">যেকোনো সমস্যায় আমাদের সাপোর্ট গ্রুপ বা চ্যানেলে যোগাযোগ করুন। ২৪ ঘণ্টার মধ্যে সমাধান দেওয়া হয়।</p>
+      <div class="channel-btn-box" style="margin-top: 15px;">
+        <a href="https://t.me/MVS_TASK_support_Group" target="_blank" class="channel-btn" style="background:#28a745;"><i class="fab fa-telegram"></i> <span data-lang="joinGroup">সাপোর্ট গ্রুপে জয়েন করুন</span></a>
+      </div>
     </div>
   </div>
 
   <!-- Submission Modal -->
   <div class="form-overlay" id="submissionModal">
     <div class="form-box">
-      <h3 id="modalTitle" style="color: #ff7e00; margin-bottom: 10px; font-weight: 800;">সাবমিশন ফরম</h3>
+      <h3 id="modalTitle" style="color: #ff7e00; margin-bottom: 10px; font-weight: 800;" data-lang="subTitle">সাবমিশন ফরম</h3>
       <p id="modalDesc" style="font-size: 12px; color: #666; margin-bottom: 12px; font-weight: 500;"></p>
       <div id="dynamicFormFields"></div>
-      <button class="btn-submit-main" onclick="submitDataToAdmin()">সাবমিট করুন</button>
-      <button class="btn-submit-main" style="background: #e9ecef; color: #555; margin-top: 8px; box-shadow: none;" onclick="closeModal()">বাতিল</button>
+      <button class="btn-submit-main" onclick="submitDataToAdmin()" data-lang="submitBtn">সাবমিট করুন</button>
+      <button class="btn-submit-main" style="background: #e9ecef; color: #555; margin-top: 8px; box-shadow: none;" onclick="closeModal()" data-lang="cancelBtn">বাতিল</button>
     </div>
   </div>
 
   <!-- Verification Modal Popup -->
   <div class="form-overlay" id="verifyModal" style="display:none;">
     <div class="form-box" style="text-align:center;">
-      <h3 style="color:#ff7e00; margin-bottom:10px; font-weight: 800;">চ্যানেল ভেরিফিকেশন</h3>
-      <p style="font-size: 13px; margin-bottom: 15px; font-weight: 500;">সাইট ব্যবহার করতে নিচের চ্যানেলগুলোতে জয়েন করুন:</p>
-      <a id="chLink1" href="https://t.me/" target="_blank" class="btn-submit-main" style="display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; background:#0088cc; margin-bottom:10px;"><i class="fab fa-telegram"></i> চ্যানেল ১-এ জয়েন করুন</a>
-      <a id="chLink2" href="https://t.me/" target="_blank" class="btn-submit-main" style="display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; background:#0088cc; margin-bottom:15px;"><i class="fab fa-telegram"></i> চ্যানেল ২-এ জয়েন করুন</a>
-      <button class="btn-submit-main" onclick="verifyTelegramJoin()">ভেরিফাই করুন</button>
-      <button class="btn-submit-main" style="background: #e9ecef; color: #555; margin-top: 8px; box-shadow: none;" onclick="closeVerifyModal()">বন্ধ করুন</button>
+      <h3 style="color:#ff7e00; margin-bottom:10px; font-weight: 800;" data-lang="vModalTitle">চ্যানেল ভেরিফিকেশন</h3>
+      <p style="font-size: 13px; margin-bottom: 15px; font-weight: 500;" data-lang="vModalDesc">সাইট ব্যবহার করতে নিচের চ্যানেল ও গ্রুপে জয়েন করুন:</p>
+      <a href="https://t.me/mvs_task_bot0" target="_blank" class="btn-submit-main" style="display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; background:#0088cc; margin-bottom:10px;"><i class="fab fa-telegram"></i> <span data-lang="vChan1">চ্যানেল ১-এ জয়েন করুন</span></a>
+      <a href="https://t.me/MVS_TASK_support_Group" target="_blank" class="btn-submit-main" style="display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; background:#28a745; margin-bottom:15px;"><i class="fab fa-telegram"></i> <span data-lang="vChan2">সাপোর্ট গ্রুপে জয়েন করুন</span></a>
+      <button class="btn-submit-main" onclick="verifyTelegramJoin()" data-lang="vVerifyBtn">ভেরিফাই করুন</button>
+      <button class="btn-submit-main" style="background: #e9ecef; color: #555; margin-top: 8px; box-shadow: none;" onclick="closeVerifyModal()" data-lang="vCloseBtn">বন্ধ করুন</button>
     </div>
   </div>
 
   <!-- Bottom Navigation Bar -->
   <div class="bottom-nav">
     <div class="nav-item active" id="nav-home" onclick="switchTab('home'); setActiveNav('home')">
-      <i class="fas fa-home"></i> <span>হোম</span>
+      <i class="fas fa-home"></i> <span data-lang="nHome">হোম</span>
     </div>
     <div class="nav-item" id="nav-task" onclick="switchTab('task'); setActiveNav('task')">
-      <i class="fas fa-tasks"></i> <span>টাস্ক</span>
+      <i class="fas fa-tasks"></i> <span data-lang="nTask">টাস্ক</span>
     </div>
     <div class="nav-item" id="nav-ads" onclick="switchTab('ads'); setActiveNav('ads')">
-      <i class="fas fa-play-circle"></i> <span>অ্যাড আর্ন</span>
+      <i class="fas fa-play-circle"></i> <span data-lang="nAds">অ্যাড আর্ন</span>
     </div>
     <div class="nav-item" id="nav-refer" onclick="switchTab('refer'); setActiveNav('refer')">
-      <i class="fas fa-users"></i> <span>রেফার</span>
+      <i class="fas fa-users"></i> <span data-lang="nRef">রেফার</span>
     </div>
     <div class="nav-item" id="nav-withdraw" onclick="switchTab('withdraw'); setActiveNav('withdraw')">
-      <i class="fas fa-wallet"></i> <span>উইথড্র</span>
+      <i class="fas fa-wallet"></i> <span data-lang="nWd">উইথড্র</span>
     </div>
     <div class="nav-item" id="nav-profile" onclick="switchTab('profile'); setActiveNav('profile')">
-      <i class="fas fa-user-circle"></i> <span>প্রোফাইল</span>
+      <i class="fas fa-user-circle"></i> <span data-lang="nProf">প্রোফাইল</span>
     </div>
   </div>
 
@@ -513,6 +512,104 @@
     let tgUser = { id: "12345678", first_name: "MVS User", username: "mvsuser", photo_url: "" };
     let selectedPaymentMethod = '';
     let isVerified = false;
+    let currentLang = 'bn';
+
+    const translations = {
+      bn: {
+        pageTitle: "MVS TASK SITE - Official Web Edition",
+        menuTitle: "MVS TASK MENU",
+        mHome: "হোম", mFb: "ফেসবুক সেল (৳১২)", mInsta: "Instagram সেল (৳৪)", mGmail: "জিমেইল সেল (৳১৮)",
+        mTask: "টাস্ক অপশন", mAds: "অ্যাড দেখে ইনকাম", mPrem: "টেলিগ্রাম প্রিমিয়াম", mRecharge: "মোবাইল রিচার্জ",
+        mLb: "টপ ১০ লিডারবোর্ড", mProfile: "প্রোফাইল", mAi: "এআই সাপোর্ট (AI Chat)", mWd: "উইথড্র দিন",
+        mAllHist: "সকল হিস্ট্রি (All History)", mRef: "রেফার", mSupport: "সাপোর্ট",
+        vText: "⚠️ অ্যাকাউন্ট ভেরিফাই করতে চ্যানেল ও গ্রুপে জয়েন করুন", vBtn: "ভেরিফাই",
+        uNameLbl: "ইউজারনেম", uIdLbl: "চ্যাট আইডি",
+        slide1H: "🚀 ফ্রিতে অনলাইনে আর্নিং", slide1P: "ফ্রিতে অনলাইনে আর্নিং করতে এখনই আমাদের এমবিএস সাইটে কাজ শুরু করুন এবং প্রতিদিন ভালো টাকা আয় করুন!",
+        slide2H: "ইনস্ট্যান্ট পেমেন্ট সিস্টেম", slide2P: "পেমেন্ট ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে নিতে পারবেন। নিরাপদে কাজ করুন এবং নিয়মিত পেমেন্ট পান!",
+        currBal: "আপনার বর্তমান ব্যালেন্স", totWd: "মোট উত্তোলন", succRef: "সফল রেফার",
+        homeShortcuts: "হোম স্ক্রিন ফিচারসমূহ", allHistBtn: "সকল হিস্ট্রি",
+        btnFb: "ফেসবুক সেল (৳১২)", btnInsta: "Instagram সেল (৳৪)", btnGmail: "জিমেইল সেল (৳১৮)", btnTask: "টাস্ক অপশন",
+        btnAds: "অ্যাড দেখে ইনকাম", btnPrem: "টেলিগ্রাম প্রিমিয়াম", btnRecharge: "মোবাইল রিচার্জ", btnLb: "টপ ১০ লিডারবোর্ড",
+        btnProfile: "প্রোফাইল অপশন", btnAi: "এআই সাপোর্ট", btnWd: "উইথড্র দিন", btnTiktok: "টিকটক কয়েন রিচার্জ",
+        taskHeader: "টাস্ক সেকশন (প্রতিটি টাস্ক একবার করে সম্পন্ন করুন)", taskHistBtn: "টাস্ক হিস্ট্রি",
+        sellHeader: "সোশ্যাল একাউন্ট আনলিমিটেড সেল হাব", sellHistBtn: "সেল হিস্ট্রি",
+        sellNotice: "ℹ️ জিমেইল সেল ২৪ ঘণ্টার মধ্যে এবং ফেসবুক/ইনস্টাগ্রাম সেল ২৪ থেকে ৪৮ ঘণ্টার মধ্যে ভেরিফাই করে ব্যালেন্স যোগ করা হবে।",
+        wdHeader: "টাকা উত্তোলন (Withdraw)", wdHistBtn: "উত্তোলন হিস্ট্রি",
+        wdRules: "⚠️ নিয়ম: সর্বনিম্ন ২৫ টাকা উত্তোলন করতে হবে। ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে পেমেন্ট পাবেন।",
+        amtLabel: "অ্যামাউন্ট সিলেক্ট করুন অথবা নিজে লিখুন:", wdBtn: "উত্তোলন নিশ্চিত করুন",
+        lbHeader: "টপ ১০ সাপ্তাহিক লিডারবোর্ড", lbNotice: "ℹ️ প্রতি সপ্তাহে এই লিডারবোর্ড আপডেট হয়। কাজের পরিমাণ ও অর্জিত অ্যামাউন্টের ভিত্তিতে সেরা ১০ জন এখানে থাকেন।",
+        loading: "লিডারবোর্ড লোড হচ্ছে...",
+        refTitle: "বন্ধুদের রেফার করুন", refDesc: "প্রতি সফল রেফারে পাবেন নিশ্চিত ৳১৫ এবং জীবনভর পাবেন ৫% কমিশন!",
+        refLinkLbl: "আপনার সাইটের ইউনিক রেফারেল লিংক:", copyBtn: "সাইট লিংক কপি করুন",
+        refListTitle: "আমার রেফারকৃত ব্যবহারকারী ও কমিশন তালিকা", noRef: "এখনো কোনো ইউজার আপনার লিংক থেকে যুক্ত হয়নি।",
+        aiHeader: "AI লাইভ সাপোর্ট চ্যাট", aiWelcome: "হ্যালো! আমি MVS AI অ্যাসিস্ট্যান্ট। ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে পেমেন্ট দেওয়া হয়।",
+        profHeader: "প্রোফাইল ও ইনফরমেশন", profBalLbl: "প্রোফাইল ব্যালেন্স",
+        supportChanHeader: "সাপোর্ট ও আপডেট চ্যানেলসমূহ", supportChanDesc: "অফিশিয়াল চ্যানেল ও সাপোর্ট গ্রুপে জয়েন করুন:",
+        ch1Text: "চ্যানেল ১ (আপডেট)", ch2Text: "সাপোর্ট গ্রুপ",
+        adsTitle: "অ্যাড ট্র্যাকার ও ইনকাম", adsDesc: "বিজ্ঞাপন দেখে রিওয়ার্ড অর্জন করুন।", adsBtn: "বিজ্ঞাপন দেখুন ও রিওয়ার্ড নিন", adsHistBtn: "অ্যাড হিস্ট্রি দেখুন",
+        allHistTitle: "সকল কাজের হিস্ট্রি (All History)", noHist: "কোনো হিস্ট্রি নেই।",
+        wdHistTitle: "উত্তোলন হিস্ট্রি (Withdraw History)", taskHistTitle: "টাস্ক হিস্ট্রি (Task History)",
+        fbHistTitle: "ফেসবুক সেল হিস্ট্রি", instaHistTitle: "Instagram সেল হিস্ট্রি", gmailHistTitle: "জিমেইল সেল হিস্ট্রি",
+        rechargeHistTitle: "মোবাইল রিচার্জ হিস্ট্রি", premHistTitle: "টেলিগ্রাম প্রিমিয়াম হিস্ট্রি",
+        suppTitle: "লাইভ সাপোর্ট সেন্টার", suppDesc: "যেকোনো সমস্যায় আমাদের সাপোর্ট গ্রুপ বা চ্যানেলে যোগাযোগ করুন। ২৪ ঘণ্টার মধ্যে সমাধান দেওয়া হয়।",
+        joinGroup: "সাপোর্ট গ্রুপে জয়েন করুন", subTitle: "সাবমিশন ফরম", submitBtn: "সাবমিট করুন", cancelBtn: "বাতিল",
+        vModalTitle: "চ্যানেল ভেরিফিকেশন", vModalDesc: "সাইট ব্যবহার করতে নিচের চ্যানেল ও গ্রুপে জয়েন করুন:",
+        vChan1: "চ্যানেল ১-এ জয়েন করুন", vChan2: "সাপোর্ট গ্রুপে জয়েন করুন", vVerifyBtn: "ভেরিফাই করুন", vCloseBtn: "বন্ধ করুন",
+        nHome: "হোম", nTask: "টাস্ক", nAds: "অ্যাড আর্ন", nRef: "রেফার", nWd: "উইথড্র", nProf: "প্রোফাইল"
+      },
+      en: {
+        pageTitle: "MVS TASK SITE - Official Web Edition",
+        menuTitle: "MVS TASK MENU",
+        mHome: "Home", mFb: "Facebook Sell (৳12)", mInsta: "Instagram Sell (৳4)", mGmail: "Gmail Sell (৳18)",
+        mTask: "Task Options", mAds: "Watch Ads", mPrem: "Telegram Premium", mRecharge: "Mobile Recharge",
+        mLb: "Top 10 Leaderboard", mProfile: "Profile", mAi: "AI Support (Chat)", mWd: "Withdraw",
+        mAllHist: "All History", mRef: "Referral", mSupport: "Support",
+        vText: "⚠️ Join our channels & group to verify account", vBtn: "Verify",
+        uNameLbl: "Username", uIdLbl: "Chat ID",
+        slide1H: "🚀 Free Online Earning", slide1P: "Start working on our MVS site right now for free online earning and make good daily income!",
+        slide2H: "Instant Payment System", slide2P: "Get your payments within 24 hours via bKash and Nagad securely!",
+        currBal: "Your Current Balance", totWd: "Total Withdraw", succRef: "Successful Referrals",
+        homeShortcuts: "Home Screen Features", allHistBtn: "All History",
+        btnFb: "Facebook Sell (৳12)", btnInsta: "Instagram Sell (৳4)", btnGmail: "Gmail Sell (৳18)", btnTask: "Task Options",
+        btnAds: "Watch Ads", btnPrem: "Telegram Premium", btnRecharge: "Mobile Recharge", btnLb: "Top 10 Leaderboard",
+        btnProfile: "Profile Options", btnAi: "AI Support", btnWd: "Withdraw Funds", btnTiktok: "TikTok Coin Recharge",
+        taskHeader: "Task Section (Complete each task once)", taskHistBtn: "Task History",
+        sellHeader: "Social Account Selling Hub", sellHistBtn: "Sell History",
+        sellNotice: "ℹ️ Gmail sell will be verified within 24 hours and Facebook/Instagram within 24 to 48 hours.",
+        wdHeader: "Withdraw Funds", wdHistBtn: "Withdraw History",
+        wdRules: "⚠️ Rule: Minimum withdrawal 25 BDT. Payments via bKash & Nagad within 24 hours.",
+        amtLabel: "Select amount or type manually:", wdBtn: "Confirm Withdrawal",
+        lbHeader: "Top 10 Weekly Leaderboard", lbNotice: "ℹ️ Leaderboard updates weekly based on total completed tasks and earnings.",
+        loading: "Loading leaderboard...",
+        refTitle: "Refer Your Friends", refDesc: "Earn 15 BDT guaranteed per referral + 5% lifetime commission!",
+        refLinkLbl: "Your Unique Referral Link:", copyBtn: "Copy Site Link",
+        refListTitle: "My Referred Users & Commissions", noRef: "No users joined from your link yet.",
+        aiHeader: "AI Live Support Chat", aiWelcome: "Hello! I am MVS AI Assistant. Payments are cleared within 24 hours via bKash and Nagad.",
+        profHeader: "Profile & Information", profBalLbl: "Profile Balance",
+        supportChanHeader: "Support & Update Channels", supportChanDesc: "Join our official channels and support group:",
+        ch1Text: "Channel 1 (Updates)", ch2Text: "Support Group",
+        adsTitle: "Ad Tracker & Earning", adsDesc: "Earn rewards by viewing ads.", adsBtn: "Watch Ad & Get Reward", adsHistBtn: "Ads History",
+        allHistTitle: "All Work History", noHist: "No history found.",
+        wdHistTitle: "Withdraw History", taskHistTitle: "Task History",
+        fbHistTitle: "Facebook Sell History", instaHistTitle: "Instagram Sell History", gmailHistTitle: "Gmail Sell History",
+        rechargeHistTitle: "Mobile Recharge History", premHistTitle: "Telegram Premium History",
+        suppTitle: "Live Support Center", suppDesc: "Contact our support group or channel for any issues. Solved within 24 hours.",
+        joinGroup: "Join Support Group", subTitle: "Submission Form", submitBtn: "Submit", cancelBtn: "Cancel",
+        vModalTitle: "Channel Verification", vModalDesc: "Join the channels and group below to use the site:",
+        vChan1: "Join Channel 1", vChan2: "Join Support Group", vVerifyBtn: "Verify", vCloseBtn: "Close",
+        nHome: "Home", nTask: "Task", nAds: "Ads Earn", nRef: "Refer", nWd: "Withdraw", nProf: "Profile"
+      }
+    };
+
+    function changeLanguage(lang) {
+      currentLang = lang;
+      const t = translations[lang];
+      document.querySelectorAll('[data-lang]').forEach(el => {
+        const key = el.getAttribute('data-lang');
+        if (t[key]) el.innerText = t[key];
+      });
+      document.getElementById('pageTitle').innerText = t.pageTitle;
+    }
 
     if (window.Telegram && window.Telegram.WebApp) {
       const tg = window.Telegram.WebApp;
@@ -534,11 +631,10 @@
       document.getElementById('profilePagePic').src = tgUser.photo_url;
     }
 
-    // Site direct URL referral link generation (e.g. https://yourdomain.com/index.html?ref=USER_ID)
-    const siteBaseUrl = window.location.href.split('?')[0];
-    document.getElementById('referLink').value = `${siteBaseUrl}?ref=${tgUser.id}`;
+    // Clean short site referral link
+    const cleanOrigin = window.location.origin + window.location.pathname;
+    document.getElementById('referLink').value = `${cleanOrigin}?ref=${tgUser.id}`;
 
-    // Handle URL referral tracking if someone joins via site link
     const urlParams = new URLSearchParams(window.location.search);
     const referredBy = urlParams.get('ref');
 
@@ -556,13 +652,12 @@
         };
         if (referredBy && referredBy !== String(tgUser.id)) {
           newUserObj.referredBy = referredBy;
-          // Update referrer count
           database.ref('users/' + referredBy).once('value').then(refSnap => {
             if(refSnap.exists()) {
               let refData = refSnap.val();
               database.ref('users/' + referredBy).update({
                 referCount: (refData.referCount || 0) + 1,
-                balance: (refData.balance || 0) + 15, // 15 BDT refer bonus
+                balance: (refData.balance || 0) + 15,
                 totalEarn: (refData.totalEarn || refData.balance || 0) + 15
               });
             }
@@ -572,7 +667,6 @@
       }
     });
 
-    // Slider animation
     let currentSlide = 0;
     const slides = document.querySelectorAll('.slide');
     function nextSlide() {
@@ -583,18 +677,6 @@
       }
     }
     setInterval(nextSlide, 4000);
-
-    database.ref('settings').on('value', snap => {
-      let settings = snap.val() || {};
-      if(settings.channel1) {
-        document.getElementById('chLink1').href = settings.channel1;
-        document.getElementById('profileChLink1').href = settings.channel1;
-      }
-      if(settings.channel2) {
-        document.getElementById('chLink2').href = settings.channel2;
-        document.getElementById('profileChLink2').href = settings.channel2;
-      }
-    });
 
     database.ref('tasks').on('value', snap => {
       let tasks = snap.val() || {};
@@ -620,14 +702,14 @@
                 <p>${t.desc} | <b>রিওয়ার্ড: ৳${t.reward}</b></p>
               </div>`;
             if(isDone) {
-              html += `<button class="btn-action" style="background:#28a745;" disabled>সম্পন্ন হয়েছে</button>`;
+              html += `<button class="btn-action" style="background:#28a745;" disabled>${currentLang === 'bn' ? 'সম্পন্ন হয়েছে' : 'Completed'}</button>`;
             } else {
-              html += `<button class="btn-action" onclick="openTaskSubmit('${t.title}', ${t.reward}, '${t.desc}', '${t.link || '#'}')">কাজ করুন</button>`;
+              html += `<button class="btn-action" onclick="openTaskSubmit('${t.title}', ${t.reward}, '${t.desc}', '${t.link || '#'}')">${currentLang === 'bn' ? 'কাজ করুন' : 'Do Task'}</button>`;
             }
             html += `</div>`;
           }
         }
-        document.getElementById('dynamicTaskList').innerHTML = html || '<p style="text-align:center; color:#777;">বর্তমানে কোনো টাস্ক নেই।</p>';
+        document.getElementById('dynamicTaskList').innerHTML = html || `<p style="text-align:center; color:#777;">${currentLang === 'bn' ? 'বর্তমানে কোনো টাস্ক নেই।' : 'No tasks available.'}</p>`;
       });
     });
 
@@ -653,7 +735,7 @@
           <strong style="color: #ff7e00;">৳ ${usr.totalEarn.toFixed(2)}</strong>
         </div>`;
       });
-      document.getElementById('leaderboardList').innerHTML = lbHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো ডেটা নেই।</p>';
+      document.getElementById('leaderboardList').innerHTML = lbHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো ডেটা নেই।' : 'No data.'}</p>`;
     });
 
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
@@ -666,12 +748,12 @@
       document.getElementById('verifyBanner').style.display = 'none';
       document.getElementById('verifyBadge').style.display = 'inline-block';
       userRef.update({ verified: true });
-      alert("✅ অ্যাকাউন্ট সফলভাবে ভেরিফাই হয়েছে!");
+      alert(currentLang === 'bn' ? "✅ অ্যাকাউন্ট সফলভাবে ভেরিফাই হয়েছে!" : "✅ Account verified successfully!");
     }
 
     function switchTab(tabId) {
       if(!isVerified && tabId !== 'home' && tabId !== 'profile' && tabId !== 'support' && tabId !== 'aichat') {
-        alert("⚠️ আগে চ্যানেল ভেরিফাই করুন!");
+        alert(currentLang === 'bn' ? "⚠️ আগে চ্যানেল ও গ্রুপে জয়েন করে ভেরিফাই করুন!" : "⚠️ Please verify by joining channels first!");
         openVerifyModal();
         return;
       }
@@ -686,17 +768,14 @@
       if(target) target.classList.add('active');
     }
 
+    // Montague Ad Integration / Off Notice as requested
     function watchAdReward() {
       if(!isVerified) {
-        alert("⚠️ আগে চ্যানেল ভেরিফাই করুন!");
+        alert(currentLang === 'bn' ? "⚠️ আগে ভেরিফাই করুন!" : "⚠️ Please verify first!");
         openVerifyModal();
         return;
       }
-      database.ref('submissions').push({
-        userId: tgUser.id, userName: tgUser.first_name, type: 'Ad Watch Earn',
-        reward: 2, field1: 'Watched Ad', status: 'pending', timestamp: Date.now()
-      });
-      alert("✅ বিজ্ঞাপন দেখা সাবমিট হয়েছে! ২৪ ঘণ্টার মধ্যে এপ্রুভ করা হবে।");
+      alert(currentLang === 'bn' ? "⚠️ এই মুহূর্তে বিজ্ঞাপনটি অফ আছে, শীঘ্রই চালু হবে।" : "⚠️ Advertisement is currently off, will be available soon.");
     }
 
     function selectPayment(method) {
@@ -719,7 +798,7 @@
 
     function processWithdrawal() {
       if(!isVerified) {
-        alert("⚠️ ভেরিফাই ছাড়া উত্তোলন করা যাবে না!");
+        alert(currentLang === 'bn' ? "⚠️ ভেরিফাই ছাড়া উত্তোলন করা যাবে না!" : "⚠️ Cannot withdraw without verification!");
         openVerifyModal();
         return;
       }
@@ -728,15 +807,15 @@
       const requestedAmt = parseFloat(amtInput);
       const currentBalance = parseFloat(document.getElementById('balance').innerText);
 
-      if (!selectedPaymentMethod) { alert("বিকাশ বা নগদ মেথড সিলেক্ট করুন!"); return; }
-      if (!requestedAmt || isNaN(requestedAmt) || requestedAmt < 25) { alert("ন্যূনতম ২৫ টাকা বা তার বেশি অ্যামাউন্ট লিখুন!"); return; }
-      if (!number || number.length !== 11 || isNaN(number)) { alert("❌ ভুল নাম্বার! সঠিক ১১ ডিজিটের বিকাশ/নগদ নাম্বার দিন।"); return; }
+      if (!selectedPaymentMethod) { alert(currentLang === 'bn' ? "বিকাশ বা নগদ মেথড সিলেক্ট করুন!" : "Select bKash or Nagad!"); return; }
+      if (!requestedAmt || isNaN(requestedAmt) || requestedAmt < 25) { alert(currentLang === 'bn' ? "ন্যূনতম ২৫ টাকা বা তার বেশি অ্যামাউন্ট লিখুন!" : "Enter at least 25 BDT!"); return; }
+      if (!number || number.length !== 11 || isNaN(number)) { alert(currentLang === 'bn' ? "❌ ভুল নাম্বার! সঠিক ১১ ডিজিটের বিকাশ/নগদ নাম্বার দিন।" : "❌ Invalid number! Enter 11 digit account number."); return; }
       
       let fee = requestedAmt >= 500 ? 10 : 5;
       let requiredBal = requestedAmt + fee;
 
       if (currentBalance < requiredBal) { 
-        alert(`❌ অপর্যাপ্ত ব্যালেন্স!\n${requestedAmt} টাকার উত্তোলনের জন্য ${fee} টাকা ফি সহ কমপক্ষে ৳${requiredBal} টাকা থাকা প্রয়োজন।`); 
+        alert(currentLang === 'bn' ? `❌ অপর্যাপ্ত ব্যালেন্স!\n${requestedAmt} টাকার উত্তোলনের জন্য ${fee} টাকা ফি সহ কমপক্ষে ৳${requiredBal} টাকা থাকা প্রয়োজন।` : `❌ Insufficient balance!`); 
         return; 
       }
 
@@ -751,24 +830,24 @@
         totalWithdraw: (parseFloat(document.getElementById('totalWithdraw').innerText) + requestedAmt)
       });
 
-      alert(`✅ উইথড্র রিকোয়েস্ট জমা হয়েছে!\n২৪ ঘণ্টার মধ্যে বিকাশ বা নগদে পেমেন্ট পেয়ে যাবেন।`);
+      alert(currentLang === 'bn' ? `✅ উইথড্র রিকোয়েস্ট জমা হয়েছে!\n২৪ ঘণ্টার মধ্যে বিকাশ বা নগদে পেমেন্ট পেয়ে যাবেন।` : `✅ Withdrawal request submitted!`);
       document.getElementById('withdrawNumber').value = '';
       document.getElementById('customWithdrawAmount').value = '';
     }
 
     function openTelegramPremiumModal() {
       if(!isVerified) {
-        alert("⚠️ সেবা নিতে হলে আগে চ্যানেল ভেরিফাই করুন!");
+        alert(currentLang === 'bn' ? "⚠️ সেবা নিতে হলে আগে চ্যানেল ভেরিফাই করুন!" : "⚠️ Verify first!");
         openVerifyModal();
         return;
       }
-      document.getElementById('modalTitle').innerText = "Telegram Premium Purchase";
-      document.getElementById('modalDesc').innerText = "টেলিগ্রাম প্রিমিয়াম নিতে নাম, হোয়াটসঅ্যাপ নাম্বার এবং টেলিগ্রাম ইউজারনেম দিন।";
+      document.getElementById('modalTitle').innerText = currentLang === 'bn' ? "Telegram Premium Purchase" : "Telegram Premium Purchase";
+      document.getElementById('modalDesc').innerText = currentLang === 'bn' ? "টেলিগ্রাম প্রিমিয়াম নিতে নাম, হোয়াটসঅ্যাপ নাম্বার এবং টেলিগ্রাম ইউজারনেম দিন।" : "Provide name, WhatsApp and Telegram username.";
       
       document.getElementById('dynamicFormFields').innerHTML = `
-        <input type="text" id="p_name" class="input-field" placeholder="আপনার নাম (Name)" required>
-        <input type="text" id="p_whatsapp" class="input-field" placeholder="হোয়াটসঅ্যাপ নাম্বার (WhatsApp Number)" required>
-        <input type="text" id="p_tguser" class="input-field" placeholder="টেলিগ্রাম ইউজারনেম (@username)" required>
+        <input type="text" id="p_name" class="input-field" placeholder="${currentLang === 'bn' ? 'আপনার নাম (Name)' : 'Your Name'}" required>
+        <input type="text" id="p_whatsapp" class="input-field" placeholder="${currentLang === 'bn' ? 'হোয়াটসঅ্যাপ নাম্বার (WhatsApp Number)' : 'WhatsApp Number'}" required>
+        <input type="text" id="p_tguser" class="input-field" placeholder="${currentLang === 'bn' ? 'টেলিগ্রাম ইউজারনেম (@username)' : 'Telegram Username'}" required>
       `;
       window.currentModalSubmitType = "Telegram Premium Order";
       document.getElementById('submissionModal').style.display = 'flex';
@@ -776,12 +855,12 @@
 
     function openMobileRechargeModal() {
       if(!isVerified) {
-        alert("⚠️ মোবাইল রিচার্জ করতে হলে আগে চ্যানেল ভেরিফাই করুন!");
+        alert(currentLang === 'bn' ? "⚠️ মোবাইল রিচার্জ করতে হলে আগে চ্যানেল ভেরিফাই করুন!" : "⚠️ Verify first!");
         openVerifyModal();
         return;
       }
-      document.getElementById('modalTitle').innerText = "Mobile Recharge (2 BDT Charge)";
-      document.getElementById('modalDesc').innerText = "সিম সিলেক্ট করুন, সঠিক ১১ ডিজিটের নাম্বার এবং টাকার পরিমাণ দিন।";
+      document.getElementById('modalTitle').innerText = currentLang === 'bn' ? "Mobile Recharge (2 BDT Charge)" : "Mobile Recharge (2 BDT Charge)";
+      document.getElementById('modalDesc').innerText = currentLang === 'bn' ? "সিম সিলেক্ট করুন, সঠিক ১১ ডিজিটের নাম্বার এবং টাকার পরিমাণ দিন।" : "Select operator, valid 11 digit number and amount.";
       
       document.getElementById('dynamicFormFields').innerHTML = `
         <select id="r_operator" class="input-field">
@@ -791,8 +870,8 @@
           <option value="Airtel">Airtel (এয়ারটেল)</option>
           <option value="Teletalk">Teletalk (টেলিটক)</option>
         </select>
-        <input type="text" id="r_number" class="input-field" placeholder="১১ ডিজিটের মোবাইল নাম্বার" required>
-        <input type="number" id="r_amount" class="input-field" placeholder="রিচার্জের পরিমাণ (টাকা)" required>
+        <input type="text" id="r_number" class="input-field" placeholder="${currentLang === 'bn' ? '১১ ডিজিটের মোবাইল নাম্বার' : '11 digit mobile number'}" required>
+        <input type="number" id="r_amount" class="input-field" placeholder="${currentLang === 'bn' ? 'রিচার্জের পরিমাণ (টাকা)' : 'Recharge Amount'}" required>
       `;
       window.currentModalSubmitType = "Mobile Recharge Order";
       document.getElementById('submissionModal').style.display = 'flex';
@@ -800,7 +879,7 @@
 
     function openSellModal(platform) {
       if(!isVerified) {
-        alert("⚠️ কাজ করতে হলে আগে চ্যানেল ভেরিফাই করুন!");
+        alert(currentLang === 'bn' ? "⚠️ কাজ করতে হলে আগে চ্যানেল ভেরিফাই করুন!" : "⚠️ Verify first!");
         openVerifyModal();
         return;
       }
@@ -810,14 +889,14 @@
       
       let fieldsHtml = '';
       if(platform === 'Facebook') {
-        document.getElementById('modalDesc').innerText = `আপনার Facebook UID / Email, Password এবং 2FA দিন। (সব তথ্য বাধ্যতামূলক)`;
-        fieldsHtml = `<input type="text" id="f_uid" class="input-field" placeholder="Facebook UID / Email / Phone" required><input type="text" id="f_pass" class="input-field" placeholder="Password" required><input type="text" id="f_tfa" class="input-field" placeholder="2FA Secret (যদি না থাকে N/A লিখুন)" required>`;
+        document.getElementById('modalDesc').innerText = currentLang === 'bn' ? `আপনার Facebook UID / Email, Password এবং 2FA দিন।` : `Provide Facebook UID/Email, Password and 2FA.`;
+        fieldsHtml = `<input type="text" id="f_uid" class="input-field" placeholder="Facebook UID / Email / Phone" required><input type="text" id="f_pass" class="input-field" placeholder="Password" required><input type="text" id="f_tfa" class="input-field" placeholder="2FA Secret (N/A if none)" required>`;
       } else if(platform === 'Gmail') {
-        document.getElementById('modalDesc').innerText = `আপনার জিমেইল অ্যাকাউন্ট ও পাসওয়ার্ড দিন। (সব তথ্য বাধ্যতামূলক)`;
+        document.getElementById('modalDesc').innerText = currentLang === 'bn' ? `আপনার জিমেইল অ্যাকাউন্ট ও পাসওয়ার্ড দিন।` : `Provide Gmail address and password.`;
         fieldsHtml = `<input type="text" id="f_uid" class="input-field" placeholder="Gmail Address" required><input type="text" id="f_pass" class="input-field" placeholder="Password" required>`;
       } else if(platform === 'Instagram') {
-        document.getElementById('modalDesc').innerText = `আপনার Instagram Username/Email, Password এবং 2FA দিন। (সব তথ্য বাধ্যতামূলক)`;
-        fieldsHtml = `<input type="text" id="f_uid" class="input-field" placeholder="Username / Email" required><input type="text" id="f_pass" class="input-field" placeholder="Password" required><input type="text" id="f_tfa" class="input-field" placeholder="2FA Secret (যদি না থাকে N/A লিখুন)" required>`;
+        document.getElementById('modalDesc').innerText = currentLang === 'bn' ? `আপনার Instagram Username/Email, Password এবং 2FA দিন।` : `Provide Instagram username/email and password.`;
+        fieldsHtml = `<input type="text" id="f_uid" class="input-field" placeholder="Username / Email" required><input type="text" id="f_pass" class="input-field" placeholder="Password" required><input type="text" id="f_tfa" class="input-field" placeholder="2FA Secret (N/A if none)" required>`;
       }
 
       document.getElementById('dynamicFormFields').innerHTML = fieldsHtml;
@@ -827,19 +906,19 @@
     let base64ImageProof = "";
     function openTaskSubmit(taskName, reward, rulesText, taskLink) {
       if(!isVerified) {
-        alert("⚠️ টাস্ক সম্পন্ন করতে হলে আগে চ্যানেল ভেরিফাই করুন!");
+        alert(currentLang === 'bn' ? "⚠️ টাস্ক সম্পন্ন করতে হলে আগে চ্যানেল ভেরিফাই করুন!" : "⚠️ Verify first!");
         openVerifyModal();
         return;
       }
       window.currentModalSubmitType = 'Task: ' + taskName;
       base64ImageProof = "";
       document.getElementById('modalTitle').innerText = taskName;
-      let linkHtml = taskLink && taskLink !== '#' ? `<br><a href="${taskLink}" target="_blank" style="color:#0088cc; font-weight:bold;"><i class="fas fa-external-link-alt"></i> কাজের লিংকে ভিজিট করুন</a>` : '';
-      document.getElementById('modalDesc').innerHTML = `নিয়মাবলী: ${rulesText} ${linkHtml} <br><b>রিওয়ার্ড: ৳${reward}</b>`;
+      let linkHtml = taskLink && taskLink !== '#' ? `<br><a href="${taskLink}" target="_blank" style="color:#0088cc; font-weight:bold;"><i class="fas fa-external-link-alt"></i> ${currentLang === 'bn' ? 'কাজের লিংকে ভিজিট করুন' : 'Visit link'}</a>` : '';
+      document.getElementById('modalDesc').innerHTML = `${currentLang === 'bn' ? 'নিয়মাবলী' : 'Rules'}: ${rulesText} ${linkHtml} <br><b>${currentLang === 'bn' ? 'রিওয়ার্ড' : 'Reward'}: ৳${reward}</b>`;
       
       document.getElementById('dynamicFormFields').innerHTML = `
-        <input type="text" id="f_proof" class="input-field" placeholder="আপনার টেলিগ্রাম ইউজারনেম / বিবরণ লিখুন" required>
-        <label style="font-size:12px; font-weight:bold; margin-top:5px; display:block;">প্রুফ স্ক্রিনশট বা ছবি আপলোড করুন (বাধ্যতামূলক):</label>
+        <input type="text" id="f_proof" class="input-field" placeholder="${currentLang === 'bn' ? 'আপনার টেলিগ্রাম ইউজারনেম / বিবরণ লিখুন' : 'Enter Telegram username / description'}" required>
+        <label style="font-size:12px; font-weight:bold; margin-top:5px; display:block;">${currentLang === 'bn' ? 'প্রুফ স্ক্রিনশট বা ছবি আপলোড করুন (বাধ্যতামূলক):' : 'Upload proof screenshot:'}</label>
         <input type="file" id="f_file" accept="image/*" class="input-field" onchange="convertFileToBase64(this)" required>
       `;
       document.getElementById('submissionModal').style.display = 'flex';
@@ -870,23 +949,30 @@
         let name = document.getElementById('p_name').value.trim();
         let whatsapp = document.getElementById('p_whatsapp').value.trim();
         let tguser = document.getElementById('p_tguser').value.trim();
-        if(!name || !whatsapp || !tguser) { alert("❌ সবকটি ঘর পূরণ করা বাধ্যতামূলক!"); return; }
+        if(!name || !whatsapp || !tguser) { alert(currentLang === 'bn' ? "❌ সবকটি ঘর পূরণ করা বাধ্যতামূলক!" : "❌ All fields are required!"); return; }
         dataPayload.field1 = "Name: " + name;
         dataPayload.field2 = "WhatsApp: " + whatsapp;
         dataPayload.field3 = "Telegram: " + tguser;
-      } else if(subType === "Mobile Recharge Order") {
+        
+        database.ref('submissions').push(dataPayload);
+        alert(currentLang === 'bn' ? "ভাই, প্রিমিয়াম সাবমিট করার পরে এটি অ্যাডমিন প্যানেলে পাঠানো হয়েছে, শীঘ্রই আপনার সাথে যোগাযোগ করবে। আপনি রেডি থাকুন।" : "Sir, your Premium request has been sent to admin panel. We will contact you soon. Stay ready!");
+        closeModal();
+        return;
+      } 
+      
+      if(subType === "Mobile Recharge Order") {
         let op = document.getElementById('r_operator').value;
         let num = document.getElementById('r_number').value.trim();
         let amt = parseFloat(document.getElementById('r_amount').value);
         if(!num || num.length !== 11 || isNaN(num) || !amt || isNaN(amt)) { 
-          alert("❌ ভুল তথ্য! সঠিক ১১ ডিজিটের মোবাইল নাম্বার এবং টাকার পরিমাণ দিন।"); 
+          alert(currentLang === 'bn' ? "❌ সঠিক ১১ ডিজিটের মোবাইল নাম্বার এবং পরিমাণ দিন।" : "❌ Enter valid 11 digit number and amount."); 
           return; 
         }
         
         let totalDeduct = amt + 2; 
         let currentBalance = parseFloat(document.getElementById('balance').innerText);
         if(currentBalance < totalDeduct) {
-          alert(`❌ অপর্যাপ্ত ব্যালেন্স!\nরিচার্জ ${amt} টাকা এবং চার্জ ২ টাকা সহ মোট ৳${totalDeduct} প্রয়োজন।`);
+          alert(currentLang === 'bn' ? `❌ অপর্যাপ্ত ব্যালেন্স!\nরিচার্জ ${amt} টাকা এবং চার্জ ২ টাকা সহ মোট ৳${totalDeduct} প্রয়োজন।` : `❌ Insufficient balance!`);
           return;
         }
 
@@ -903,13 +989,13 @@
 
         if(uidInput && passInput) {
           if(!uidInput.value.trim() || !passInput.value.trim()) {
-            alert("❌ ইউজারনেম/ইমেইল এবং পাসওয়ার্ডের ঘরগুলো খালি রাখা যাবে না!");
+            alert(currentLang === 'bn' ? "❌ ইউজারনেম এবং পাসওয়ার্ডের ঘরগুলো খালি রাখা যাবে না!" : "❌ Fields cannot be empty!");
             return;
           }
         }
         if(proofInput) {
           if(!proofInput.value.trim() || !base64ImageProof) {
-            alert("❌ বিবরণ এবং প্রুফ স্ক্রিনশট আপলোড করা বাধ্যতামূলক!");
+            alert(currentLang === 'bn' ? "❌ বিবরণ এবং প্রুফ স্ক্রিনশট আপলোড করা বাধ্যতামূলক!" : "❌ Description and screenshot required!");
             return;
           }
         }
@@ -920,7 +1006,7 @@
       }
 
       database.ref('submissions').push(dataPayload);
-      alert("✅ সফলভাবে সাবমিট হয়েছে! ২৪ থেকে ৪৮ ঘণ্টার মধ্যে আপডেট দেওয়া হবে।");
+      alert(currentLang === 'bn' ? "✅ সফলভাবে সাবমিট হয়েছে! ২৪ ঘণ্টার মধ্যে আপডেট দেওয়া হবে।" : "✅ Successfully submitted!");
       closeModal();
     }
 
@@ -928,7 +1014,7 @@
       const copyText = document.getElementById('referLink');
       copyText.select();
       navigator.clipboard.writeText(copyText.value);
-      alert("✅ সাইটের রেফার লিংক কপি করা হয়েছে!");
+      alert(currentLang === 'bn' ? "✅ সাইটের ছোট রেফার লিংক কপি করা হয়েছে!" : "✅ Referral link copied!");
     }
 
     function sendAiMessage() {
@@ -941,7 +1027,7 @@
       chatBox.scrollTop = chatBox.scrollHeight;
 
       setTimeout(() => {
-        let reply = "আমি আপনার প্রশ্নটি বুঝতে পেরেছি। ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে পেমেন্ট দেওয়া হয়।";
+        let reply = currentLang === 'bn' ? "আমি আপনার প্রশ্নটি বুঝতে পেরেছি। ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে পেমেন্ট দেওয়া হয়।" : "I understand your query. Payments are made via bKash & Nagad within 24 hours.";
         chatBox.innerHTML += `<div class="chat-msg bot">${reply}</div>`;
         chatBox.scrollTop = chatBox.scrollHeight;
       }, 600);
@@ -953,18 +1039,18 @@
       for(let rId in refs) {
         let rUser = refs[rId];
         let earnedCommission = rUser.commissionEarned || 0;
-        refHtml += `<div class="list-card"><div><b>নাম: ${rUser.name || 'User'}</b><br><small>চ্যাট আইডি: ${rId}</small></div><div style="text-align:right;"><strong style="color: #ff7e00;">কমিশন: ৳${earnedCommission.toFixed(2)}</strong></div></div>`;
+        refHtml += `<div class="list-card"><div><b>${currentLang === 'bn' ? 'নাম' : 'Name'}: ${rUser.name || 'User'}</b><br><small>ID: ${rId}</small></div><div style="text-align:right;"><strong style="color: #ff7e00;">${currentLang === 'bn' ? 'কমিশন' : 'Comm'}: ৳${earnedCommission.toFixed(2)}</strong></div></div>`;
       }
-      document.getElementById('referralUserList').innerHTML = refHtml || '<p style="text-align:center; color:#777; padding:15px;">এখনো কোনো ইউজার আপনার লিংক থেকে যুক্ত হয়নি।</p>';
+      document.getElementById('referralUserList').innerHTML = refHtml || `<p style="text-align:center; color:#777; padding:15px;">${currentLang === 'bn' ? 'এখনো কোনো ইউজার আপনার লিংক থেকে যুক্ত হয়নি।' : 'No referrals yet.'}</p>`;
     });
 
     database.ref('submissions').orderByChild('userId').equalTo(tgUser.id).on('value', snap => {
       let subs = snap.val() || {};
-      let allHtml = '', taskHtml = '', fbHtml = '', instaHtml = '', gmailHtml = '', rechargeHtml = '', adsHtml = '';
+      let allHtml = '', taskHtml = '', fbHtml = '', instaHtml = '', gmailHtml = '', rechargeHtml = '', premHtml = '', adsHtml = '';
 
       for(let k in subs) {
         let s = subs[k];
-        let statusText = s.status === 'approved' ? '<span style="color:green; font-weight:bold;">সফল (Approved)</span>' : (s.status === 'rejected' ? '<span style="color:red; font-weight:bold;">বাতিল (Rejected)</span>' : '<span style="color:orange; font-weight:bold;">প্রসেসিং / পেন্ডিং</span>');
+        let statusText = s.status === 'approved' ? `<span style="color:green; font-weight:bold;">${currentLang === 'bn' ? 'সফল (Approved)' : 'Approved'}</span>` : (s.status === 'rejected' ? `<span style="color:red; font-weight:bold;">${currentLang === 'bn' ? 'বাতিল (Rejected)' : 'Rejected'}</span>` : `<span style="color:orange; font-weight:bold;">${currentLang === 'bn' ? 'পেন্ডিং (Pending)' : 'Pending'}</span>`);
         let card = `<div class="list-card"><div><b>${s.type}</b><br><small>${new Date(s.timestamp).toLocaleString()}</small></div><div>${statusText}</div></div>`;
         
         allHtml += card;
@@ -973,16 +1059,18 @@
         if(s.type.includes('Instagram Sell')) instaHtml += card;
         if(s.type.includes('Gmail Sell')) gmailHtml += card;
         if(s.type.includes('Mobile Recharge Order')) rechargeHtml += card;
+        if(s.type.includes('Telegram Premium Order')) premHtml += card;
         if(s.type.includes('Ad Watch Earn')) adsHtml += card;
       }
 
-      document.getElementById('allHistoryList').innerHTML = allHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো হিস্ট্রি নেই।</p>';
-      document.getElementById('taskHistoryList').innerHTML = taskHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো টাস্ক হিস্ট্রি নেই।</p>';
-      document.getElementById('fbHistoryList').innerHTML = fbHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো ফেসবুক সেল হিস্ট্রি নেই।</p>';
-      document.getElementById('instaHistoryList').innerHTML = instaHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো ইনস্টাগ্রাম সেল হিস্ট্রি নেই।</p>';
-      document.getElementById('gmailHistoryList').innerHTML = gmailHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো জিমেইল সেল হিস্ট্রি নেই।</p>';
-      document.getElementById('rechargeHistoryList').innerHTML = rechargeHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো মোবাইল রিচার্জ হিস্ট্রি নেই।</p>';
-      document.getElementById('adsHistoryList').innerHTML = adsHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো অ্যাড হিস্ট্রি নেই।</p>';
+      document.getElementById('allHistoryList').innerHTML = allHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো হিস্ট্রি নেই।' : 'No history.'}</p>`;
+      document.getElementById('taskHistoryList').innerHTML = taskHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো টাস্ক হিস্ট্রি নেই।' : 'No task history.'}</p>`;
+      document.getElementById('fbHistoryList').innerHTML = fbHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো ফেসবুক সেল হিস্ট্রি নেই।' : 'No FB history.'}</p>`;
+      document.getElementById('instaHistoryList').innerHTML = instaHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো ইনস্টাগ্রাম সেল হিস্ট্রি নেই।' : 'No Insta history.'}</p>`;
+      document.getElementById('gmailHistoryList').innerHTML = gmailHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো জিমেইল সেল হিস্ট্রি নেই।' : 'No Gmail history.'}</p>`;
+      document.getElementById('rechargeHistoryList').innerHTML = rechargeHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো মোবাইল রিচার্জ হিস্ট্রি নেই।' : 'No recharge history.'}</p>`;
+      document.getElementById('premHistoryList').innerHTML = premHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো প্রিমিয়াম হিস্ট্রি নেই।' : 'No premium history.'}</p>`;
+      document.getElementById('adsHistoryList').innerHTML = adsHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো অ্যাড হিস্ট্রি নেই।' : 'No ad history.'}</p>`;
     });
 
     database.ref('withdrawals').orderByChild('userId').equalTo(tgUser.id).on('value', snap => {
@@ -990,10 +1078,10 @@
       let wHtml = '';
       for(let k in data) {
         let w = data[k];
-        let statusMsg = w.status === 'approved' ? '<span style="color:green; font-weight:bold;">সফল</span>' : (w.status === 'rejected' ? '<span style="color:red; font-weight:bold;">বাতিল</span>' : '<span style="color:orange; font-weight:bold;">পেন্ডিং</span>');
-        wHtml += `<div class="list-card"><div><b>মেথড: ${w.method} (${w.number})</b><br>পরিমাণ: ৳${w.requestedAmount}<br><small>${new Date(w.timestamp).toLocaleString()}</small></div><div>${statusMsg}</div></div>`;
+        let statusMsg = w.status === 'approved' ? `<span style="color:green; font-weight:bold;">${currentLang === 'bn' ? 'সফল' : 'Approved'}</span>` : (w.status === 'rejected' ? `<span style="color:red; font-weight:bold;">${currentLang === 'bn' ? 'বাতিল' : 'Rejected'}</span>` : `<span style="color:orange; font-weight:bold;">${currentLang === 'bn' ? 'পেন্ডিং' : 'Pending'}</span>`);
+        wHtml += `<div class="list-card"><div><b>${currentLang === 'bn' ? 'মেথড' : 'Method'}: ${w.method} (${w.number})</b><br>${currentLang === 'bn' ? 'পরিমাণ' : 'Amount'}: ৳${w.requestedAmount}<br><small>${new Date(w.timestamp).toLocaleString()}</small></div><div>${statusMsg}</div></div>`;
       }
-      document.getElementById('withdrawHistoryList').innerHTML = wHtml || '<p style="text-align:center; color:#777; padding:20px;">কোনো উত্তোলন হিস্ট্রি নেই।</p>';
+      document.getElementById('withdrawHistoryList').innerHTML = wHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো উত্তোলন হিস্ট্রি নেই।' : 'No withdrawal history.'}</p>`;
     });
 
     userRef.on('value', (snapshot) => {
