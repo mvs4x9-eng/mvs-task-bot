@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="pageTitle">MVS TASK SITE - Official Web Edition</title>
   
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -147,6 +146,10 @@
     .chat-msg { margin-bottom: 10px; font-size: 13px; max-width: 80%; padding: 8px 12px; border-radius: 12px; }
     .chat-msg.bot { background: #e2f0fd; color: #0056b3; align-self: flex-start; }
     .chat-msg.user { background: #ff7e00; color: white; margin-left: auto; text-align: right; }
+    
+    .avatar-grid { display: flex; justify-content: center; gap: 10px; margin: 10px 0; }
+    .avatar-grid img { width: 45px; height: 45px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+    .avatar-grid img.selected { border-color: #ff7e00; transform: scale(1.1); }
   </style>
 </head>
 <body>
@@ -156,6 +159,7 @@
     <h3 data-lang="menuTitle">MVS TASK MENU</h3>
     <ul>
       <li onclick="switchTab('home'); toggleSidebar()"><i class="fas fa-home"></i> <span data-lang="mHome">হোম</span></li>
+      <li onclick="openFbBoostModal(); toggleSidebar()"><i class="fas fa-bullhorn" style="color: #1877F2;"></i> <span data-lang="mBoost">ফেসবুক বুস্ট</span></li>
       <li onclick="openSellModal('Facebook'); toggleSidebar()"><i class="fab fa-facebook" style="color: #1877F2;"></i> <span data-lang="mFb">ফেসবুক সেল (৳১২)</span></li>
       <li onclick="openSellModal('Instagram'); toggleSidebar()"><i class="fab fa-instagram" style="color: #E4405F;"></i> <span data-lang="mInsta">Instagram সেল (৳৪)</span></li>
       <li onclick="openSellModal('Gmail'); toggleSidebar()"><i class="fas fa-envelope" style="color: #EA4335;"></i> <span data-lang="mGmail">জিমেইল সেল (৳১৮)</span></li>
@@ -198,11 +202,11 @@
     </div>
 
     <div class="user-card">
-      <img id="userPhoto" src="https://ui-avatars.com/api/?name=User" alt="User">
+      <img id="userPhoto" src="https://api.dicebear.com/7.x/bottts/svg?seed=cat1" alt="User">
       <div class="user-info">
         <h4 id="userName">User Name <i class="fas fa-check-circle" style="color: #28a745;" title="Active"></i></h4>
-        <p><span data-lang="uNameLbl">ইউজারনেম</span>: <span id="userHandle">@username</span></p>
-        <p><span data-lang="uIdLbl">চ্যাট আইডি</span>: <span id="chatId">12345678</span></p>
+        <p><span data-lang="uNameLbl">ইউজারনেম</span>: <span id="userHandle">@user</span></p>
+        <p><span data-lang="uIdLbl">রিও আইডি (UID)</span>: <span id="chatId">12345678</span></p>
       </div>
     </div>
   </div>
@@ -235,6 +239,10 @@
     </div>
 
     <div class="home-action-grid">
+      <div class="home-action-btn" onclick="openFbBoostModal()">
+        <i class="fas fa-bullhorn" style="color: #1877F2;"></i>
+        <span data-lang="btnBoost">ফেসবুক বুস্ট</span>
+      </div>
       <div class="home-action-btn" onclick="openSellModal('Facebook')">
         <i class="fab fa-facebook" style="color: #1877F2;"></i>
         <span data-lang="btnFb">ফেসবুক সেল (৳১২)</span>
@@ -278,11 +286,6 @@
       <div class="home-action-btn" onclick="switchTab('withdraw'); setActiveNav('withdraw')">
         <i class="fas fa-wallet"></i>
         <span data-lang="btnWd">উইথড্র দিন</span>
-      </div>
-      <div class="home-action-btn locked" onclick="alert(currentLang === 'bn' ? 'দুঃখিত! এই ফিচারটি এই মুহূর্তে বন্ধ আছে।' : 'Sorry! This feature is currently disabled.')">
-        <span class="lock-badge">LOCK</span>
-        <i class="fas fa-coins"></i>
-        <span data-lang="btnTiktok">টিকটক কয়েন রিচার্জ</span>
       </div>
     </div>
   </div>
@@ -373,9 +376,19 @@
       <p data-lang="refDesc">প্রতি সফল রেফারে পাবেন নিশ্চিত ৳১০ (ইউজার কাজ সম্পন্ন করার পর যোগ হবে) এবং আজীবন ৫% কমিশন!</p>
     </div>
     <div class="balance-card">
-      <p style="font-size: 13px; color: #666; margin-bottom: 5px; font-weight: 600;" data-lang="refLinkLbl">আপনার টেলিগ্রাম বট রেফারেল লিংক:</p>
+      <p style="font-size: 13px; color: #666; margin-bottom: 5px; font-weight: 600;" data-lang="refLinkLbl">আপনার রেফারেল লিংক:</p>
       <input type="text" id="referLink" class="input-field" value="" readonly>
-      <button class="btn-submit-main" onclick="copyReferLink()" data-lang="copyBtn">বট লিংক কপি করুন</button>
+      <button class="btn-submit-main" onclick="copyReferLink()" data-lang="copyBtn">রেফার লিংক কপি করুন</button>
+    </div>
+
+    <!-- রিও আইডি (UID) দিয়ে ডাউনলাইন সার্চ ও কমিশন চেকিং অপশন -->
+    <div class="balance-card">
+      <h4 style="font-size: 14px; margin-bottom: 8px; font-weight: 700;"><i class="fas fa-search"></i> রিও আইডি (UID) দিয়ে ডাউনলাইন সার্চ করুন</h4>
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="searchDownlineUid" class="input-field" placeholder="৮ ডিজিটের রিও আইডি লিখুন" style="margin:0;">
+        <button class="btn-submit-main" style="width:auto; margin:0; padding:0 18px;" onclick="checkDownlineByUid()">চেক</button>
+      </div>
+      <div id="downlineSearchResult" style="font-size: 13px; margin-top: 10px; color: #0088cc; font-weight: bold;"></div>
     </div>
 
     <div class="section-title"><i class="fas fa-users"></i> <span data-lang="refListTitle">আমার রেফারকৃত ব্যবহারকারী ও কমিশন তালিকা</span></div>
@@ -403,11 +416,41 @@
     <div class="section-title"><i class="fas fa-user-circle"></i> <span data-lang="profHeader">প্রোফাইল ও ইনফরমেশন</span></div>
     
     <div class="balance-card" style="text-align: center; padding: 22px;">
-      <img id="profilePagePic" src="https://ui-avatars.com/api/?name=User" alt="Profile" style="width: 85px; height: 85px; border-radius: 50%; border: 3px solid #ff7e00; margin-bottom: 12px; object-fit: cover;">
-      <h3 id="profilePageName" style="font-size: 18px; font-weight: 800;">User Name</h3>
-      <p style="color: #666; font-size: 13px; margin-top: 5px;"><span data-lang="uNameLbl">ইউজারনেম</span>: <span id="profilePageHandle">@username</span></p>
-      <p style="color: #666; font-size: 13px;"><span data-lang="uIdLbl">চ্যাট আইডি</span>: <span id="profilePageChatId">12345678</span></p>
+      <img id="profilePagePic" src="https://api.dicebear.com/7.x/bottts/svg?seed=cat1" alt="Profile" style="width: 85px; height: 85px; border-radius: 50%; border: 3px solid #ff7e00; margin-bottom: 12px; object-fit: cover;">
       
+      <!-- প্রোফাইল এডিট সেকশন (কলম আইকন সহ) -->
+      <div style="background: #f1f3f5; padding: 15px; border-radius: 12px; margin-bottom: 15px; text-align: left;">
+        <h4 style="font-size: 14px; margin-bottom: 10px; color: #ff7e00; font-weight: bold;"><i class="fas fa-pen"></i> প্রোফাইল এডিট করুন</h4>
+        <label style="font-size: 12px; font-weight: 600;">ফার্স্ট নাম:</label>
+        <input type="text" id="editFirstName" class="input-field" placeholder="ফার্স্ট নাম লিখুন" style="margin-top: 3px; margin-bottom: 10px;">
+        
+        <label style="font-size: 12px; font-weight: 600;">লাস্ট নাম:</label>
+        <input type="text" id="editLastName" class="input-field" placeholder="লাস্ট নাম লিখুন" style="margin-top: 3px; margin-bottom: 10px;">
+
+        <label style="font-size: 12px; font-weight: 600;">টেলিগ্রাম ইউজারনেম (ইউনিক):</label>
+        <input type="text" id="editTgUsername" class="input-field" placeholder="@username (ইউনিক হতে হবে)" style="margin-top: 3px; margin-bottom: 10px;">
+
+        <label style="font-size: 12px; font-weight: 600;">জন্মতারিখ (DOB):</label>
+        <input type="date" id="editDob" class="input-field" style="margin-top: 3px; margin-bottom: 12px;">
+
+        <button class="btn-submit-main" style="padding: 10px; font-size: 14px; margin-top: 0;" onclick="saveDetailedProfile()">প্রোফাইল সেভ করুন</button>
+      </div>
+
+      <p style="color: #666; font-size: 13px; margin-top: 5px;"><span data-lang="uNameLbl">ইউজারনেম</span>: <span id="profilePageHandle">@user</span></p>
+      <p style="color: #666; font-size: 13px;"><span data-lang="uIdLbl">রিও আইডি (UID)</span>: <span id="profilePageChatId">12345678</span></p>
+      
+      <!-- বিড়াল বা অবতার ছবি পরিবর্তনের অপশন -->
+      <div style="margin-top: 15px; text-align:left;">
+        <label style="font-size: 12px; font-weight: bold; color: #555;">প্রোফাইল পিকচার (বিড়াল/অ্যাভাতার) সিলেক্ট করুন:</label>
+        <div class="avatar-grid" id="avatarSelector">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=cat1" onclick="changeAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=cat1', this)" class="selected">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=cat2" onclick="changeAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=cat2', this)">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=cat3" onclick="changeAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=cat3', this)">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=cat4" onclick="changeAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=cat4', this)">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=cat5" onclick="changeAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=cat5', this)">
+        </div>
+      </div>
+
       <div style="margin-top: 15px; background: #fff5eb; padding: 10px; border-radius: 12px; border: 1px dashed #ff7e00;">
         <p style="font-size: 12px; color: #555; font-weight: 600;" data-lang="profBalLbl">প্রোফাইল ব্যালেন্স</p>
         <h3 style="font-size: 22px; color: #ff7e00; font-weight: 800;">৳ <span id="profileBalance">0.00</span></h3>
@@ -502,7 +545,6 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    let tgUser = { id: "12345678", first_name: "MVS User", username: "mvsuser", photo_url: "" };
     let selectedPaymentMethod = '';
     let currentLang = 'bn';
 
@@ -510,20 +552,20 @@
       bn: {
         pageTitle: "MVS TASK SITE - Official Web Edition",
         menuTitle: "MVS TASK MENU",
-        mHome: "হোম", mFb: "ফেসবুক সেল (৳১২)", mInsta: "Instagram সেল (৳৪)", mGmail: "জিমেইল সেল (৳১৮)",
+        mHome: "হোম", mBoost: "ফেসবুক বুস্ট", mFb: "ফেসবুক সেল (৳১২)", mInsta: "Instagram সেল (৳৪)", mGmail: "জিমেইল সেল (৳১৮)",
         mTask: "টাস্ক অপশন", mAds: "অ্যাড দেখে ইনকাম", mPrem: "টেলিগ্রাম প্রিমিয়াম", mRecharge: "মোবাইল রিচার্জ",
         mLb: "টপ ১০ লিডারবোর্ড", mProfile: "প্রোফাইল", mAi: "এআই সাপোর্ট (AI Chat)", mWd: "উইথড্র দিন",
         mAllHist: "সকল হিস্ট্রি (All History)", mRef: "রেফার", mSupport: "সাপোর্ট",
         updateNoticeText: "📢 প্রতিদিন নিয়মিত আপডেট জানতে আমাদের চ্যানেল ও সাপোর্ট গ্রুপে জয়েন করুন:",
         ch1Btn: "চ্যানেল ১", ch2Btn: "সাপোর্ট গ্রুপ",
-        uNameLbl: "ইউজারনেম", uIdLbl: "চ্যাট আইডি",
+        uNameLbl: "ইউজারনেম", uIdLbl: "রিও আইডি (UID)",
         slide1H: "🚀 ফ্রিতে অনলাইনে আর্নিং", slide1P: "ফ্রিতে অনলাইনে আর্নিং করতে এখনই আমাদের এমবিএস সাইটে কাজ শুরু করুন এবং প্রতিদিন ভালো টাকা আয় করুন!",
         slide2H: "ইনস্ট্যান্ট পেমেন্ট সিস্টেম", slide2P: "পেমেন্ট ২৪ ঘণ্টার মধ্যে বিকাশ ও নগদে নিতে পারবেন। নিরাপদে কাজ করুন এবং নিয়মিত পেমেন্ট পান!",
         currBal: "আপনার বর্তমান ব্যালেন্স", totWd: "মোট উত্তোলন", succRef: "সফল রেফার",
         homeShortcuts: "হোম স্ক্রিন ফিচারসমূহ", allHistBtn: "সকল হিস্ট্রি",
-        btnFb: "ফেসবুক সেল (৳১২)", btnInsta: "Instagram সেল (৳৪)", btnGmail: "জিমেইল সেল (৳১৮)", btnTask: "টাস্ক অপশন",
+        btnBoost: "ফেসবুক বুস্ট", btnFb: "ফেসবুক সেল (৳১২)", btnInsta: "Instagram সেল (৳৪)", btnGmail: "জিমেইল সেল (৳১৮)", btnTask: "টাস্ক অপশন",
         btnAds: "অ্যাড দেখে ইনকাম", btnPrem: "টেলিগ্রাম প্রিমিয়াম", btnRecharge: "মোবাইল রিচার্জ", btnLb: "টপ ১০ লিডারবোর্ড",
-        btnProfile: "প্রোফাইল অপশন", btnAi: "এআই সাপোর্ট", btnWd: "উইথড্র দিন", btnTiktok: "টিকটক কয়েন রিচার্জ",
+        btnProfile: "প্রোফাইল অপশন", btnAi: "এআই সাপোর্ট", btnWd: "উইথড্র দিন",
         taskHeader: "টাস্ক সেকশন (প্রতিটি টাস্ক একবার করে সম্পন্ন করুন)", taskHistBtn: "টাস্ক হিস্ট্রি",
         sellHeader: "সোশ্যাল একাউন্ট আনলিমিটেড সেল হাব", sellHistBtn: "সেল হিস্ট্রি",
         sellNotice: "ℹ️ জিমেইল সেল ২৪ ঘণ্টার মধ্যে এবং ফেসবুক/ইনস্টাগ্রাম সেল ২৪ থেকে ৪৮ ঘণ্টার মধ্যে ভেরিফাই করে ব্যালেন্স যোগ করা হবে।",
@@ -533,7 +575,7 @@
         lbHeader: "টপ ১০ সাপ্তাহিক লিডারবোর্ড", lbNotice: "ℹ️ প্রতি সপ্তাহে এই লিডারবোর্ড আপডেট হয়। কাজের পরিমাণ ও অর্জিত অ্যামাউন্টের ভিত্তিতে সেরা ১০ জন এখানে থাকেন।",
         loading: "লিডারবোর্ড লোড হচ্ছে...",
         refTitle: "বন্ধুদের রেফার করুন", refDesc: "প্রতি সফল রেফারে পাবেন নিশ্চিত ৳১০ (ইউজার কাজ সম্পন্ন করার পর যোগ হবে) এবং আজীবন ৫% কমিশন!",
-        refLinkLbl: "আপনার টেলিগ্রাম বট রেফারেল লিংক:", copyBtn: "বট লিংক কপি করুন",
+        refLinkLbl: "আপনার রেফারেল লিংক:", copyBtn: "রেফার লিংক কপি করুন",
         refListTitle: "আমার রেফারকৃত ব্যবহারকারী ও কমিশন তালিকা", noRef: "এখনো কোনো ইউজার আপনার লিংক থেকে যুক্ত হয়নি।",
         aiHeader: "AI লাইভ সাপোর্ট চ্যাট", aiWelcome: "হ্যালো! আমি MVS AI অ্যাসিস্ট্যান্ট। যেকোনো বিষয়ে আমাকে প্রশ্ন করুন (যেমন: প্রিমিয়াম নেব কিভাবে, ফেসবুক সেল, উইথড্র, টাস্ক ইত্যাদি)।",
         profHeader: "প্রোফাইল ও ইনফরমেশন", profBalLbl: "প্রোফাইল ব্যালেন্স",
@@ -541,7 +583,7 @@
         ch1Text: "চ্যানেল ১ (আপডেট)", ch2Text: "সাপোর্ট গ্রুপ",
         adsTitle: "অ্যাড ট্র্যাকার ও ইনকাম", adsDesc: "বিজ্ঞাপন দেখে রিওয়ার্ড অর্জন করুন।", adsBtn: "বিজ্ঞাপন দেখুন ও রিওয়ার্ড নিন", adsHistBtn: "অ্যাড হিস্ট্রি দেখুন",
         allHistTitle: "সকল কাজের হিস্ট্রি (All History)", noHist: "কোনো হিস্ট্রি নেই।",
-        wdHistTitle: "উত্তোলন হিস্ট্রি (Withdraw History)", taskHistTitle: "টাস্ক হিস্ট্রি (Task History)",
+        wdHistTitle: "উত্তোলন হিস্ট্রি", taskHistTitle: "টাস্ক হিস্ট্রি",
         fbHistTitle: "ফেসবুক সেল হিস্ট্রি", instaHistTitle: "Instagram সেল হিস্ট্রি", gmailHistTitle: "জিমেইল সেল হিস্ট্রি",
         rechargeHistTitle: "মোবাইল রিচার্জ হিস্ট্রি", premHistTitle: "টেলিগ্রাম প্রিমিয়াম হিস্ট্রি",
         suppTitle: "লাইভ সাপোর্ট সেন্টার", suppDesc: "যেকোনো সমস্যায় আমাদের সাপোর্ট গ্রুপ বা চ্যানেলে যোগাযোগ করুন। ২৪ ঘণ্টার মধ্যে সমাধান দেওয়া হয়।",
@@ -551,20 +593,20 @@
       en: {
         pageTitle: "MVS TASK SITE - Official Web Edition",
         menuTitle: "MVS TASK MENU",
-        mHome: "Home", mFb: "Facebook Sell (৳12)", mInsta: "Instagram Sell (৳4)", mGmail: "Gmail Sell (৳18)",
+        mHome: "Home", mBoost: "Facebook Boost", mFb: "Facebook Sell (৳12)", mInsta: "Instagram Sell (৳4)", mGmail: "Gmail Sell (৳18)",
         mTask: "Task Options", mAds: "Watch Ads", mPrem: "Telegram Premium", mRecharge: "Mobile Recharge",
         mLb: "Top 10 Leaderboard", mProfile: "Profile", mAi: "AI Support (Chat)", mWd: "Withdraw",
         mAllHist: "All History", mRef: "Referral", mSupport: "Support",
         updateNoticeText: "📢 Join our official channel & support group for regular updates:",
         ch1Btn: "Channel 1", ch2Btn: "Support Group",
-        uNameLbl: "Username", uIdLbl: "Chat ID",
+        uNameLbl: "Username", uIdLbl: "Rio ID (UID)",
         slide1H: "🚀 Free Online Earning", slide1P: "Start working on our MVS site right now for free online earning and make good daily income!",
         slide2H: "Instant Payment System", slide2P: "Get your payments within 24 hours via bKash and Nagad securely!",
         currBal: "Your Current Balance", totWd: "Total Withdraw", succRef: "Successful Referrals",
         homeShortcuts: "Home Screen Features", allHistBtn: "All History",
-        btnFb: "Facebook Sell (৳12)", btnInsta: "Instagram Sell (৳4)", btnGmail: "Gmail Sell (৳18)", btnTask: "Task Options",
+        btnBoost: "Facebook Boost", btnFb: "Facebook Sell (৳12)", btnInsta: "Instagram Sell (৳4)", btnGmail: "Gmail Sell (৳18)", btnTask: "Task Options",
         btnAds: "Watch Ads", btnPrem: "Telegram Premium", btnRecharge: "Mobile Recharge", btnLb: "Top 10 Leaderboard",
-        btnProfile: "Profile Options", btnAi: "AI Support", btnWd: "Withdraw Funds", btnTiktok: "TikTok Coin Recharge",
+        btnProfile: "Profile Options", btnAi: "AI Support", btnWd: "Withdraw Funds",
         taskHeader: "Task Section (Complete each task once)", taskHistBtn: "Task History",
         sellHeader: "Social Account Selling Hub", sellHistBtn: "Sell History",
         sellNotice: "ℹ️ Gmail sell will be verified within 24 hours and Facebook/Instagram within 24 to 48 hours.",
@@ -574,7 +616,7 @@
         lbHeader: "Top 10 Weekly Leaderboard", lbNotice: "ℹ️ Leaderboard updates weekly based on total completed tasks and earnings.",
         loading: "Loading leaderboard...",
         refTitle: "Refer Your Friends", refDesc: "Earn 10 BDT per referral (credited after user completes a task) + 5% commission!",
-        refLinkLbl: "Your Telegram Bot Referral Link:", copyBtn: "Copy Bot Link",
+        refLinkLbl: "Your Referral Link:", copyBtn: "Copy Referral Link",
         refListTitle: "My Referred Users & Commissions", noRef: "No users joined from your link yet.",
         aiHeader: "AI Live Support Chat", aiWelcome: "Hello! I am MVS AI Assistant. Ask me anything (e.g. how to get premium, sell Facebook accounts, withdraw, tasks, etc.).",
         profHeader: "Profile & Information", profBalLbl: "Profile Balance",
@@ -601,63 +643,66 @@
       document.getElementById('pageTitle').innerText = t.pageTitle;
     }
 
-    if (window.Telegram && window.Telegram.WebApp) {
-      const tg = window.Telegram.WebApp;
-      tg.expand();
-      if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        tgUser = tg.initDataUnsafe.user;
-      }
+    // ================= STRICT ANTI-MULTI-ACCOUNT & AUTO REGISTRATION SYSTEM =================
+    let localUid = localStorage.getItem('mvs_user_uid');
+    let deviceKey = localStorage.getItem('mvs_device_key');
+
+    if (!localUid || !deviceKey) {
+      deviceKey = 'dev_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      localUid = Math.floor(10000000 + Math.random() * 90000000).toString(); // ৮ ডিজিটের ইউনিক রিও আইডি (UID)
+      localStorage.setItem('mvs_device_key', deviceKey);
+      localStorage.setItem('mvs_user_uid', localUid);
     }
 
-    document.getElementById('userName').innerText = `${tgUser.first_name || 'User'}`;
-    document.getElementById('userHandle').innerText = tgUser.username ? `@${tgUser.username}` : 'N/A';
-    document.getElementById('chatId').innerText = tgUser.id;
-    
-    document.getElementById('profilePageName').innerText = `${tgUser.first_name || 'User'}`;
-    document.getElementById('profilePageHandle').innerText = tgUser.username ? `@${tgUser.username}` : 'N/A';
-    document.getElementById('profilePageChatId').innerText = tgUser.id;
-    if (tgUser.photo_url) {
-      document.getElementById('userPhoto').src = tgUser.photo_url;
-      document.getElementById('profilePagePic').src = tgUser.photo_url;
-    }
+    let currentUser = {
+      id: localUid,
+      firstName: localStorage.getItem('mvs_first_name') || 'MVS',
+      lastName: localStorage.getItem('mvs_last_name') || 'User',
+      username: localStorage.getItem('mvs_tg_username') || 'user_' + localUid,
+      dob: localStorage.getItem('mvs_dob') || '',
+      avatar: localStorage.getItem('mvs_user_avatar') || 'https://api.dicebear.com/7.x/bottts/svg?seed=' + localUid,
+      balance: 0,
+      totalWithdraw: 0,
+      referCount: 0,
+      taskCompleted: false
+    };
 
-    // সঠিক বটের ইউজারনেম দিয়ে রেফারেল লিংক জেনারেটর (ম্যাটched with @MVS_Task_Bot)
-    const botUsername = "MVS_Task_Bot"; 
-    document.getElementById('referLink').value = `https://t.me/${botUsername}?start=ref_${tgUser.id}`;
+    const userRef = database.ref('users/' + currentUser.id);
 
-    // স্টার্ট প্যারামিটার বা ইউআরএল থেকে রেফার আইডি ডিটেক্ট করার সিস্টেম
-    let referredBy = null;
+    // লিংকের রেফারেল প্যারামিটার চেক করা
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('ref')) {
-      referredBy = urlParams.get('ref');
-    }
-    
-    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe) {
-      const startParam = window.Telegram.WebApp.initDataUnsafe.start_param;
-      if (startParam && startParam.startsWith('ref_')) {
-        referredBy = startParam.replace('ref_', '');
-      }
-    }
+    let referredBy = urlParams.get('ref');
 
-    const userRef = database.ref('users/' + tgUser.id);
     userRef.once('value').then(snapshot => {
       if (!snapshot.exists()) {
         let newUserObj = {
-          name: tgUser.first_name,
-          username: tgUser.username || '',
+          firstName: currentUser.firstName,
+          lastName: currentUser.lastName,
+          username: currentUser.username,
+          dob: currentUser.dob,
+          avatar: currentUser.avatar,
           balance: 0.00,
           totalWithdraw: 0.00,
           referCount: 0,
           taskCompleted: false,
           joined: Date.now()
         };
-        // যদি অন্য কারো রেফার লিংকে ঢুকে থাকে, তবে শুধু তার সাথেই যুক্ত হবে (নিজের আইডি হলে হবে না)
-        if (referredBy && referredBy !== String(tgUser.id)) {
+
+        if (referredBy && referredBy !== currentUser.id) {
           newUserObj.referredBy = referredBy;
-          database.ref('referrals/' + referredBy + '/' + tgUser.id).set({
-            name: tgUser.first_name,
-            userId: tgUser.id,
-            status: 'pending (Task not completed)',
+          
+          database.ref('users/' + referredBy).once('value').then(refSnap => {
+            if (refSnap.exists()) {
+              let refData = refSnap.val();
+              let currentCount = refData.referCount || 0;
+              database.ref('users/' + referredBy).update({ referCount: currentCount + 1 });
+            }
+          });
+
+          database.ref('referrals/' + referredBy + '/' + currentUser.id).set({
+            name: currentUser.firstName + " " + currentUser.lastName,
+            userId: currentUser.id,
+            status: 'Joined (Task pending)',
             commission: 0,
             timestamp: Date.now()
           });
@@ -665,6 +710,102 @@
         userRef.set(newUserObj);
       }
     });
+
+    // UI-তে ইউজার ইনফো সেট করা
+    function updateUI() {
+      let fullName = currentUser.firstName + " " + currentUser.lastName;
+      document.getElementById('userName').innerText = fullName;
+      document.getElementById('editFirstName').value = currentUser.firstName;
+      document.getElementById('editLastName').value = currentUser.lastName;
+      document.getElementById('editTgUsername').value = currentUser.username;
+      document.getElementById('editDob').value = currentUser.dob;
+
+      document.getElementById('userHandle').innerText = '@' + currentUser.username;
+      document.getElementById('chatId').innerText = currentUser.id;
+      document.getElementById('profilePageName').innerText = fullName;
+      document.getElementById('profilePageHandle').innerText = '@' + currentUser.username;
+      document.getElementById('profilePageChatId').innerText = currentUser.id;
+      document.getElementById('userPhoto').src = currentUser.avatar;
+      document.getElementById('profilePagePic').src = currentUser.avatar;
+
+      // রেফার লিংক জেনারেটর (নিখুঁতভাবে কাজ করবে)
+      const cleanUrl = window.location.href.split('?')[0];
+      document.getElementById('referLink').value = `${cleanUrl}?ref=${currentUser.id}`;
+    }
+
+    // প্রোফাইল ডিটেইলস সেভ করার ফাংশন (ইউনিক ইউজারনেম চেক সহ)
+    function saveDetailedProfile() {
+      let fName = document.getElementById('editFirstName').value.trim();
+      let lName = document.getElementById('editLastName').value.trim();
+      let tgUser = document.getElementById('editTgUsername').value.trim();
+      let dobVal = document.getElementById('editDob').value;
+
+      if (!fName || !lName || !tgUser) {
+        alert("❌ ফার্স্ট নাম, লাস্ট নাম এবং টেলিগ্রাম ইউজারনেম আবশ্যিক!");
+        return;
+      }
+
+      // ইউনিক ইউজারনেম ডেটাবেসে চেক করা
+      database.ref('users').orderByChild('username').equalTo(tgUser).once('value').then(snap => {
+        if (snap.exists()) {
+          let existingUserId = Object.keys(snap.val())[0];
+          if (existingUserId !== currentUser.id) {
+            alert("❌ এই টেলিগ্রাম ইউজারনেমটি ইতিমধ্যে অন্য কেউ ব্যবহার করছে! অন্য একটি দিন।");
+            return;
+          }
+        }
+
+        currentUser.firstName = fName;
+        currentUser.lastName = lName;
+        currentUser.username = tgUser;
+        currentUser.dob = dobVal;
+
+        localStorage.setItem('mvs_first_name', fName);
+        localStorage.setItem('mvs_last_name', lName);
+        localStorage.setItem('mvs_tg_username', tgUser);
+        localStorage.setItem('mvs_dob', dobVal);
+
+        userRef.update({
+          firstName: fName,
+          lastName: lName,
+          username: tgUser,
+          dob: dobVal
+        });
+
+        updateUI();
+        alert("✅ আপনার প্রোফাইল সফলভাবে আপডেট ও সংরক্ষিত হয়েছে!");
+      });
+    }
+
+    // অবতার বা বিড়াল ছবি পরিবর্তনের ফাংশন
+    function changeAvatar(imgUrl, element) {
+      document.querySelectorAll('.avatar-grid img').forEach(img => img.classList.remove('selected'));
+      element.classList.add('selected');
+      currentUser.avatar = imgUrl;
+      localStorage.setItem('mvs_user_avatar', imgUrl);
+      userRef.update({ avatar: imgUrl });
+      document.getElementById('userPhoto').src = imgUrl;
+      document.getElementById('profilePagePic').src = imgUrl;
+    }
+
+    // রিও আইডি (UID) দিয়ে ডাউনলাইন বা রেফার চেক করার ফাংশন
+    function checkDownlineByUid() {
+      let uidQuery = document.getElementById('searchDownlineUid').value.trim();
+      let resBox = document.getElementById('downlineSearchResult');
+      if (!uidQuery || uidQuery.length !== 8) {
+        resBox.innerText = "❌ সঠিক ৮ ডিজিটের রিও আইডি (UID) লিখুন।";
+        return;
+      }
+
+      database.ref('referrals/' + currentUser.id + '/' + uidQuery).once('value').then(snap => {
+        if (snap.exists()) {
+          let data = snap.val();
+          resBox.innerHTML = `✅ পাওয়া গেছে! নাম: ${data.name} | UID: ${uidQuery} | স্ট্যাটাস: ${data.status} | কমিশন: ৳${data.commission || 0}`;
+        } else {
+          resBox.innerText = "❌ এই রিও আইডি আপনার ডাউনলাইন বা রেফারে পাওয়া যায়নি।";
+        }
+      });
+    }
 
     let currentSlide = 0;
     const slides = document.querySelectorAll('.slide');
@@ -679,7 +820,7 @@
 
     database.ref('tasks').on('value', snap => {
       let tasks = snap.val() || {};
-      database.ref('submissions').orderByChild('userId').equalTo(tgUser.id).once('value', subSnap => {
+      database.ref('submissions').orderByChild('userId').equalTo(currentUser.id).once('value', subSnap => {
         let userSubs = subSnap.val() || {};
         let completedTaskNames = [];
         for(let k in userSubs) {
@@ -718,7 +859,7 @@
       for(let uid in users) {
         let u = users[uid];
         userArray.push({
-          name: u.name || 'User',
+          name: (u.firstName || 'User') + " " + (u.lastName || ''),
           balance: u.balance || 0,
           totalEarn: u.totalEarn || u.balance || 0
         });
@@ -734,7 +875,7 @@
           <strong style="color: #ff7e00;">৳ ${usr.totalEarn.toFixed(2)}</strong>
         </div>`;
       });
-      document.getElementById('leaderboardList').innerHTML = lbHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো ডেটা নেই।' : 'No data.'}</p>`;
+      document.getElementById('leaderboardList').innerHTML = lbHtml || `<p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো ডেটা নেই।</p>`;
     });
 
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
@@ -792,7 +933,7 @@
       }
 
       database.ref('withdrawals').push({
-        userId: tgUser.id, userName: tgUser.first_name, method: selectedPaymentMethod,
+        userId: currentUser.id, userName: currentUser.firstName + " " + currentUser.lastName, method: selectedPaymentMethod,
         number: number, requestedAmount: requestedAmt, fee: fee, payableAmount: requestedAmt,
         status: 'pending', timestamp: Date.now()
       });
@@ -817,6 +958,21 @@
         <input type="text" id="p_tguser" class="input-field" placeholder="${currentLang === 'bn' ? 'টেলিগ্রাম ইউজারনেম (@username)' : 'Telegram Username'}" required>
       `;
       window.currentModalSubmitType = "Telegram Premium Order";
+      document.getElementById('submissionModal').style.display = 'flex';
+    }
+
+    // ফেসবুক বুস্ট মোডাল উইন্ডো ওপেন করার ফাংশন
+    function openFbBoostModal() {
+      document.getElementById('modalTitle').innerText = "ফেসবুক বুস্ট রিকোয়েস্ট (Facebook Boost)";
+      document.getElementById('modalDesc').innerText = "আপনার ভিডিও বা পেজ বুস্ট করতে নিচের তথ্যগুলো সঠিকভাব পূরণ করে সাবমিট করুন।";
+      
+      document.getElementById('dynamicFormFields').innerHTML = `
+        <input type="text" id="b_whatsapp" class="input-field" placeholder="আপনার হোয়াটসঅ্যাপ নাম্বার" required>
+        <input type="text" id="b_tguser" class="input-field" placeholder="টেলিগ্রাম ইউজারনেম (@username)" required>
+        <input type="text" id="b_fblink" class="input-field" placeholder="মূল ফেসবুক প্রোফাইল বা পেজ লিংক" required>
+        <input type="text" id="b_videolink" class="input-field" placeholder="বুস্ট করার ভিডিওর লিংক" required>
+      `;
+      window.currentModalSubmitType = "Facebook Boost Order";
       document.getElementById('submissionModal').style.display = 'flex';
     }
 
@@ -869,7 +1025,7 @@
       document.getElementById('modalDesc').innerHTML = `${currentLang === 'bn' ? 'নিয়মাবলী' : 'Rules'}: ${rulesText} ${linkHtml} <br><b>${currentLang === 'bn' ? 'রিওয়ার্ড' : 'Reward'}: ৳${reward}</b>`;
       
       document.getElementById('dynamicFormFields').innerHTML = `
-        <input type="text" id="f_proof" class="input-field" placeholder="${currentLang === 'bn' ? 'আপনার টেলিগ্রাম ইউজারনেম / বিবরণ লিখুন' : 'Enter Telegram username / description'}" required>
+        <input type="text" id="f_proof" class="input-field" placeholder="${currentLang === 'bn' ? 'আপনার ইউজারনেম / বিবরণ লিখুন' : 'Enter username / description'}" required>
         <label style="font-size:12px; font-weight:bold; margin-top:5px; display:block;">${currentLang === 'bn' ? 'প্রুফ স্ক্রিনশট বা ছবি আপলোড করুন (বাধ্যতামূলক):' : 'Upload proof screenshot:'}</label>
         <input type="file" id="f_file" accept="image/*" class="input-field" onchange="convertFileToBase64(this)" required>
       `;
@@ -887,7 +1043,7 @@
 
     function closeModal() { document.getElementById('submissionModal').style.display = 'none'; }
 
-    // টাস্ক সম্পন্ন করার পর সঠিক রেফারকারীর অ্যাকাউন্টে বোনাস যোগ করার সিস্টেম
+    // টাস্ক সম্পন্ন করার পর সঠিক রেফারকারীর অ্যাকাউন্টে বোনাস (৳১০) যোগ করার সিস্টেম
     function checkAndRewardReferrer() {
       userRef.once('value').then(snap => {
         let uData = snap.val() || {};
@@ -898,17 +1054,15 @@
           database.ref('users/' + refId).once('value').then(refSnap => {
             if (refSnap.exists()) {
               let rData = refSnap.val();
-              let newCount = (rData.referCount || 0) + 1;
               let newBal = (rData.balance || 0) + 10;
               let newTotal = (rData.totalEarn || rData.balance || 0) + 10;
 
               database.ref('users/' + refId).update({
-                referCount: newCount,
                 balance: newBal,
                 totalEarn: newTotal
               });
 
-              database.ref('referrals/' + refId + '/' + tgUser.id).update({
+              database.ref('referrals/' + refId + '/' + currentUser.id).update({
                 status: 'Completed Task (Rewarded ৳10)',
                 commission: 10
               });
@@ -921,12 +1075,34 @@
     function submitDataToAdmin() {
       let subType = window.currentModalSubmitType || 'General Submission';
       let dataPayload = {
-        userId: tgUser.id,
-        userName: tgUser.first_name,
+        userId: currentUser.id,
+        userName: currentUser.firstName + " " + currentUser.lastName,
         type: subType,
         status: 'pending',
         timestamp: Date.now()
       };
+
+      if(subType === "Facebook Boost Order") {
+        let whatsapp = document.getElementById('b_whatsapp').value.trim();
+        let tguser = document.getElementById('b_tguser').value.trim();
+        let fblink = document.getElementById('b_fblink').value.trim();
+        let vidlink = document.getElementById('b_videolink').value.trim();
+
+        if(!whatsapp || !tguser || !fblink || !vidlink) {
+          alert("❌ সকল তথ্য পূরণ করা বাধ্যতামূলক!");
+          return;
+        }
+
+        dataPayload.field1 = "WhatsApp: " + whatsapp;
+        dataPayload.field2 = "Telegram: " + tguser;
+        dataPayload.field3 = "FB Profile: " + fblink;
+        dataPayload.field4 = "Video Link: " + vidlink;
+
+        database.ref('submissions').push(dataPayload);
+        alert("✅ আপনার ফেসবুক বুস্ট রিকোয়েস্টটি অ্যাডমিনের কাছে পাঠানো হয়েছে। আপনার সাথে শীঘ্রই যোগাযোগ করা হবে, আপনি রেডি থাকুন।");
+        closeModal();
+        return;
+      }
 
       if(subType === "Telegram Premium Order") {
         let name = document.getElementById('p_name').value.trim();
@@ -939,7 +1115,7 @@
         
         database.ref('submissions').push(dataPayload);
         checkAndRewardReferrer();
-        alert(currentLang === 'bn' ? "ভাই, প্রিমিয়াম সাবমিট করার পরে এটি অ্যাডমিন প্যানেলে পাঠানো হয়েছে, শীঘ্রই আপনার সাথে যোগাযোগ করবে। আপনি রেডি থাকুন।" : "Sir, your Premium request has been sent to admin panel. We will contact you soon. Stay ready!");
+        alert(currentLang === 'bn' ? "ভাই, প্রিমিয়াম সাবমিট করার পরে এটি অ্যাডমিন প্যানেলে পাঠানো হয়েছে, শীঘ্রই আপনার সাথে যোগাযোগ করবে। আপনি রেডি থাকুন।" : "Sir, your Premium request has been sent to admin panel.");
         closeModal();
         return;
       } 
@@ -991,7 +1167,7 @@
 
       database.ref('submissions').push(dataPayload);
       checkAndRewardReferrer();
-      alert(currentLang === 'bn' ? "✅ সফলভাবে সাবমিট হয়েছে! ২৪ ঘণ্টার মধ্যে আপডেট দেওয়া হবে।" : "✅ Successfully submitted!");
+      alert(currentLang === 'bn' ? "✅ সফলভাবে সাবমিট হয়েছে! ২৪ ঘণ্টার মধ্যে আপডেট দেওয়া হবে। অ্যাডমিনের কাছে পাঠানো হয়েছে, শীঘ্রই যোগাযোগ করা হবে।" : "✅ Successfully submitted!");
       closeModal();
     }
 
@@ -999,7 +1175,7 @@
       const copyText = document.getElementById('referLink');
       copyText.select();
       navigator.clipboard.writeText(copyText.value);
-      alert(currentLang === 'bn' ? "✅ টেলিগ্রাম বট রেফার লিংক কপি করা হয়েছে!" : "✅ Telegram bot referral link copied!");
+      alert(currentLang === 'bn' ? "✅ রেফার লিংক কপি করা হয়েছে!" : "✅ Referral link copied!");
     }
 
     function sendAiMessage() {
@@ -1014,37 +1190,37 @@
       setTimeout(() => {
         let reply = "";
         if(text.includes('প্রিমিয়াম') || text.includes('premium') || text.includes('coin') || text.includes('কয়েন')) {
-          reply = "টেলিগ্রাম প্রিমিয়াম বা কয়েন রিচার্জ নিতে সাইটের 'টেলিগ্রাম প্রিমিয়াম' বাটন বা মেনু থেকে ফর্ম পূরণ করে সাবমিট করুন। সাবমিট করার পর এটি অ্যাডমিন প্যানেলে চলে যাবে এবং অ্যাডমিন আপনার সাথে যোগাযোগ করে প্রিমিয়াম বা কয়েন পৌঁছে দেবেন।";
+          reply = "টেলিগ্রাম প্রিমিয়াম বা কয়েন রিচার্জ নিতে সাইটের মেনু থেকে ফর্ম পূরণ করে সাবমিট করুন। অ্যাডমিন প্যানেলে যাওয়ার পর যোগাযোগ করা হবে।";
         } else if(text.includes('ফেসবুক') || text.includes('facebook') || text.includes('insta') || text.includes('ইনস্টাগ্রাম') || text.includes('gmail') || text.includes('জিমেইল') || text.includes('সেল') || text.includes('sell')) {
-          reply = "সোশ্যাল অ্যাকাউন্ট (Facebook, Instagram, Gmail) সেল করতে হোম বা মেনু থেকে সংশ্লিষ্ট অপশনে গিয়ে সঠিক UID/Email, Password এবং 2FA দিয়ে সাবমিট করুন। ২৪ থেকে ৪৮ ঘণ্টার মধ্যে ভেরিফাই করে আপনার ব্যালেন্স যোগ করা হবে।";
-        } else if(text.includes('উত্তোলন') || text.includes('withdraw') || text.includes('টাকা') || text.includes('bKash') || text.includes('বিকাশ') || text.includes('নগদ') || text.includes('nagad')) {
-          reply = "ন্যূনতম ২৫ টাকা হলে 'উইথড্র দিন' অপশনে গিয়ে বিকাশ বা নগদ সিলেক্ট করুন, আপনার সঠিক ১১ ডিজিটের অ্যাকাউন্ট নাম্বার দিন এবং রিকোয়েস্ট পাঠান। ২৪ ঘণ্টার মধ্যে পেমেন্ট পেয়ে যাবেন।";
+          reply = "সোশ্যাল অ্যাকাউন্ট সেল করতে সঠিক তথ্য দিয়ে সাবমিট করুন। ২৪ থেকে ৪৮ ঘণ্টার মধ্যে ভেরিফাই করে ব্যালেন্স যোগ করা হবে।";
+        } else if(text.includes('উত্তোলন') || text.includes('withdraw') || text.includes('টাকা') || text.includes('bKash') || text.includes('বিকাশ')) {
+          reply = "ন্যূনতম ২৫ টাকা হলে 'উইথড্র দিন' অপশনে গিয়ে সঠিক বিকাশ বা নগদ নাম্বার দিয়ে রিকোয়েস্ট পাঠান। ২৪ ঘণ্টার মধ্যে পেমেন্ট পাবেন।";
         } else if(text.includes('টাস্ক') || text.includes('task') || text.includes('কাজ')) {
-          reply = "টাস্ক অপশনে গিয়ে উপলব্ধ টাস্কগুলোর নিয়ম মেনে কাজ করুন এবং প্রুফ (স্ক্রিনশট ও বিবরণ) দিয়ে সাবমিট করুন। অ্যাডমিন চেক করে রিওয়ার্ড আপনার ব্যালেন্সে যোগ করে দেবেন।";
+          reply = "টাস্ক অপশনে গিয়ে কাজ সম্পন্ন করে প্রুফ জমা দিন। অ্যাডমিন চেক করে রিওয়ার্ড যোগ করে দেবেন।";
         } else if(text.includes('রেফার') || text.includes('refer')) {
-          reply = "রেফার অপশন থেকে আপনার ইউনিক টেলিগ্রাম বট লিংকটি বন্ধুদের সাথে শেয়ার করুন। যাকে রেফার করবেন সে একটি কাজ সম্পূর্ণ করার সাথে সাথেই আপনি পাবেন ১০ টাকা এবং আজীবন ৫% কমিশন!";
+          reply = "রেফার অপশন থেকে আপনার লিংক শেয়ার করুন। যাকে রেফার করবেন সে কাজ করার পর আপনি ১০ টাকা পাবেন!";
         } else {
-          reply = "আমি আপনার বিষয়টি বুঝতে পেরেছি। আপনার যেকোনো কাজের স্ট্যাটাস বা সমস্যা সমাধানের জন্য ২৪ ঘণ্টার মধ্যে আমাদের সাপোর্ট গ্রুপে যোগাযোগ করতে পারেন।";
+          reply = "আমি আপনার বিষয়টি বুঝতে পেরেছি। যেকোনো সমস্যায় ২৪ ঘণ্টার মধ্যে আমাদের সাপোর্ট গ্রুপে যোগাযোগ করতে পারেন।";
         }
         chatBox.innerHTML += `<div class="chat-msg bot">${reply}</div>`;
         chatBox.scrollTop = chatBox.scrollHeight;
       }, 600);
     }
 
-    // নির্দিষ্ট ইউজারের রেফারকৃত তালিকা ফায়ারবেস থেকে রিয়েলটাইমে লোড করা
-    database.ref('referrals/' + tgUser.id).on('value', snap => {
+    // রেফারকৃত তালিকা ও কমিশন রিয়েলটাইমে পাশাপাশি লোড করা
+    database.ref('referrals/' + currentUser.id).on('value', snap => {
       let refs = snap.val() || {};
       let refHtml = '';
       for(let rId in refs) {
         let rUser = refs[rId];
         let comm = rUser.commission || 0;
         let stat = rUser.status || 'Pending';
-        refHtml += `<div class="list-card"><div><b>${currentLang === 'bn' ? 'নাম' : 'Name'}: ${rUser.name || 'User'}</b><br><small>ID: ${rId} | স্থিতি: ${stat}</small></div><div style="text-align:right;"><strong style="color: #ff7e00;">৳${comm.toFixed(2)}</strong></div></div>`;
+        refHtml += `<div class="list-card"><div><b>${currentLang === 'bn' ? 'নাম' : 'Name'}: ${rUser.name || 'User'}</b><br><small>রিও আইডি (UID): ${rId} | স্থিতি: ${stat}</small></div><div style="text-align:right;"><strong style="color: #ff7e00;">৳${comm.toFixed(2)}</strong></div></div>`;
       }
-      document.getElementById('referralUserList').innerHTML = refHtml || `<p style="text-align:center; color:#777; padding:15px;">${currentLang === 'bn' ? 'এখনো কোনো ইউজার আপনার লিংক থেকে যুক্ত হয়নি।' : 'No referrals yet.'}</p>`;
+      document.getElementById('referralUserList').innerHTML = refHtml || `<p style="text-align:center; color:#777; padding:15px;" data-lang="noRef">এখনো কোনো ইউজার আপনার লিংক থেকে যুক্ত হয়নি।</p>`;
     });
 
-    database.ref('submissions').orderByChild('userId').equalTo(tgUser.id).on('value', snap => {
+    database.ref('submissions').orderByChild('userId').equalTo(currentUser.id).on('value', snap => {
       let subs = snap.val() || {};
       let allHtml = '', taskHtml = '', fbHtml = '', instaHtml = '', gmailHtml = '', rechargeHtml = '', premHtml = '', adsHtml = '';
 
@@ -1063,17 +1239,17 @@
         if(s.type.includes('Ad Watch Earn')) adsHtml += card;
       }
 
-      document.getElementById('allHistoryList').innerHTML = allHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো হিস্ট্রি নেই।' : 'No history.'}</p>`;
-      document.getElementById('taskHistoryList').innerHTML = taskHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো টাস্ক হিস্ট্রি নেই।' : 'No task history.'}</p>`;
-      document.getElementById('fbHistoryList').innerHTML = fbHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো ফেসবুক সেল হিস্ট্রি নেই।' : 'No FB history.'}</p>`;
-      document.getElementById('instaHistoryList').innerHTML = instaHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো ইনস্টাগ্রাম সেল হিস্ট্রি নেই।' : 'No Insta history.'}</p>`;
-      document.getElementById('gmailHistoryList').innerHTML = gmailHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো জিমেইল সেল হিস্ট্রি নেই।' : 'No Gmail history.'}</p>`;
-      document.getElementById('rechargeHistoryList').innerHTML = rechargeHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো মোবাইল রিচার্জ হিস্ট্রি নেই।' : 'No recharge history.'}</p>`;
-      document.getElementById('premHistoryList').innerHTML = premHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো প্রিমিয়াম হিস্ট্রি নেই।' : 'No premium history.'}</p>`;
-      document.getElementById('adsHistoryList').innerHTML = adsHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো অ্যাড হিস্ট্রি নেই।' : 'No ad history.'}</p>`;
+      document.getElementById('allHistoryList').innerHTML = allHtml || `<p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো হিস্ট্রি নেই।</p>`;
+      document.getElementById('taskHistoryList').innerHTML = taskHtml || `<p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো টাস্ক হিস্ট্রি নেই।</p>`;
+      document.getElementById('fbHistoryList').innerHTML = fbHtml || `<p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো ফেসবুক সেল হিস্ট্রি নেই।</p>`;
+      document.getElementById('instaHistoryList').innerHTML = instaHtml || `<p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো ইনস্টাগ্রাম সেল হিস্ট্রি নেই।</p>`;
+      document.getElementById('gmailHistoryList').innerHTML = gmailHtml || `<p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো জিমেইল সেল হিস্ট্রি নেই।</p>`;
+      document.getElementById('rechargeHistoryList').innerHTML = rechargeHtml || `<p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো মোবাইল রিচার্জ হিস্ট্রি নেই।</p>`;
+      document.getElementById('premHistoryList').innerHTML = premHtml || `<p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো প্রিমিয়াম হিস্ট্রি নেই।</p>`;
+      document.getElementById('adsHistoryList').innerHTML = adsHtml || `<p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো অ্যাড হিস্ট্রি নেই।</p>`;
     });
 
-    database.ref('withdrawals').orderByChild('userId').equalTo(tgUser.id).on('value', snap => {
+    database.ref('withdrawals').orderByChild('userId').equalTo(currentUser.id).on('value', snap => {
       let data = snap.val() || {};
       let wHtml = '';
       for(let k in data) {
@@ -1081,12 +1257,18 @@
         let statusMsg = w.status === 'approved' ? `<span style="color:green; font-weight:bold;">${currentLang === 'bn' ? 'সফল' : 'Approved'}</span>` : (w.status === 'rejected' ? `<span style="color:red; font-weight:bold;">${currentLang === 'bn' ? 'বাতিল' : 'Rejected'}</span>` : `<span style="color:orange; font-weight:bold;">${currentLang === 'bn' ? 'পেন্ডিং' : 'Pending'}</span>`);
         wHtml += `<div class="list-card"><div><b>${currentLang === 'bn' ? 'মেথড' : 'Method'}: ${w.method} (${w.number})</b><br>${currentLang === 'bn' ? 'পরিমাণ' : 'Amount'}: ৳${w.requestedAmount}<br><small>${new Date(w.timestamp).toLocaleString()}</small></div><div>${statusMsg}</div></div>`;
       }
-      document.getElementById('withdrawHistoryList').innerHTML = wHtml || `<p style="text-align:center; color:#777; padding:20px;">${currentLang === 'bn' ? 'কোনো উত্তোলন হিস্ট্রি নেই।' : 'No withdrawal history.'}</p>`;
+      document.getElementById('withdrawHistoryList').innerHTML = wHtml || `<p style="text-align:center; color:#777; padding:20px;" data-lang="noHist">কোনো উত্তোলন হিস্ট্রি নেই।</p>`;
     });
 
     userRef.on('value', (snapshot) => {
       const data = snapshot.val();
       if (data) {
+        currentUser.firstName = data.firstName || currentUser.firstName;
+        currentUser.lastName = data.lastName || currentUser.lastName;
+        currentUser.username = data.username || currentUser.username;
+        currentUser.dob = data.dob || currentUser.dob;
+        updateUI();
+
         let bal = data.balance || 0;
         document.getElementById('balance').innerText = bal.toFixed(2);
         document.getElementById('profileBalance').innerText = bal.toFixed(2);
